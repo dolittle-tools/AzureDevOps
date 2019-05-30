@@ -1,5 +1,5 @@
 ---
-title: Installing
+title: Installing in Azure DevOps
 description: Overview of how to add an a build badge to your README.md
 keywords: Build
 weight: 2
