@@ -1,8 +1,8 @@
 ---
-title: Adding build badge
-description: Overview of how to add an a build badge to your README.md
+title: Adding pipeline
+description: Overview of how to add an a pipeline
 keywords: Build
-weight: 2
+weight: 1
 author: einari
 ---
 Start by adding a file called `azure-pipelines.yml` at the root of the

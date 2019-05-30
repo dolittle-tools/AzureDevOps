@@ -1,3 +1,10 @@
+---
+title: Adding build badge
+description: Overview of how to add an a build badge to your README.md
+keywords: Build
+weight: 2
+author: einari
+---
 Azure DevOps has a Build badge that we typically want to make puplic at the top of the
 repository's `README.md` file. The markdown code for this can be found by clicking the
 menu to the right:
