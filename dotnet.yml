@@ -1,11 +1,12 @@
 parameters:
+  name: $(Build.Repository.Name)
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
 
 jobs:
 - job: ${{ parameters.name }}
-  pool: ${{ pool }}
+  pool: ${{ parameters.pool }}
 
   steps:
   - bash: |
@@ -43,14 +44,14 @@ jobs:
     inputs:
       command: build
       projects: '**/*.csproj'
-      arguments: '--configuration ${{ buildConfiguration }}' # Update this to match your need
+      arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
       
   - task: DotNetCoreCLI@2
     displayName: Run Tests
     inputs:
       command: test
       projects: 'Specifications/**/*.csproj'
-      arguments: '--configuration ${{ buildConfiguration }}'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
     
   
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
