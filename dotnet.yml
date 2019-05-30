@@ -1,5 +1,5 @@
 parameters:
-  name: $(Build.Repository.Name)
+  name: '$(Build.Repository.Name)'
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
