@@ -1,5 +1,5 @@
 parameters:
-  name: '$(Build.Repository.Name)'
+  name: '.NET Core Framework'
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
