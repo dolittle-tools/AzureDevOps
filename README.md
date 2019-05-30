@@ -23,6 +23,25 @@ jobs:
 As you can see, the file refer to a job template. You'll find the different
 available templates in this repository.
 
+### Cascades
+
+It is possible to cascade to a pipeline for another project. This feature is
+basically to make versioning for things like NuGet to work properly and guarantee
+that the correct versions are being used when one project is dependent on the other.
+This might not be important to you, but for some of the Dolittle projects, this is
+vital - as we rely on wildcard for minor and patch in versioning and trust our own
+commitment to [versioning](https://dolittle.io/contributing/guidelines/versioning/).
+
+You simply add a parameter called `CASCADES`to the job, this can hold one or more
+projects to cascade to - space separated. The format is [GitHub Organization]/[Repository].
+
+```yaml
+jobs:
+- template: dotnet-framework.yml@templates
+  parameters:
+    CASCADES: dolittle-runtime/DotNET.SDK
+```
+
 ### Installing in Azure DevOps
 
 When the pipeline is in place, we want to hook this up in Azure DevOps.
