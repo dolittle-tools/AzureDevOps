@@ -42,6 +42,20 @@ jobs:
     CASCADES: dolittle-runtime/DotNET.SDK
 ```
 
+### Build Badge
+
+Azure DevOps has a Build badge that we typically want to make puplic at the top of the
+repository's `README.md` file. The markdown code for this can be found by clicking the
+menu to the right:
+
+![Get status badge](images/azure_devops_status_badge_1.png)
+
+With the popup, you can then copy the markdown code to your clipboard:
+
+![Get status badge markdown code](images/azure_devops_status_badge_2.png)
+
+Put what you have in the clipboard into your `README.md`.
+
 ### Installing in Azure DevOps
 
 When the pipeline is in place, we want to hook this up in Azure DevOps.
@@ -53,22 +67,22 @@ Add a build pipeline:
 
 ![Adding build pipeline](images/azure_devops_1.png)
 
-Select GitHub as the location of the code:
+Select GitHub as the source of the code:
 
-![Adding build pipeline](images/azure_devops_2.png)
+![Selecting GitHub as source](images/azure_devops_2.png)
 
 Find the repository you're hooking up:
 
-![Adding build pipeline](images/azure_devops_3.png)
+![Find repository](images/azure_devops_3.png)
 
 Verify that the suggestion is correct for the repository or select the correct repository and then
 grant Azure DevOps access and install.
 
-![Adding build pipeline](images/azure_devops_4.png)
+![Select repository in GitHub and grant access to Azure DevOps](images/azure_devops_4.png)
 
 Verify that it is the pipeline you're expecting:
 
-![Adding build pipeline](images/azure_devops_5.png)
+![Verify pipeline and run](images/azure_devops_5.png)
 
 Here is a full video:
 
