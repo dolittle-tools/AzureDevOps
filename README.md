@@ -1,1 +1,56 @@
 # Build
+
+## Setting up Azure Pipelines in a new project
+
+Start by adding a file called `azure-pipelines.yml` at the root of the
+repository you want to use.
+
+```yaml
+trigger:
+- master
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: dolittle-tools/Build
+      endpoint: dolittle-tools
+
+jobs:
+- template: dotnet-framework.yml@templates
+```
+
+As you can see, the file refer to a job template. You'll find the different
+available templates in this repository.
+
+### Installing in Azure DevOps
+
+When the pipeline is in place, we want to hook this up in Azure DevOps.
+Note: You'll need to be authorized in this organization in order to do this.
+
+Navigate to the [project in Azure DevOps](https://dev.azure.com/dolittle/Dolittle%20open-source%20repositories).
+
+Add a build pipeline:
+
+![Adding build pipeline](images/azure_devops_1.png)
+
+Select GitHub as the location of the code:
+
+![Adding build pipeline](images/azure_devops_2.png)
+
+Find the repository you're hooking up:
+
+![Adding build pipeline](images/azure_devops_3.png)
+
+Verify that the suggestion is correct for the repository or select the correct repository and then
+grant Azure DevOps access and install.
+
+![Adding build pipeline](images/azure_devops_4.png)
+
+Verify that it is the pipeline you're expecting:
+
+![Adding build pipeline](images/azure_devops_5.png)
+
+Here is a full video:
+
+![Azure DevOps adding pipeline video](images/azure_devops.gif)
