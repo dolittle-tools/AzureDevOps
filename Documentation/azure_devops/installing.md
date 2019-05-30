@@ -2,7 +2,7 @@
 title: Installing
 description: Overview of how to add an a build badge to your README.md
 keywords: Build
-weight: 3
+weight: 2
 author: einari
 ---
 When the pipeline is in place, we want to hook this up in Azure DevOps.

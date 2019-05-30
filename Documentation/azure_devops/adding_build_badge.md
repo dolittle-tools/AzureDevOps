@@ -2,7 +2,7 @@
 title: Adding build badge
 description: Overview of how to add an a build badge to your README.md
 keywords: Build
-weight: 2
+weight: 3
 author: einari
 ---
 Azure DevOps has a Build badge that we typically want to make puplic at the top of the
