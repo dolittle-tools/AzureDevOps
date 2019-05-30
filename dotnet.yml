@@ -1,5 +1,5 @@
 parameters:
-  name: '.NET Core Framework'
+  name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
