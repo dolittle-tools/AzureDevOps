@@ -13,25 +13,25 @@ be [this](https://dev.azure.com/dolittle/Dolittle%20open-source%20repositories).
 
 Add a build pipeline:
 
-![Adding build pipeline](images/azure_devops_1.png)
+![Adding build pipeline](../images/azure_devops_1.png)
 
 Select GitHub as the source of the code:
 
-![Selecting GitHub as source](images/azure_devops_2.png)
+![Selecting GitHub as source](../images/azure_devops_2.png)
 
 Find the repository you're hooking up:
 
-![Find repository](images/azure_devops_3.png)
+![Find repository](../images/azure_devops_3.png)
 
 Verify that the suggestion is correct for the repository or select the correct repository and then
 grant Azure DevOps access and install.
 
-![Select repository in GitHub and grant access to Azure DevOps](images/azure_devops_4.png)
+![Select repository in GitHub and grant access to Azure DevOps](../images/azure_devops_4.png)
 
 Verify that it is the pipeline you're expecting:
 
-![Verify pipeline and run](images/azure_devops_5.png)
+![Verify pipeline and run](../images/azure_devops_5.png)
 
 Here is a full video:
 
-![Azure DevOps adding pipeline video](images/azure_devops.gif)
+![Azure DevOps adding pipeline video](../images/azure_devops.gif)
