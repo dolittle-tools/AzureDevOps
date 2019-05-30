@@ -20,7 +20,7 @@ resources:
       endpoint: dolittle-tools
 
 jobs:
-- template: dotnet-framework.yml@templates
+- template: Source/DotNet/framework.yml@templates
 ```
 
 As you can see, the file refer to a job template. You'll find the different
@@ -40,7 +40,7 @@ projects to cascade to - space separated. The format is [GitHub Organization]/[R
 
 ```yaml
 jobs:
-- template: dotnet-framework.yml@templates
+- template: Source/DotNet/framework.yml@templates
   parameters:
     CASCADES: dolittle-runtime/DotNET.SDK
 ```
