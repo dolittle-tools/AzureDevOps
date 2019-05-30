@@ -24,7 +24,7 @@ jobs:
 ```
 
 As you can see, the file refer to a job template. You'll find the different
-available templates in this repository.
+available templates in the [repository](https://github.com/dolittle-tools/Build).
 
 ## Cascades
 
