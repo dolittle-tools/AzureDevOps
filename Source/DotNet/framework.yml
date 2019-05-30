@@ -43,7 +43,7 @@ jobs:
     displayName: Build release
     inputs:
       command: build
-      projects: '**/*.csproj'
+      projects: 'Source/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
       
   - task: DotNetCoreCLI@2
