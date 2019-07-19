@@ -7,14 +7,15 @@ parameters:
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
+  variables:
+        accesstoken: $(PAT)
   
   steps:
     - task: Bash@3
       inputs:
         arguments: $(Build.Repository.Uri)
         targetType: inline
-      variables:
-        accesstoken: $(PAT)
+      
     - checkout: self
       persistCredentials: true
       clean: true
