@@ -23,7 +23,7 @@ jobs:
         GIT_TERMINAL_PROMPT=1
         mkdir tmp
         cd tmp/
-        git clone https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git
+        git clone https://@github.com/dolittle/Documentation.git
         cd Documentation/
         cd Source/
         cd repositories/
@@ -34,6 +34,6 @@ jobs:
         git add Source/repositories/
         git config user.name "Dolittle Documentation"
         git commit -m "Updating Documentation"
-        git push
+        git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git
         cd ..
         rm -rf Documentation/
