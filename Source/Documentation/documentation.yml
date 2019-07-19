@@ -1,39 +1,39 @@
-trigger:
-- master
+parameters:
+  name: 'DotNetCore_Framework_Job'
+  buildConfiguration: 'Release'
+  pool: Default
+  CASCADES: ''
 
-resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: dolittle-tools/AzureDevOps
-      endpoint: dolittle-tools
+jobs:
+- job: ${{ parameters.name }}
+  pool: ${{ parameters.pool }}
   
-steps:
-  - task: Bash@3
-    inputs:
-      arguments: $(Build.Repository.Uri)
-      targetType: inline
-  - checkout: self
-    persistCredentials: true
-    clean: true
-  - bash: |
-      URL=$(Build.Repository.Uri)
+  steps:
+    - task: Bash@3
+      inputs:
+        arguments: $(Build.Repository.Uri)
+        targetType: inline
+    - checkout: self
+      persistCredentials: true
+      clean: true
+    - bash: |
+        URL=$(Build.Repository.Uri)
 
-      submodule_name=`echo "$URL" | awk -F "dolittle-" '{ print $2 }'`
-      GIT_TERMINAL_PROMPT=1
-      mkdir tmp
-      cd tmp/
-      git clone https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git
-      cd Documentation/
-      cd Source/
-      cd repositories/
-      git submodule init && git submodule update "$submodule_name"
-      cd "$submodule_name"
-      git checkout master && git pull
-      cd ../../../..
-      git add Source/repositories/
-      git config user.name "Dolittle Documentation"
-      git commit -m "Updating Documentation"
-      git push
-      cd ..
-      rm -rf Documentation/
+        submodule_name=`echo "$URL" | awk -F "dolittle-" '{ print $2 }'`
+        GIT_TERMINAL_PROMPT=1
+        mkdir tmp
+        cd tmp/
+        git clone https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git
+        cd Documentation/
+        cd Source/
+        cd repositories/
+        git submodule init && git submodule update "$submodule_name"
+        cd "$submodule_name"
+        git checkout master && git pull
+        cd ../../../..
+        git add Source/repositories/
+        git config user.name "Dolittle Documentation"
+        git commit -m "Updating Documentation"
+        git push
+        cd ..
+        rm -rf Documentation/
