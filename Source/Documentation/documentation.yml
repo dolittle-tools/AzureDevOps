@@ -32,7 +32,7 @@ jobs:
         git checkout master && git pull
         cd ../../../..
         git add Source/repositories/
-        git config --global user.email "documentation@dolittle.do
+        git config --global user.email "documentation@dolittle.do"
         git config --global user.name "Dolittle Documentation"
         git commit -m "Updating Documentation"
         git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
