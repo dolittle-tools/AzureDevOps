@@ -2,13 +2,10 @@ parameters:
   name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
   pool: Default
-  CASCADES: ''
 
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
-  variables:
-        accesstoken: $(PAT)
   
   steps:
     - task: Bash@3
@@ -34,11 +31,9 @@ jobs:
         cd "$submodule_name"
         git checkout master && git pull
         cd ../../../..
-        export
         git add Source/repositories/
-        git config credential.helper
         git config user.name "Dolittle Documentation"
         git commit -m "Updating Documentation"
-        git push https://$accesstoken@github.com/dolittle/Documentation.git --all
+        git push https://dolittle-documentation$PAT@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
