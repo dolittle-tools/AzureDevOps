@@ -31,7 +31,9 @@ jobs:
         cd "$submodule_name"
         git checkout master && git pull
         cd ../../../..
+        export
         git add Source/repositories/
+        git config credential.helper
         git config user.name "Dolittle Documentation"
         git commit -m "Updating Documentation"
         git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
