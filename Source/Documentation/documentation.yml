@@ -13,6 +13,8 @@ jobs:
       inputs:
         arguments: $(Build.Repository.Uri)
         targetType: inline
+      variables:
+        accesstoken: $(PAT)
     - checkout: self
       persistCredentials: true
       clean: true
@@ -23,7 +25,7 @@ jobs:
         GIT_TERMINAL_PROMPT=1
         mkdir tmp
         cd tmp/
-        git clone https://@github.com/dolittle/Documentation.git
+        git clone https://github.com/dolittle/Documentation.git
         cd Documentation/
         cd Source/
         cd repositories/
@@ -36,6 +38,6 @@ jobs:
         git config credential.helper
         git config user.name "Dolittle Documentation"
         git commit -m "Updating Documentation"
-        git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
+        git push https://$accesstoken@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
