@@ -34,6 +34,6 @@ jobs:
         git add Source/repositories/
         git config user.name "Dolittle Documentation"
         git commit -m "Updating Documentation"
-        git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git
+        git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
