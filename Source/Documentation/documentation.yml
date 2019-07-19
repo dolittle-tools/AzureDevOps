@@ -1,5 +1,5 @@
 parameters:
-  name: 'DotNetCore_Framework_Job'
+  name: 'Documentation'
   buildConfiguration: 'Release'
   pool: Default
 
