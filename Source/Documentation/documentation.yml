@@ -6,7 +6,7 @@ parameters:
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
-  variable:
+  variables:
   - group: global-var-pipelines
   
   steps:
