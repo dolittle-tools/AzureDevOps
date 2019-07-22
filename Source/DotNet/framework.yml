@@ -1,3 +1,10 @@
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: dolittle-tools/AzureDevOps
+      endpoint: dolittle-tools
+
 parameters:
   name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
