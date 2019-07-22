@@ -1,6 +1,3 @@
-trigger:
-- master
-
 parameters:
   name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
@@ -56,8 +53,6 @@ jobs:
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
       
-
-  - template: Source/Documentation/documentation.yml@templates
   
   
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
