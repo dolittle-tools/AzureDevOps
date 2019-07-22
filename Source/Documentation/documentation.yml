@@ -6,6 +6,8 @@ parameters:
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
+  variable:
+  - group: global-var-pipelines
   
   steps:
     - task: Bash@3
