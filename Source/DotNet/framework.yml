@@ -53,7 +53,7 @@ jobs:
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
   
-  -job:
+  - job:
   - template: Source/Documentation/documentation.yml@templates
     parameters:
     
