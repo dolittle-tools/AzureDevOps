@@ -52,6 +52,10 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
+  
+  -job:
+  - template: Source/Documentation/documentation.yml@templates
+    parameters:
     
   
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
