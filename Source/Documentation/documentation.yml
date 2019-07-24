@@ -3,7 +3,6 @@ parameters:
   buildConfiguration: 'Release'
   pool: Default
 
-jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
   variables:
