@@ -2,7 +2,6 @@ parameters:
   name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
   pool: Default
-  CASCADES: ''
 
 jobs:
 - job: ${{ parameters.name }}
