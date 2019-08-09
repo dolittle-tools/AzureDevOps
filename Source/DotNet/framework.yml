@@ -2,7 +2,7 @@ parameters:
   name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
   pool: Default
-  CASCADES: ''
+  CASCADES: dolittle-runtime/Runtime
 
 jobs:
 - job: ${{ parameters.name }}
