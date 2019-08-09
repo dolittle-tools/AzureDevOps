@@ -53,6 +53,20 @@ jobs:
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
       
+  - task: NuGetCommand@2
+    displayName: NuGet pack
+    inputs:
+      commands: pack
+      
+  - task: NuGetCommand@2
+    displayName: NuGet push
+    inputs:
+      command: push
+      nuGetFeedType: external
+      publishFeedCredentials: CI_MyGet
+      versioningScheme: byEnvVar
+      versionEnvVar: version
+      
 - job: Documentation
   pool: ${{ parameters.pool }}
   variables:
