@@ -1,0 +1,12 @@
+parameters:
+  name: 'Versioning'
+  buildConfiguration: 'Release'
+  pool: Default
+  
+jobs:
+- jobs: ${{ parameters.name }}
+  pool: ${{ parameters.pool }}
+  
+  steps:
+  - bash: |
+  ##to be continued
