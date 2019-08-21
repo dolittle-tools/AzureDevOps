@@ -48,7 +48,7 @@ jobs:
       git tag -a "$MAJOR"."$MINOR"."$PATCH"
       echo "No longer in version $(VERSION)"
       echo "New version : $(MAJOR).$(MINOR).$(PATCH)"
-      git push --tags
+##      git push --tags
       export VERSION=$(git tag --sort=-version:refname | head -1)
   ##to be continued
     displayName: Update Version tag
