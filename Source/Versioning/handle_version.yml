@@ -16,7 +16,7 @@ jobs:
       VERSION=$(git tag --sort=-version:refname | head -1)
       
       if [ "$LABEL" == "MAJOR" ]
-        ##increase major and don't cascade
+  ##increase major and don't cascade
       then
         
       
