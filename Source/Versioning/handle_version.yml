@@ -31,14 +31,11 @@ jobs:
       elif [ "$LABEL" == "MINOR" ]
   ##increase minor -> has to cascade
       then
-        MAJOR="0"
         MINOR=$((MINOR+1))
         PATCH="0"
       
       else
   ##its a patch -> has to cascade
-        MAJOR="0"
-        MINOR="0"
         PATCH=$((PATCH+1))
       fi
       
