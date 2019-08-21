@@ -21,10 +21,10 @@ jobs:
         
       
       elif [ "$LABEL" == "MINOR" ]
-        ##increase minor
+  ##increase minor
       then
       
       else
-        ##its a patch
+  ##its a patch
       fi
   ##to be continued
