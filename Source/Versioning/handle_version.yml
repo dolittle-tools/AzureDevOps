@@ -14,13 +14,19 @@ jobs:
   pool: ${{ parameters.pool }}
   
   steps:
+  - task: Bash@3
+      inputs:
+        arguments: ${{ parameters.LABEL }}
+        targetType: inline
+  
   - bash: |
+      LABEL=${{ parameters.LABEL }}
       VERSION=$(git tag --sort=-version:refname | head -1)
       MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
       MINOR=`echo $VERSION | awk -F "." '{print $2}'`
       PATCH=`echo $VERSION | awk -F "." '{print $3}'`
       
-      if [ "$LABEL" == "MAJOR" ]
+      if [ "$LABEL" = "major" ]
   ##increase major and don't cascade
       then
         MAJOR=$((MAJOR+1))
@@ -28,7 +34,7 @@ jobs:
         PATCH="0"
         parameters.CASCADES=NULL
       
-      elif [ "$LABEL" == "MINOR" ]
+      elif [ "$LABEL" = "minor" ]
   ##increase minor -> has to cascade
       then
         MINOR=$((MINOR+1))
