@@ -89,6 +89,10 @@ jobs:
         git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
+        
+job: Versioning
+- template: Source/Versioning/handle_version.yml
+  parameters: ${CASCADES}
   
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
 # echo IndividualCI 036100265b6d83d536827451131bf8c306ce9d43 2.0.0
