@@ -9,4 +9,22 @@ jobs:
   
   steps:
   - bash: |
+      URL=$(Build.Repository.Uri)
+      REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
+      TARGET="https://api.github.com/repos/$(REPO)/pulls\?state\=all"
+      LABEL=$(GET $(TARGET) | tr ',' '\n' | grep labels | head -1 | cut -d ":" -f 2 | tr -d '[' | tr -d ']')
+      VERSION=$(git tag --sort=-version:refname | head -1)
+      
+      if [ "$LABEL" == "MAJOR" ]
+        ##increase major and don't cascade
+      then
+        
+      
+      elif [ "$LABEL" == "MINOR" ]
+        ##increase minor
+      then
+      
+      else
+        ##its a patch
+      fi
   ##to be continued
