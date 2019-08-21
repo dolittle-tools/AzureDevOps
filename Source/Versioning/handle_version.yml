@@ -44,3 +44,4 @@ jobs:
       echo "New version : $(MAJOR).$(MINOR).$(PATCH)"
       git push --tags
   ##to be continued
+    displayName: Update Version tag
