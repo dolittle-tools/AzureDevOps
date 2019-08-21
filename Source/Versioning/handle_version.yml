@@ -3,6 +3,11 @@ parameters:
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
+## To get the versioning label, please use this in the .yml calling this one and pass it in parameters
+##    URL=$(Build.Repository.Uri)
+##    REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
+##    LABEL=`GET https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep labels | head -1 | cut -d ":" -f 2 | tr -d '[' | tr -d ']'`
+  LABEL: ''
   
 jobs:
 - jobs: ${{ parameters.name }}
@@ -10,10 +15,6 @@ jobs:
   
   steps:
   - bash: |
-      URL=$(Build.Repository.Uri)
-      REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
-      TARGET="https://api.github.com/repos/$(REPO)/pulls\?state\=all"
-      LABEL=`GET $(TARGET) | tr ',' '\n' | grep labels | head -1 | cut -d ":" -f 2 | tr -d '[' | tr -d ']'`
       VERSION=$(git tag --sort=-version:refname | head -1)
       MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
       MINOR=`echo $VERSION | awk -F "." '{print $2}'`
