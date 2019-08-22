@@ -9,7 +9,7 @@ jobs:
   pool: ${{ parameters.pool }}
 
   steps:
-  - template: Source/Vesioning/handle_version.yml
+  - template: ../Vesioning/handle_version.yml
 
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
