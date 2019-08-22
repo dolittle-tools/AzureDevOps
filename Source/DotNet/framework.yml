@@ -1,15 +1,15 @@
-parameters:
-  name: 'DotNetCore_Framework_Job'
-  buildConfiguration: 'Release'
-  pool: Default
-  CASCADES: ''
-
 resources:
   repositories:
     - repository: templates
       type: github
       name: dolittle-tools/AzureDevOps
       endpoint: dolittle-tools
+
+parameters:
+  name: 'DotNetCore_Framework_Job'
+  buildConfiguration: 'Release'
+  pool: Default
+  CASCADES: ''
 
 jobs:
 - job: ${{ parameters.name }}
