@@ -4,12 +4,19 @@ parameters:
   pool: Default
   CASCADES: ''
 
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: dolittle-tools/AzureDevOps
+      endpoint: dolittle-tools
+
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
 
   steps:
-  - template: /Source/Vesioning/handle_version.yml
+  - template: Source/Vesioning/handle_version.yml@templates
 
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
