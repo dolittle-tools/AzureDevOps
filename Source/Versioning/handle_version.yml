@@ -2,7 +2,7 @@ parameters:
   name: 'Versioning'
   buildConfiguration: 'Release'
   pool: Default
-  CASCADES: ''  `
+  CASCADES: ''
   
 jobs:
 - jobs: ${{ parameters.name }}
