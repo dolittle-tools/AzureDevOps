@@ -9,6 +9,8 @@ jobs:
   pool: ${{ parameters.pool }}
 
   steps:
+  - template: /Source/Vesioning/handle_version.yml
+
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
       echo $BUILD_REASON $BUILD_SOURCEVERSION $VERSION
@@ -89,6 +91,9 @@ jobs:
         git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
+        
+- job:
+  template
         
   
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
