@@ -5,15 +5,10 @@ parameters:
   CASCADES: ''
   
 jobs:
-- jobs: ${{ parameters.name }}
+- job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
   
-  steps:
-  - task: Bash@3
-      inputs:
-        arguments: ${{ parameters.LABEL }}
-        targetType: inline
-  
+  steps:  
   - bash: |
       URL=$(Build.Repository.Uri)
       REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
