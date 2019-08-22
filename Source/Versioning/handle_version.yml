@@ -42,7 +42,7 @@ jobs:
         PATCH=$((PATCH+1))
       fi
       
-      git tag -a "$MAJOR"."$MINOR"."$PATCH"
+      git tag -a "$MAJOR"."$MINOR"."$PATCH" -m ""
       echo "No longer in version $(VERSION)"
       echo "New version : $(MAJOR).$(MINOR).$(PATCH)"
 ##      git push --tags
