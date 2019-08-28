@@ -8,7 +8,7 @@ jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
 
-  #steps:
+  steps:
   #- template: ../Versioning/handle_version.yml
 
   - bash: |
