@@ -1,3 +1,13 @@
+parameters:
+  name: 'Versioning'
+  buildConfiguration: 'Release'
+  pool: Default
+  CASCADES: ''
+
+jobs:
+- job: ${{ parameters.name }}
+  pool: ${{ parameters.pool }}
+
 - bash: |
     URL=$(Build.Repository.Uri)
     REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
