@@ -4,7 +4,7 @@ parameters:
   pool: Default
   CASCADES: ''
   
-jobs:
+
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
   
