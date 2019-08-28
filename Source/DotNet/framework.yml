@@ -9,6 +9,8 @@ jobs:
   pool: ${{ parameters.pool }}
 
   steps:
+  - template: ../Versioning/handle_version.yml
+
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
       echo $BUILD_REASON $BUILD_SOURCEVERSION $VERSION
