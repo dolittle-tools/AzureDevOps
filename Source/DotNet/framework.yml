@@ -8,8 +8,8 @@ jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
 
-  steps:
-  - template: ../Versioning/handle_version.yml
+  #steps:
+  #- template: ../Versioning/handle_version.yml
 
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
