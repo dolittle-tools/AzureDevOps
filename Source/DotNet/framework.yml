@@ -7,6 +7,7 @@ parameters:
 jobs:
 - job: 'Versioning'
   pool: Default
+  steps:
   - template: ../Versioning/handle_version.yml
   
 - job: ${{ parameters.name }}
