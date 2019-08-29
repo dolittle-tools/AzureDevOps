@@ -8,7 +8,7 @@ steps:
   - bash: |
       URL=$(Build.Repository.Uri)
       REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
-      LABEL=`GET https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep labels | head -1 | cut -d ":" -f 2 | tr -d '[' | tr -d ']'
+      LABEL=`GET https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep name | head -1 | cut -d ":" -f 2 | tr -d '"'`
       VERSION=$(git tag --sort=-version:refname | head -1)
       MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
       MINOR=`echo $VERSION | awk -F "." '{print $2}'`
