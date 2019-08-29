@@ -4,10 +4,7 @@ parameters:
   pool: Default
   CASCADES: ''
 
-jobs:
-- job: ${{ parameters.name }}
-  pool: ${{ parameters.pool }}
-
+steps:
   - bash: |
       URL=$(Build.Repository.Uri)
       REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
