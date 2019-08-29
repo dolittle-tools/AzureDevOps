@@ -13,7 +13,7 @@ steps:
       MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
       MINOR=`echo $VERSION | awk -F "." '{print $2}'`
       PATCH=`echo $VERSION | awk -F "." '{print $3}'`
-      STATUS=`GET https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep merged_at | head -1 | cut -d ":" -f 2 | tr -d '"'`
+      STATUS=$(GET https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep merged_at | head -1 | cut -d ":" -f 2 | tr -d '"')
       echo $LABEL
       if [ "$STATUS" != "null" ]
       then
