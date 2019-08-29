@@ -58,14 +58,11 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
-      
-- job: Documentation
-  pool: ${{ parameters.pool }}
-  variables:
-  - group: global-var-pipelines
   
 - job: 'Documentation'
   pool: Default
+  variables:
+  - group: global-var-pipelines
   steps:
   - template: ../Documentation/documentation.yml
         
