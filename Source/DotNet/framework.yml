@@ -5,11 +5,14 @@ parameters:
   CASCADES: ''
 
 jobs:
+- job: 'Versioning'
+  pool: Default
+  - template: ../Versioning/handle_version.yml
+  
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
 
   steps:
-  #- template: ../Versioning/handle_version.yml
 
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
