@@ -69,7 +69,7 @@ jobs:
 - job: 'Cascading'
   pool: Default
   steps:
-  - template: ../DotNet/cascades.yml
+  - template: cascades.yml
 
   
         
