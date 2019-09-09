@@ -58,8 +58,7 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
-  
-jobs:
+
 - job: 'Cascading'
   pool: Default
   steps:
