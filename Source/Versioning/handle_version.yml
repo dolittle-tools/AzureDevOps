@@ -44,7 +44,3 @@ steps:
   ##to be continued
     displayName: Update Version tag
     
-  - job: 'Cascading'
-    pool: Default
-    steps:
-    - template: ../DotNet/cascades.yml
