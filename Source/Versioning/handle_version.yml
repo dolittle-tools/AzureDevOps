@@ -43,3 +43,8 @@ steps:
       export VERSION=$(git tag --sort=-version:refname | head -1)
   ##to be continued
     displayName: Update Version tag
+    
+  - job: 'Cascading'
+    pool: Default
+    steps:
+    - template: ../DotNet/cascades.yml
