@@ -3,8 +3,7 @@ parameters:
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
-
-resources:
+  resources:
   repositories:
     - repository: templates
       type: github
