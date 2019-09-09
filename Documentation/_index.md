@@ -14,3 +14,5 @@ project and we provide out of the box templates for working with it.
 
 This project aims at providing build pipelines that can build, quality assure,
 automate testing, automate security and vulnerabilities checks.
+
+Some change test
