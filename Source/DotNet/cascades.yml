@@ -5,10 +5,10 @@ parameters:
   CASCADES: ''
   resources:
     repositories:
-      - repository: templates
+      - repository: root
         type: github
         name: $CASCADES
         endpoint: dolittle-tools
 
 steps:
-- template: azure-pipelines.yml@templates
+- template: azure-pipelines.yml@root
