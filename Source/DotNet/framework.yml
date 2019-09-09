@@ -59,6 +59,12 @@ jobs:
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
   
+jobs:
+- job: 'Cascading'
+  pool: Default
+  steps:
+  - template: cascades.yml 
+ 
 - job: 'Documentation'
   pool: Default
   variables:
