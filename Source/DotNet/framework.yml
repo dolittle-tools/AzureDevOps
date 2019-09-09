@@ -2,7 +2,7 @@ parameters:
   name: 'DotNetCore_Framework_Job'
   buildConfiguration: 'Release'
   pool: Default
-  CASCADES: 'test test test'
+  CASCADES: ''
 
 jobs:
 - job: 'Versioning'
