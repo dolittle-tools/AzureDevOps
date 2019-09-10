@@ -65,11 +65,7 @@ jobs:
   - group: global-var-pipelines
   steps:
   - template: ../Documentation/documentation.yml
-  
-- job: 'Cascading'
-  pool: Default
-  steps:
-  - template: cascades.yml
+
 
   
         
