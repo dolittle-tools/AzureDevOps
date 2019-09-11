@@ -3,12 +3,7 @@ parameters:
   buildConfiguration: 'Release'
   pool: Default
 
-steps:
-    - task: Bash@3
-      inputs:
-        arguments: $(Build.Repository.Uri)
-        targetType: inline
-      
+steps:      
     - checkout: self
       persistCredentials: true
       clean: true
@@ -33,3 +28,4 @@ steps:
         git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
+      condition: and(failed(), ne(variables['Build.Reason'], 'PullRequest'))
