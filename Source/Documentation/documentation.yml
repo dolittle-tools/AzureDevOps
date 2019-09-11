@@ -28,4 +28,4 @@ steps:
         git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
         cd ..
         rm -rf Documentation/
-      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
