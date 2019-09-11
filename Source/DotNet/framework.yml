@@ -63,6 +63,8 @@ jobs:
   pool: Default
   variables:
   - group: global-var-pipelines
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
   steps:
   - template: ../Documentation/documentation.yml
 
