@@ -3,44 +3,24 @@ parameters:
   pool: Default
   CASCADES: ''
 
-stages:
-- stage: Setup
-  jobs:
-  - job: Setup
-    pool: ${{ parameters.pool }}
-    steps:
-    - task: NodeTool@0
-      versionSpec: '12.0.0'
-      displayName: 'Ensuring version'
+jobs:
+- job: 'Typescript_Pipeline'
+  pool: ${{ parameters.pool }}
+  steps:
+  - task: NodeTool@0
+    versionSpec: '12.0.0'
+    displayName: 'Ensuring version'
 
-    - script: yarn
-      displayName: 'Installing dependencies'
-    
-- stage: Build
-  dependsOn: Setup
-  jobs:
-  - job: Build
-    pool: ${{ parameters.pool }}
-    steps:
-    - script: yarn build
-      displayName: 'Building the typescript project'
+  - script: yarn
+    displayName: 'Installing dependencies'
   
-- stage: Test
-  dependsOn: Build
-  jobs:
-  - job: Test
-    pool: ${{ parameters.pool }}
-    steps:
-    - script: yarn test:run
-      displayName: 'Running tests'
+  - script: yarn build
+    displayName: 'Building the typescript project'
 
-- stage: Versioning
-  dependsOn: Test
-  jobs:
-  - job: Versioning
-    pool: ${{ parameters.pool }}
-    steps:
-    - template: ../Versioning/handle_version.yml
-    - script: |
-        echo The version is $(VERSION)
-      displayName: Show version
+  - script: yarn test:run
+    displayName: 'Running tests'
+    
+  - template: ../Versioning/handle_version.yml
+  - script: |
+      echo The version is $(VERSION)
+    displayName: Show version
