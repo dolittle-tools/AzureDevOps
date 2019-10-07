@@ -1,0 +1,36 @@
+parameters:
+  name: 'Documentation'
+  buildConfiguration: 'Release'
+  pool: Default
+
+steps:      
+    - checkout: self
+      persistCredentials: true
+      clean: true
+    - bash: |
+        STATUS=$(GET https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep merged_at | head -1 | cut -d ":" -f 2 | tr -d '"')
+        if [ "$STATUS" != "null" ]
+        then
+          URL=$(Build.Repository.Uri)
+          submodule_name=`echo "$URL" | awk -F "dolittle-" '{ print $2 }'`
+          GIT_TERMINAL_PROMPT=1
+          mkdir tmp
+          cd tmp/
+          git clone https://github.com/dolittle/Documentation.git
+          cd Documentation/
+          cd Source/
+          cd repositories/
+          git submodule init && git submodule update "$submodule_name"
+          cd "$submodule_name"
+          git checkout master && git pull
+          cd ../../../..
+          git add Source/repositories/
+          git config --global user.email "documentation@dolittle.do"
+          git config --global user.name "Dolittle Documentation"
+          git commit -m "Updating Documentation"
+          git push https://dolittle-documentation:$(PAT)@github.com/dolittle/Documentation.git --all
+          cd ..
+          rm -rf Documentation/
+        else
+          echo "Pull request not merged -> Documentation build abort"
+        fi

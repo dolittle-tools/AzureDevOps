@@ -1,0 +1,14 @@
+parameters:
+  name: 'cascade_build'
+  buildConfiguration: 'Release'
+  pool: Default
+  CASCADES: ''
+  resources:
+    repositories:
+      - repository: template
+        type: github
+        name: $CASCADES
+        endpoint: dolittle-tools
+
+steps:
+- template: azure-pipelines.yml@template
