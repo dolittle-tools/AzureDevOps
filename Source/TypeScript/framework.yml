@@ -16,6 +16,10 @@ jobs:
   - script: yarn
     displayName: 'Installing dependencies'
   - script: ls
+  - script: ls Source
+  - script: ls Source/dependencies
+  - script: ls Source/dependencies/validation
+  - script: ls Source/dependencies/discoverDependency
   - script: yarn build
     displayName: 'Building the typescript project'
 
