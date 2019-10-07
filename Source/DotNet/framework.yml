@@ -25,7 +25,7 @@ jobs:
       do
         printf "  %s\n" $item
       done
-    displayName: Set Version
+    displayName: Building dependencies
 
   - script: |
       echo The version is $(VERSION)
