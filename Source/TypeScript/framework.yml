@@ -8,8 +8,9 @@ jobs:
   pool: ${{ parameters.pool }}
   steps:
   - task: NodeTool@0
-    versionSpec: '12.0.0'
     displayName: 'Ensuring version'
+    inputs:
+      versionSpec: '12.0.0'
 
   - script: yarn
     displayName: 'Installing dependencies'
@@ -19,7 +20,7 @@ jobs:
 
   - script: yarn test:run
     displayName: 'Running tests'
-    
+
   - template: ../Versioning/handle_version.yml
   - script: |
       echo The version is $(VERSION)
