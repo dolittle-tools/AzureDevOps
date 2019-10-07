@@ -15,7 +15,7 @@ jobs:
     displayName: 'Installing yarn'
   - script: yarn
     displayName: 'Installing dependencies'
-  
+  - script: ls
   - script: yarn build
     displayName: 'Building the typescript project'
 
