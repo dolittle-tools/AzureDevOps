@@ -1,0 +1,57 @@
+parameters:
+  buildConfiguration: 'Release'
+  pool: Default
+  CASCADES: ''
+
+stages:
+- stage: Setup
+  jobs:
+  - job: Setup
+    pool: ${{ parameters.pool }}
+    steps:
+    - task: NodeTool@0
+      versionSpec: '12.0.0'
+      displayName: 'Ensuring version'
+
+    - script: yarn
+      displayName: 'Installing dependencies'
+    
+- stage: Build
+  dependsOn: Setup
+  jobs:
+  - job: Build
+    pool: ${{ parameters.pool }}
+    steps:
+    - script: yarn build
+      displayName: 'Building the typescript project'
+  
+- stage: Test
+  dependsOn: Build
+  jobs:
+  - job: Test
+    pool: ${{ parameters.pool }}
+    steps:
+    - script: yarn test:run
+      displayName: 'Running tests'
+
+- stage: Versioning
+  dependsOn: Test
+  jobs:
+  - job: Versioning
+    pool: ${{ parameters.pool }}
+    steps:
+    - template: ../Versioning/handle_version.yml
+    - bash: |
+        export VERSION=$(git tag --sort=-version:refname | head -1)
+        echo $BUILD_REASON $BUILD_SOURCEVERSION $VERSION
+        echo "##vso[task.setvariable variable=VERSION]$VERSION"
+
+        echo "Cascade to :"
+        for item in ${{ parameters.CASCADES }}
+        do
+          printf "  %s\n" $item
+        done
+      displayName: Set Version
+    - script: |
+        echo The version is $(VERSION)
+      displayName: Show version
