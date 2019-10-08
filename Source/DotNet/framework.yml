@@ -5,29 +5,12 @@ parameters:
   CASCADES: ''
 
 jobs:
-- job: 'Versioning'
-  pool: Default
-  steps:
-  - template: ../Versioning/handle_version.yml
-  
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
 
   steps:
-
-  - bash: |
-      export VERSION=$(git tag --sort=-version:refname | head -1)
-      echo $BUILD_REASON $BUILD_SOURCEVERSION $VERSION
-      echo "##vso[task.setvariable variable=VERSION]$VERSION"
-
-      echo "Cascade to :"
-      for item in ${{ parameters.CASCADES }}
-      do
-        printf "  %s\n" $item
-      done
-    displayName: Building dependencies
-
   - script: |
+      export VERSION=$(git tag --sort=-version:refname | head -1)
       echo The version is $(VERSION)
     displayName: Show version
 
@@ -58,16 +41,29 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
+     
+
+- job: 'Versioning'
+  pool: Default
+  dependsOn: ${{ parameters.name }}
+  condition: succeeded()
+  steps:
+  - template: ../Versioning/handle_version.yml
+ 
+
+# 1 -  publish to local nuget
+
+# 2 -  Cascade
  
 - job: 'Documentation'
   pool: Default
+  dependsOn: ${{ parameters.name }}
+  condition: succeeded()
   variables:
   - group: global-var-pipelines
   steps:
   - template: ../Documentation/documentation.yml
-
-
-  
-        
+   
+   
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
 # echo IndividualCI 036100265b6d83d536827451131bf8c306ce9d43 2.0.0
