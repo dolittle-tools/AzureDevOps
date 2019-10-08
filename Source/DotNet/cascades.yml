@@ -11,4 +11,4 @@ parameters:
         endpoint: dolittle-tools
 
 steps:
-- template: azure-pipelines.yml@template
+- template: azure-pipelines.yml
