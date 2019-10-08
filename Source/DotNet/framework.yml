@@ -52,6 +52,8 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
+      
+# publish to local nuget
 
 - job: 'Versioning'
   pool: Default
