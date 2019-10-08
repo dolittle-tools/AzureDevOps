@@ -28,3 +28,9 @@ jobs:
   - script: |
       echo The version is $(VERSION)
     displayName: Show version
+- job: 'Documentation'
+  pool: ${{ parameters.pool }}
+  variables:
+  - group: global-var-pipelines
+  steps:
+  - template: ../Documentation/documentation.yml
