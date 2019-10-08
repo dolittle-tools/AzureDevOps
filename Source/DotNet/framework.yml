@@ -5,16 +5,10 @@ parameters:
   CASCADES: ''
 
 jobs:
-- job: 'Versioning'
-  pool: Default
-  steps:
-  - template: ../Versioning/handle_version.yml
-  
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
 
   steps:
-
   - bash: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
       echo $BUILD_REASON $BUILD_SOURCEVERSION $VERSION
@@ -58,9 +52,19 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
+
+- job: 'Versioning'
+  pool: Default
+  dependsOn: ${{ parameters.name }}
+  condition: succeeded()
+  steps:
+  - template: ../Versioning/handle_version.yml
+  
  
 - job: 'Documentation'
   pool: Default
+  dependsOn: ${{ parameters.name }}
+  condition: succeeded()
   variables:
   - group: global-var-pipelines
   steps:
