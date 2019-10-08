@@ -11,15 +11,13 @@ jobs:
     displayName: 'Ensuring version'
     inputs:
       versionSpec: '>=12.0.0'
+  
   - script: npm i yarn -g
     displayName: 'Installing yarn'
+  
   - script: yarn
     displayName: 'Installing dependencies'
-  - script: ls
-  - script: ls Source
-  - script: ls Source/dependencies
-  - script: ls Source/dependencies/validation
-  - script: ls Source/dependencies/validation/discoverDependency
+    
   - script: yarn build
     displayName: 'Building the typescript project'
 
