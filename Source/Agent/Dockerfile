@@ -10,10 +10,10 @@ RUN apt-get update \
         ca-certificates \
         curl \
         jq \
-        git \
         iputils-ping \
-        libcurl3 \
-        libicu55
+        libcurl4
+RUN apt-get -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+RUN add-apt-repository ppa:git-core/ppa -y && apt-get update && apt-get install git -y
 
 WORKDIR /azp
 
