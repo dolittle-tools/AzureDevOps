@@ -27,7 +27,7 @@ jobs:
   - template: ../Versioning/handle_version.yml
   - script: |
       export VERSION=$(git tag --sort=-version:refname | head -1)
-      echo The version is $(VERSION)
+      echo The current version is $(VERSION)
     displayName: Show version
 - job: 'Documentation'
   pool: ${{ parameters.pool }}
