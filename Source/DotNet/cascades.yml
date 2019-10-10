@@ -41,7 +41,7 @@ steps:
       command: build
       projects: 'Source/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
-      packagesDirectory: $(System.DefaultWorkingDirectory)/packages
+      packagesDirectory: $(Build.ArtifactStagingDirectory)
   
   - task: DotNetCoreCLI@2
     displayName: Run Tests
@@ -55,7 +55,7 @@ steps:
     condition: succeeded()
     inputs:
       command: pack
-      packDirectory: $(System.DefaultWorkingDirectory)/packages
+      packDirectory: $(Build.ArtifactStagingDirectory)
       packagesToPack: '**/*.csproj'
 
   - task: DotNetCoreCLI@2
@@ -66,27 +66,16 @@ steps:
 
 # 1 - deploy nuget packages in a folder 
 
-  - publish: $(System.DefaultWorkingDirectory)/packages
+  - publish: $(Build.ArtifactStagingDirectory)
     artifact: NugetPack  
 # Trigger a new pipeline by changing a file
   - bash: |
       for item in ${{ parameters.CASCADES }}
       do
         git clone https://github.com/"$item".git --recursive
-        export REPO=`echo $item | awk -F "/" '{print $1}'`
-        cd $REPO
-
-        if [ ! -f ".cascade" ]; then
-            touch .cascade
-            git add .cascade
-        else
-            rm .cascade
-            git rm .cascade
-        fi
-
         git config --global user.email $(GitEmail)
         git config --global user.name $(GitUsername)
-        git commit -m "Push .cascade for pipeline trigger [Auto]"
+        git commit --allow-empty -m "Empty commit for pipeline trigger [Auto]"
         git push https://dolittle-documentation:$(CascadingBuild)@github.com/dolittle/Documentation.git --all
       done
     displayName: Trigger new pipeline ( $REPO )
