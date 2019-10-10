@@ -17,13 +17,14 @@ steps:
       downloadPath: '$(Build.ArtifactStagingDirectory)'
 
 # DotnetCore functions
-  - task: DotNetCoreCLI@2
+  - task: NuGetCommand@2
     displayName: Restore from nuget
     inputs:
       command: 'restore'
       feedsToUse: 'select'
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
+      feedRestore: '$(Build.ArtifactStagingDirectory)'
 
 
   - task: DotNetCoreCLI@2
