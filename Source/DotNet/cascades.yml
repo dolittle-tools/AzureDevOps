@@ -21,10 +21,9 @@ steps:
     displayName: Restore packages
     inputs:
       command: 'restore'
-      feedsToUse: 'config'
+      feedsToUse: 'select'
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
-      nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
   - task: DotNetCoreCLI@2
     displayName: Build release
