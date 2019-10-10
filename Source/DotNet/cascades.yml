@@ -37,7 +37,6 @@ steps:
 
   - task: NuGetCommand@2
     displayName: Packing
-    dependsOn: Run Tests
     condition: succeeded
     inputs:
       command: pack
@@ -46,7 +45,6 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish release
-    dependsOn: Packing
     condition: succeeded
     inputs:
       command: publish
