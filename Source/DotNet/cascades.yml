@@ -6,8 +6,11 @@ parameters:
 
 steps:
 # Download artifact containing nuget packs into $(System.DefaultWorkingDirectory)/$REPO/packages
-  - download: current
-    artifact: NugetPack
+  - task: DownloadBuildArtifacts@0
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'NugetPack'
     downloadPath: '$(System.DefaultWorkingDirectory)/packages'
 
 # DotnetCore functions
