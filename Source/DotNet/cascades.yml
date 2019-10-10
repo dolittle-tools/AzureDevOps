@@ -18,12 +18,13 @@ steps:
 
 # DotnetCore functions
   - task: DotNetCoreCLI@2
-    displayName: Restore packages
+    displayName: Restore from nuget
     inputs:
       command: 'restore'
       feedsToUse: 'select'
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
+      feedRestore: '$(Build.ArtifactStagingDirectory)'
 
   - task: DotNetCoreCLI@2
     displayName: Build release
