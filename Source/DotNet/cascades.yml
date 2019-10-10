@@ -1,14 +1,79 @@
 parameters:
-  name: 'cascade_build'
+  name: 'Triggering cascade'
   buildConfiguration: 'Release'
   pool: Default
   CASCADES: ''
-  resources:
-    repositories:
-      - repository: next
-        type: github
-        name: $CASCADES
-        endpoint: dolittle-tools
 
 steps:
-- template: azure-pipelines.yml@next
+# Download artifact containing nuget packs into $(System.DefaultWorkingDirectory)/$REPO/packages
+  - download: current
+    artifact: NugetPack
+    downloadPath: '$(System.DefaultWorkingDirectory)/packages'
+
+# DotnetCore functions
+  - task: DotNetCoreCLI@2
+    displayName: Restore packages
+    inputs:
+      command: 'restore'
+      feedsToUse: 'config'
+      versioningScheme: 'off'
+      nuGetFeedType: 'internal'
+      nugetConfigPath: $(System.DefaultWorkingDirectory)/packages
+
+  - task: DotNetCoreCLI@2
+    displayName: Build release
+    inputs:
+      command: build
+      projects: 'Source/**/*.csproj'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
+      packagesDirectory: $(System.DefaultWorkingDirectory)/packages
+  
+  - task: DotNetCoreCLI@2
+    displayName: Run Tests
+    inputs:
+      command: test
+      projects: 'Specifications/**/*.csproj'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+
+  - task: NuGetCommand@2
+    displayName: Packing
+    dependsOn: Run Tests
+    condition: succeeded
+    inputs:
+      command: pack
+      packDirectory: $(System.DefaultWorkingDirectory)/packages
+      packagesToPack: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish release
+    dependsOn: Packing
+    condition: succeeded
+    inputs:
+      command: publish
+
+# 1 - deploy nuget packages in a folder 
+
+  - publish: $(System.DefaultWorkingDirectory)/packages
+    artifact: NugetPack  
+# Trigger a new pipeline by changing a file
+  - bash: |
+      for item in ${{ parameters.CASCADES }}
+      do
+        git clone https://github.com/"$item".git --recursive
+        export REPO=`echo $item | awk -F "/" '{print $1}'`
+        cd $REPO
+
+        if [ ! -f ".cascade" ]; then
+            touch .cascade
+            git add .cascade
+        else
+            rm .cascade
+            git rm .cascade
+        fi
+
+        git config --global user.email $(GitEmail)
+        git config --global user.name $(GitUsername)
+        git commit -m "Push .cascade for pipeline trigger [Auto]"
+        git push https://dolittle-documentation:$(CascadingBuild)@github.com/dolittle/Documentation.git --all
+      done
+    displayName: Trigger new pipeline ( $REPO )
