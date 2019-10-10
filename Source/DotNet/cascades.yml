@@ -40,7 +40,7 @@ steps:
 
   - task: NuGetCommand@2
     displayName: Packing
-    condition: succeeded
+    condition: succeeded()
     inputs:
       command: pack
       packDirectory: $(System.DefaultWorkingDirectory)/packages
@@ -48,7 +48,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish release
-    condition: succeeded
+    condition: succeeded()
     inputs:
       command: publish
 
