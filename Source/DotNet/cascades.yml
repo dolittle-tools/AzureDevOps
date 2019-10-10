@@ -11,7 +11,7 @@ steps:
       buildType: 'current'
       downloadType: 'single'
       artifactName: 'NugetPack'
-      downloadPath: '$(System.DefaultWorkingDirectory)/packages'
+      downloadPath: '$(Build.ArtifactStagingDirectory)'
       
   - publish: $(System.DefaultWorkingDirectory)/packages
     condition: failed()
@@ -23,7 +23,7 @@ steps:
       buildType: 'current'
       downloadType: 'single'
       artifactName: 'NugetPack'
-      downloadPath: '$(System.DefaultWorkingDirectory)/packages'
+      downloadPath: '$(Build.ArtifactStagingDirectory)'
 
 # DotnetCore functions
   - task: DotNetCoreCLI@2
@@ -33,7 +33,7 @@ steps:
       feedsToUse: 'config'
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
-      nugetConfigPath: $(System.DefaultWorkingDirectory)/packages
+      nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
   - task: DotNetCoreCLI@2
     displayName: Build release
