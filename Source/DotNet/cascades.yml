@@ -13,7 +13,7 @@ steps:
       artifactName: 'NugetPack'
       downloadPath: '$(Build.ArtifactStagingDirectory)'
       
-  - publish: $(System.DefaultWorkingDirectory)/packages
+  - publish: $(Build.ArtifactStagingDirectory)
     condition: failed()
     artifact: NugetPack  
     
