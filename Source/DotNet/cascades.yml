@@ -35,16 +35,15 @@ steps:
       arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
       packagesDirectory: $(Build.ArtifactStagingDirectory)
   
-  - task: DotNetCoreCLI@2
-    displayName: Run Tests
-    inputs:
-      command: test
-      projects: 'Specifications/**/*.csproj'
-      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+#  - task: DotNetCoreCLI@2
+#    displayName: Run Tests
+#    inputs:
+#      command: test
+#      projects: 'Specifications/**/*.csproj'
+#      arguments: '--configuration ${{ parameters.buildConfiguration }}'
 
   - task: NuGetCommand@2
     displayName: Packing
-    condition: succeeded()
     inputs:
       command: pack
       outputDir: $(Build.ArtifactStagingDirectory)
@@ -52,7 +51,6 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Push release
-    condition: succeeded()
     inputs:
       command: push
       searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
