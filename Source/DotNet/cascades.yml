@@ -44,9 +44,8 @@ steps:
   - task: NuGetCommand@2
     displayName: Packing
     inputs:
-      command: pack
-      outputDir: $(Build.ArtifactStagingDirectory)
-      packagesToPack: '**/*.csproj'
+      command: 'pack'
+      outputDir: '$(Build.ArtifactStagingDirectory)'
 
   - task: DotNetCoreCLI@2
     displayName: Push release
