@@ -4,6 +4,7 @@ parameters:
   pool: Default
   CASCADES: ''
 
+steps:
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: NugetPack  
     
