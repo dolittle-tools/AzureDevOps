@@ -12,6 +12,18 @@ steps:
       downloadType: 'single'
       artifactName: 'NugetPack'
       downloadPath: '$(System.DefaultWorkingDirectory)/packages'
+      
+  - publish: $(System.DefaultWorkingDirectory)/packages
+    condition: failed()
+    artifact: NugetPack  
+    
+  - task: DownloadBuildArtifacts@0
+    condition: 
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'NugetPack'
+      downloadPath: '$(System.DefaultWorkingDirectory)/packages'
 
 # DotnetCore functions
   - task: DotNetCoreCLI@2
