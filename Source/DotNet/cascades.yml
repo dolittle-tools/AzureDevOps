@@ -45,7 +45,7 @@ steps:
     condition: succeeded()
     inputs:
       command: pack
-      packDirectory: $(Build.ArtifactStagingDirectory)
+      outputDir: $(Build.ArtifactStagingDirectory)
       packagesToPack: '**/*.csproj'
 
   - task: DotNetCoreCLI@2
@@ -55,7 +55,7 @@ steps:
       command: push
       searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg
       feedPublish: NugetPack
-
+      
 # 1 - deploy nuget packages in a folder 
 
   - publish: $(Build.ArtifactStagingDirectory)
