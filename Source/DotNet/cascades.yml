@@ -49,10 +49,12 @@ steps:
       packagesToPack: '**/*.csproj'
 
   - task: DotNetCoreCLI@2
-    displayName: Publish release
+    displayName: Push release
     condition: succeeded()
     inputs:
-      command: publish
+      command: push
+      searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg
+      feedPublish: NugetPack
 
 # 1 - deploy nuget packages in a folder 
 
