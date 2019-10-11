@@ -21,30 +21,30 @@ jobs:
     inputs:
       version: '2.2.203'
 
- # - template: cascades.yml
- #   parameters:
- #     CASCADES: ${{ parameters.CASCADES }}
+  - template: cascades.yml
+    parameters:
+      CASCADES: ${{ parameters.CASCADES }}
 
-  - task: DotNetCoreCLI@2
-    displayName: Restore packages
-    inputs:
-      command: 'restore'
-      feedsToUse: 'select'
-      versioningScheme: 'off'
+#  - task: DotNetCoreCLI@2
+#    displayName: Restore packages
+#    inputs:
+#      command: 'restore'
+#      feedsToUse: 'select'
+#      versioningScheme: 'off'
 
-  - task: DotNetCoreCLI@2
-    displayName: Build release
-    inputs:
-      command: build
-      projects: 'Source/**/*.csproj'
-      arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
+#  - task: DotNetCoreCLI@2
+#    displayName: Build release
+#    inputs:
+#      command: build
+#      projects: 'Source/**/*.csproj'
+#      arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
 
-  - task: DotNetCoreCLI@2
-    displayName: Run Tests
-    inputs:
-      command: test
-      projects: 'Specifications/**/*.csproj'
-      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+#  - task: DotNetCoreCLI@2
+#    displayName: Run Tests
+#    inputs:
+#      command: test
+#      projects: 'Specifications/**/*.csproj'
+#      arguments: '--configuration ${{ parameters.buildConfiguration }}'
      
 
 - job: 'Versioning'
