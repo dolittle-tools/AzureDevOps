@@ -53,7 +53,7 @@ steps:
     inputs:
       command: push
       searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      feedPublish: NugetPack
+      feedPublish: 'nugetCredentials'
       
 # 1 - deploy nuget packages in a folder 
 
