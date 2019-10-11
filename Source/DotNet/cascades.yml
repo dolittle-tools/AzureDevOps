@@ -17,7 +17,7 @@ steps:
       downloadPath: '$(Build.ArtifactStagingDirectory)'
 
 # DotnetCore functions
-  - task: NuGetCommand@2
+  - task: DotNetCoreCLI@2
     displayName: Restore from nuget
     inputs:
       command: 'restore'
@@ -25,6 +25,7 @@ steps:
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
       feedRestore: '$(Build.ArtifactStagingDirectory)'
+      nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
 
   - task: DotNetCoreCLI@2
@@ -42,7 +43,7 @@ steps:
 #      projects: 'Specifications/**/*.csproj'
 #      arguments: '--configuration ${{ parameters.buildConfiguration }}'
 
-  - task: NuGetCommand@2
+  - task: DotNetCoreCLI@2
     displayName: Packing
     inputs:
       command: 'pack'
