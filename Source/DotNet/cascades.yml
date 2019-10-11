@@ -53,7 +53,7 @@ steps:
     inputs:
       command: push
       searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      feedPublish: 'nugetCredentials'
+#      feedPublish: 'put here the Nuget service connection'
       
 # 1 - deploy nuget packages in a folder 
 
