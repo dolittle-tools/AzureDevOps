@@ -24,7 +24,6 @@ steps:
       feedsToUse: 'select'
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
-      feedRestore: '$(Build.ArtifactStagingDirectory)'
       nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
 
