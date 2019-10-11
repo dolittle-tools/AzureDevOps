@@ -2,12 +2,12 @@ parameters:
   name: 'Versioning'
   buildConfiguration: 'Release'
   pool: Default
-  CASCADES: ''
 
 variables:
 - group: global-var-pipelines
+
 steps:
-  - bash: |
+-  bash: |
       URL=$(Build.Repository.Uri)
       COMMIT_SHA=$(Build.SourceVersion)
       BRANCH=$(Build.SourceBranch) 
@@ -39,11 +39,11 @@ steps:
           MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
           MINOR=`echo $VERSION | awk -F "." '{print $2}'`
           PATCH=`echo $VERSION | awk -F "." '{print $3}'`
-          SHOULD_TAG=false
+          SHOULD_PUBLISH=false
 
           if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
           then
-              SHOULD_TAG=true
+              SHOULD_PUBLISH=true
           fi
           
           if [ "$MAJOR_LABEL" = "major" ] && [ "$NEW_PROJECT" = false ]
@@ -63,25 +63,22 @@ steps:
               echo "New patch release"
               PATCH=$((PATCH+1))
           fi
-          if [ "$SHOULD_TAG" = true ]
+          if [ "$SHOULD_PUBLISH" = true ]
           then
-              echo "Triggering new version tag"
-              git config user.name \"$GIT_USERNAME\"
-              git config user.email \"$GIT_EMAIL\"
-              git tag -a "$MAJOR"."$MINOR"."$PATCH" -m "Azure Devops Pipelines Versioning Strategy: Tagging new version"
-              echo "Previous version $VERSION"
-              echo "New version : $MAJOR.$MINOR.$PATCH"
-              git push https://$GIT_USERNAME:$PAT@github.com/$REPO HEAD:$BRANCH --tags
+              echo "Triggering new release"
+              echo //registry.npmjs.org/:_authToken="$NPM_TOKEN" > .npmrc
+              ROOT_JSON=$(jq )
+              WORKSPACES=$(jq '.workspaces' package.json)
+              
           else
               echo "No label triggering new version"
           fi
       fi
       echo "End of script"
-    
-    displayName: Handle versioning tag
-    env:
-      GIT_EMAIL: $(GitEmail)
-      GIT_USERNAME: $(GitUsername)
-      PAT: $(CascadingBuild)
+   displayName: Handling release
+   env:
+     NPM_TOKEN: $(NpmToken)
 
+-  script: yarn run publish
+   displayName: Publishing
     
