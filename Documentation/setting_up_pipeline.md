@@ -4,7 +4,9 @@ description: Overview of how to add an a build badge to your README.md
 keywords: Build
 weight: 2
 author: einari
+aliases: /tools/azuredevops/setting_up_pipeline
 ---
+
 When the pipeline is in place, we want to hook this up in Azure DevOps.
 Note: You'll need to be authorized in the organization in order to do this.
 
