@@ -17,6 +17,7 @@ steps:
 
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: NugetPack
+    condition: always()
     
 # Trigger a new pipeline with empty commit
   - bash: |
