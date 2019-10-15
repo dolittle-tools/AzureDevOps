@@ -61,7 +61,7 @@ jobs:
 - job: 'Versioning'
   pool: Default
   dependsOn: ${{ parameters.name }}
-  condition: always()
+  condition: succeeded()
   steps:
   - template: ../Versioning/handle_version.yml
   
