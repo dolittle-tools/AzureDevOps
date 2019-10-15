@@ -5,19 +5,25 @@ parameters:
   CASCADES: ''
 
 steps:
+
+#  - bash: |
+#      if [  ]
+#        echo "##vso[task.setvariable variable=artifact_exists]YES"
+#      else
+#        echo "##vso[task.setvariable variable=artifact_exists]NO"
+#      fi
     
-  - task: DownloadBuildArtifacts@0
-    condition: 
-    inputs:
-      buildType: 'current'
-      downloadType: 'single'
-      artifactName: 'NugetPack'
-      downloadPath: '$(Build.ArtifactStagingDirectory)'
+#  - task: DownloadBuildArtifacts@0
+#    condition: eq($(artifact_exists), 'YES')
+#    inputs:
+#      buildType: 'current'
+#      downloadType: 'single'
+#      artifactName: 'NugetPack'
+#      downloadPath: '$(Build.ArtifactStagingDirectory)'
 
 # DotnetCore functions
   - task: DotNetCoreCLI@2
     displayName: Restore from nuget
-    condition: always()
     inputs:
       command: 'restore'
       feedsToUse: 'select'
@@ -28,7 +34,6 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Build release
-    condition: always()
     inputs:
       command: build
       projects: 'Source/**/*.csproj'
@@ -44,7 +49,6 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Packing
-    condition: always()
     inputs:
       command: 'pack'
       outputDir: '$(Build.ArtifactStagingDirectory)'
@@ -59,7 +63,6 @@ steps:
 
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: NugetPack
-    condition: always()
 # Trigger a new pipeline by changing a file
   - bash: |
       for item in ${{ parameters.CASCADES }}
