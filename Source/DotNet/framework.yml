@@ -7,6 +7,8 @@ parameters:
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
+  variables:
+  - group: global-var-pipelines
 
   steps:
   - script: |
@@ -22,11 +24,14 @@ jobs:
       version: '2.2.203'
 
   - task: DotNetCoreCLI@2
-    displayName: Restore packages
+    displayName: Restore from nuget
     inputs:
       command: 'restore'
       feedsToUse: 'select'
       versioningScheme: 'off'
+      nuGetFeedType: 'internal'
+      nugetConfigPath: $(Build.ArtifactStagingDirectory)
+
 
   - task: DotNetCoreCLI@2
     displayName: Build release
@@ -34,14 +39,24 @@ jobs:
       command: build
       projects: 'Source/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
-      
+      packagesDirectory: $(Build.ArtifactStagingDirectory)
+  
   - task: DotNetCoreCLI@2
     displayName: Run Tests
     inputs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
-     
+
+  - task: DotNetCoreCLI@2
+    displayName: Packing
+    inputs:
+      command: 'pack'
+      outputDir: '$(Build.ArtifactStagingDirectory)'
+
+  - template: cascades.yml
+    parameters:
+      CASCADES: ${{ parameters.CASCADES }}
 
 - job: 'Versioning'
   pool: Default
@@ -49,16 +64,11 @@ jobs:
   condition: succeeded()
   steps:
   - template: ../Versioning/handle_version.yml
- 
-
-# 1 -  publish to local nuget
-
-# 2 -  Cascade
- 
+  
 - job: 'Documentation'
   pool: Default
   dependsOn: ${{ parameters.name }}
-  condition: succeeded()
+  condition: always()
   variables:
   - group: global-var-pipelines
   steps:

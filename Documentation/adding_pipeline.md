@@ -4,6 +4,7 @@ description: Overview of how to add an a pipeline
 keywords: Build
 weight: 1
 author: einari
+aliases: /tools/azuredevops/adding_pipeline
 ---
 Start by adding a file called `azure-pipelines.yml` at the root of the
 repository you want to use.
