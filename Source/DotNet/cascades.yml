@@ -17,6 +17,7 @@ steps:
 # DotnetCore functions
   - task: DotNetCoreCLI@2
     displayName: Restore from nuget
+    condition: always()
     inputs:
       command: 'restore'
       feedsToUse: 'select'
