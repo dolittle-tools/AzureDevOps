@@ -4,7 +4,7 @@ parameters:
   CASCADES: ''
 
 jobs:
-- job: 'Typescript_Pipeline'
+- job: Build
   pool: ${{ parameters.pool }}
   steps:
   - task: NodeTool@0
@@ -24,15 +24,17 @@ jobs:
   - script: yarn test:run
     displayName: 'Running tests'
 
-- job: 'Release'
+- job: Release
   pool: ${{ parameters.pool }}
+  dependsOn: Build
   variables:
   - group: global-var-pipelines
   steps:
   - template: ./release.yml
 
-- job: 'Documentation'
+- job: Documentation
   pool: ${{ parameters.pool }}
+  dependsOn: Build
   variables:
   - group: global-var-pipelines
   steps:
