@@ -5,8 +5,6 @@ parameters:
   CASCADES: ''
 
 steps:
-  - publish: $(Build.ArtifactStagingDirectory)
-    artifact: NugetPack  
     
   - task: DownloadBuildArtifacts@0
     condition: 
