@@ -53,12 +53,7 @@ jobs:
   condition: succeeded()
   steps:
   - template: ../Versioning/handle_version.yml
- 
-
-# 1 -  publish to local nuget
-
-# 2 -  Cascade
- 
+  
 - job: 'Documentation'
   pool: Default
   dependsOn: ${{ parameters.name }}
