@@ -24,11 +24,13 @@ jobs:
   - script: yarn test:run
     displayName: 'Running tests'
 
-  - template: ../Versioning/handle_version.yml
-  - script: |
-      export VERSION=$(git tag --sort=-version:refname | head -1)
-      echo The current version is $(VERSION)
-    displayName: Show version
+- job: 'Release'
+  pool: ${{ parameters.pool }}
+  variables:
+  - group: global-var-pipelines
+  steps:
+  - template: ./release.yml
+
 - job: 'Documentation'
   pool: ${{ parameters.pool }}
   variables:
