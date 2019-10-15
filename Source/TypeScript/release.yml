@@ -57,9 +57,9 @@ steps:
     else
         echo "No new version to release"
     fi
-    displayName: Handling release
-    env:
-      NPM_TOKEN: $(NpmToken)
-      GIT_USERNAME: $(GitUsername)
-      GIT_EMAIL: $(GitEmail)
-      PAT: $(CascadingBuild)
+  displayName: Handling release
+  env:
+    NPM_TOKEN: $(NpmToken)
+    GIT_USERNAME: $(GitUsername)
+    GIT_EMAIL: $(GitEmail)
+    PAT: $(CascadingBuild)

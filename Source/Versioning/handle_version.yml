@@ -25,7 +25,7 @@ steps:
         TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
         while [ ! "$TAG_REFS" ]
         do
-            sleep 1
+        sleep 1
         done
         VERSION=$(echo $TAG_REFS | grep -o -E "refs/tags/\S+" | grep -o -e "[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
         NEW_PROJECT=false
@@ -44,7 +44,7 @@ steps:
         then
             SHOULD_TAG=true
         fi
-        
+    
         if [ "$MAJOR_LABEL" = "major" ] && [ "$NEW_PROJECT" = false ]
         then
             echo "New major release"
@@ -80,10 +80,9 @@ steps:
     else
         echo "##vso[task.setvariable variable=Version]empty"
     fi
-    
-    displayName: Handle version tag
-    name: VersionHandling
-    env:
-      GIT_EMAIL: $(GitEmail)
-      GIT_USERNAME: $(GitUsername)
-      PAT: $(CascadingBuild)
+  displayName: Handle version tag
+  name: VersionHandling
+  env:
+    GIT_EMAIL: $(GitEmail)
+    GIT_USERNAME: $(GitUsername)
+    PAT: $(CascadingBuild)
