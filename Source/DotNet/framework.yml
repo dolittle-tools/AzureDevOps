@@ -60,7 +60,6 @@ jobs:
   - template: cascades.yml
     parameters:
       CASCADES: ${{ parameters.CASCADES }}
-    condition: ne($(LABEL), 'major')
 
 - job: 'Versioning'
   pool: Default
