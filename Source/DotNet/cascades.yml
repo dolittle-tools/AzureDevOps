@@ -71,3 +71,4 @@ steps:
         git push https://$(GitUsername):$(CascadingBuild)@github.com/"$item".git --all
       done
     displayName: Trigger new pipeline ( $REPO )
+    condition: always()
