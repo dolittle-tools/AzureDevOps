@@ -34,7 +34,7 @@ steps:
     
 # Trigger a new pipeline with empty commit
   - bash: |
-      export LABEL=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep name | head -1 | cut -d ":" -f 2 | tr -d '"')
+      echo "##vso[task.setvariable LABEL=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep name | head -1 | cut -d ":" -f 2 | tr -d '"')]"
       for item in ${{ parameters.CASCADES }}
       do
         git clone https://github.com/"$item".git
@@ -46,5 +46,5 @@ steps:
         git commit --allow-empty -m "Empty commit for pipeline trigger [Auto]"
         git push https://$(GitUsername):$(CascadingBuild)@github.com/"$item".git --all
       done
-    displayName: Trigger new pipeline ( $REPO )
-    condition: ne($LABEL, 'major')
+    displayName: Trigger new pipeline ( switching repository )
+    condition: ne($(LABEL), 'major')
