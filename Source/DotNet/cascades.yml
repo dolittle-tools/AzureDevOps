@@ -43,7 +43,7 @@ steps:
         git checkout origin master
         git config --global user.email $(GitEmail)
         git config --global user.name $(GitUsername)
-        git commit --allow-empty -m "Empty commit for pipeline trigger [Auto]"
+        git commit --allow-empty -m "[Auto] Triggered from another pipeline (cascading)"
         git push https://$(GitUsername):$(CascadingBuild)@github.com/"$item".git --all
       done
     displayName: Trigger new pipeline ( switching repository )
