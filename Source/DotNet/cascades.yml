@@ -6,21 +6,6 @@ parameters:
 
 steps:
 
-#  - bash: |
-#      if [  ]
-#        echo "##vso[task.setvariable variable=artifact_exists]YES"
-#      else
-#        echo "##vso[task.setvariable variable=artifact_exists]NO"
-#      fi
-    
-#  - task: DownloadBuildArtifacts@0
-#    condition: eq($(artifact_exists), 'YES')
-#    inputs:
-#      buildType: 'current'
-#      downloadType: 'single'
-#      artifactName: 'NugetPack'
-#      downloadPath: '$(Build.ArtifactStagingDirectory)'
-
 #  - task: DotNetCoreCLI@2
 #    displayName: Push release
 #    inputs:
