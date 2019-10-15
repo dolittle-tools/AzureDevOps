@@ -67,7 +67,7 @@ steps:
   - bash: |
       for item in ${{ parameters.CASCADES }}
       do
-        git clone https://github.com/"$item".git --recursive
+        git clone https://github.com/"$item".git
         git config --global user.email $(GitEmail)
         git config --global user.name $(GitUsername)
         git commit --allow-empty -m "Empty commit for pipeline trigger [Auto]"
