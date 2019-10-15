@@ -10,8 +10,9 @@ steps:
     displayName: Push release
     inputs:
       command: push
+      nugetFeedType: 'external'
       searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      feedPublish: 'nuget_credential'
+      externalEndPoint: 'nuget_credential'
       
 
   - publish: $(Build.ArtifactStagingDirectory)
