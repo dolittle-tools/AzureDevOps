@@ -50,14 +50,14 @@ jobs:
 - job: 'Versioning'
   pool: Default
   dependsOn: ${{ parameters.name }}
-  condition: succeeded()
+  condition: always()
   steps:
   - template: ../Versioning/handle_version.yml
   
 - job: 'Documentation'
   pool: Default
   dependsOn: ${{ parameters.name }}
-  condition: succeeded()
+  condition: always()
   variables:
   - group: global-var-pipelines
   steps:
