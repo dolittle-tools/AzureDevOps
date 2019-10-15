@@ -34,7 +34,7 @@ steps:
     
 # Trigger a new pipeline with empty commit
   - bash: |
-      echo "##vso[task.setvariable LABEL=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep name | head -1 | cut -d ":" -f 2 | tr -d '"')]"
+      echo "##vso[task.setvariable variable=LABEL]$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep name | head -1 | cut -d ":" -f 2 | tr -d '"')"
       for item in ${{ parameters.CASCADES }}
       do
         git clone https://github.com/"$item".git
