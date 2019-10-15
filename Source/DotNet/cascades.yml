@@ -6,15 +6,6 @@ parameters:
 
 steps:
 
-  - task: DotNetCoreCLI@2
-    displayName: Push release
-    inputs:
-      command: nuget push
-      nugetFeedType: 'external'
-      searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      externalEndPoint: 'nuget_credential'
-      
-
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: NugetPack
     condition: always()
