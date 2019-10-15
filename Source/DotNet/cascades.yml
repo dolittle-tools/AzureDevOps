@@ -40,12 +40,12 @@ steps:
       arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
       packagesDirectory: $(Build.ArtifactStagingDirectory)
   
-#  - task: DotNetCoreCLI@2
-#    displayName: Run Tests
-#    inputs:
-#      command: test
-#      projects: 'Specifications/**/*.csproj'
-#      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+  - task: DotNetCoreCLI@2
+    displayName: Run Tests
+    inputs:
+      command: test
+      projects: 'Specifications/**/*.csproj'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
 
   - task: DotNetCoreCLI@2
     displayName: Packing
@@ -68,6 +68,9 @@ steps:
       for item in ${{ parameters.CASCADES }}
       do
         git clone https://github.com/"$item".git
+        FOLDER=`echo "$item" | awk -F "/" '{ print $2 }'`
+        cd $(FOLDER)
+        git checkout origin master
         git config --global user.email $(GitEmail)
         git config --global user.name $(GitUsername)
         git commit --allow-empty -m "Empty commit for pipeline trigger [Auto]"
