@@ -7,6 +7,8 @@ parameters:
 jobs:
 - job: ${{ parameters.name }}
   pool: ${{ parameters.pool }}
+  variables:
+  - group: global-var-pipelines
 
   steps:
   - script: |
@@ -22,8 +24,6 @@ jobs:
       version: '2.2.203'
 
   - template: cascades.yml
-    variables:
-    - group: global-var-pipelines
     parameters:
       CASCADES: ${{ parameters.CASCADES }}
 
