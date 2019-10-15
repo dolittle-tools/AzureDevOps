@@ -37,8 +37,8 @@ steps:
       for item in ${{ parameters.CASCADES }}
       do
         git clone https://github.com/"$item".git
-        FOLDER=`echo "$item" | awk -F "/" '{ print $2 }'`
-        cd $(FOLDER)
+        FOLDER=$(echo "$item" | awk -F "/" '{ print $2 }')
+        cd $FOLDER
         git checkout origin master
         git config --global user.email $(GitEmail)
         git config --global user.name $(GitUsername)
