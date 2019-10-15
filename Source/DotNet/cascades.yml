@@ -48,14 +48,13 @@ steps:
       command: 'pack'
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
-  - task: DotNetCoreCLI@2
-    displayName: Push release
-    inputs:
-      command: push
-      searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+#  - task: DotNetCoreCLI@2
+#    displayName: Push release
+#    inputs:
+#      command: push
+#      searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
 #      feedPublish: 'put here the Nuget service connection'
       
-# 1 - deploy nuget packages in a folder 
 
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: NugetPack  
