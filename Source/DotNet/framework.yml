@@ -22,6 +22,8 @@ jobs:
       version: '2.2.203'
 
   - template: cascades.yml
+    variables:
+    - group: global-var-pipelines
     parameters:
       CASCADES: ${{ parameters.CASCADES }}
 
