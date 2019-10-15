@@ -58,7 +58,7 @@ jobs:
       export LABEL=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | tr ',' '\n' | grep name | head -1 | cut -d ":" -f 2 | tr -d '"')
 
   - template: cascades.yml
-    condition: ne($(LABEL), 'major')
+    condition: always()
     parameters:
       CASCADES: ${{ parameters.CASCADES }}
 
