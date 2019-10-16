@@ -54,13 +54,13 @@ jobs:
       command: 'pack'
       outputDir: '$(Build.ArtifactStagingDirectory)'
       
-  - task: DotNetCoreCLI@2
-    displayName: Push release
-    inputs:
-      command: push
-      nugetFeedType: 'external'
-      searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      externalEndPoint: 'nuget_credential'
+#  - task: DotNetCoreCLI@2
+#    displayName: Push release
+#    inputs:
+#      command: push
+#      nugetFeedType: 'external'
+#      searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+#      externalEndPoint: 'nuget_credential'
 
   - template: cascades.yml
     parameters:
