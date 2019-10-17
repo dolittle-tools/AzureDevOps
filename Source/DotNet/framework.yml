@@ -49,6 +49,7 @@ jobs:
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
   
   - template: ../Versioning/set_version_variable.yml
+    displayName: SetVersion
       
   - task: DotNetCoreCLI@2
     displayName: Packing
