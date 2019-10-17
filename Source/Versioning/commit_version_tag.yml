@@ -20,7 +20,7 @@ steps:
     }
     main () {
         setup
-        VERSION="$(Version)"
+        VERSION="$(NEW_VERSION)"
         echo "$VERSION"
         if [ "$VERSION" != "empty" ]
         then
