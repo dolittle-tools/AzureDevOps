@@ -54,8 +54,8 @@ steps:
     }
     main () {
         setup
-        echo "$Version"
-        echo "$VERSION"
+        echo "$(set_version.Version)"
+        VERSION="$(set_version.Version)"
         if [ "$VERSION" != "empty" ]
         then
             echo Triggering new release of version "$VERSION"
