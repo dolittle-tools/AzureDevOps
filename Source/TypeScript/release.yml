@@ -54,11 +54,7 @@ steps:
     }
     main () {
         setup
-        echo "$VERSION"
         echo "$Version"
-        echo "$(VERSION)"
-        echo "$(Version)"
-        VERSION="$(Version)"
         echo "$VERSION"
         if [ "$VERSION" != "empty" ]
         then
