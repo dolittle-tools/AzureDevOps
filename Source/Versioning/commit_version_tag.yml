@@ -19,8 +19,13 @@ steps:
         git push https://"${GIT_USERNAME}":"${PAT}"@github.com/"${REPO}" HEAD:"${branch}" --tags
     }
     main () {
+        
         setup
         VERSION="$(NEW_VERSION)"
+        if [ -z "${VERSION+xxx}" ] then
+            echoerr Version was not set
+            exit 1
+        fi
         echo "$VERSION"
         if [ "$VERSION" != "empty" ]
         then
