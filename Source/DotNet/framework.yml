@@ -71,7 +71,7 @@ jobs:
   dependsOn: ${{ parameters.name }}
   condition: succeeded()
   steps:
-  - template: ../Versioning/handle_version.yml
+  - template: ../Versioning/handle_version_tag.yml
   
 - job: 'Documentation'
   pool: Default
