@@ -19,11 +19,10 @@ steps:
         git push https://"${GIT_USERNAME}":"${PAT}"@github.com/"${REPO}" HEAD:"${branch}" --tags
     }
     main () {
-        
         setup
         VERSION="$(NEW_VERSION)"
         echo "$VERSION"
-        if [ "$VERSION" != "empty" ]
+        if [ -n "${VERSION}" ] && [ "$VERSION" != "empty" ]
         then
             URL=$(Build.Repository.Uri)
             REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`

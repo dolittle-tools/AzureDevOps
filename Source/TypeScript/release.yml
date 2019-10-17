@@ -55,7 +55,7 @@ steps:
     main () {
         setup
         VERSION="$(set_version.Version)"
-        if [ "$VERSION" != "empty" ]
+        if [ -n "${VERSION}" ] && [ "$VERSION" != "empty" ]
         then
             echo Triggering new release of version "$VERSION"
             URL=$(Build.Repository.Uri)
