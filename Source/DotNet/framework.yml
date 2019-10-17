@@ -5,7 +5,7 @@ parameters:
   CASCADES: ''
 
 jobs:
-- job: ${{ parameters.name }}
+- job: 'DotNetCore_Build'
   pool: ${{ parameters.pool }}
   variables:
   - group: global-var-pipelines
@@ -47,13 +47,33 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
-
+      
   - task: DotNetCoreCLI@2
     displayName: Packing
     inputs:
       command: 'pack'
       outputDir: '$(Build.ArtifactStagingDirectory)'
-      
+
+  - template: cascades.yml
+    parameters:
+      CASCADES: ${{ parameters.CASCADES }}
+
+- job: 'Versioning'
+  pool: Default
+  dependsOn: DotNetCore_Build
+  condition: succeeded()
+  steps:
+  - template: ../Versioning/handle_version_tag.yml
+
+- job: 'Release
+  pool: Default
+  dependsOn: 'Versioning'
+  condition: succeeded()
+  variables:
+  - group: global-var-pipelines
+
+  steps:
+  
   - task: NuGetCommand@2
     displayName: Push Nuget packs
     inputs:
@@ -62,17 +82,7 @@ jobs:
       packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
       publishFeedCredentials: 'nuget_credential'
 
-  - template: cascades.yml
-    parameters:
-      CASCADES: ${{ parameters.CASCADES }}
 
-- job: 'Versioning'
-  pool: Default
-  dependsOn: ${{ parameters.name }}
-  condition: succeeded()
-  steps:
-  - template: ../Versioning/handle_version_tag.yml
-  
 - job: 'Documentation'
   pool: Default
   dependsOn: ${{ parameters.name }}
