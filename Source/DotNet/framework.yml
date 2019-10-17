@@ -38,7 +38,7 @@ jobs:
     inputs:
       command: build
       projects: 'Source/**/*.csproj'
-      arguments: '--configuration ${{ parameters.buildConfiguration }}' # Update this to match your need
+      arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore' # Update this to match your need
       packagesDirectory: $(Build.ArtifactStagingDirectory)
   
   - task: DotNetCoreCLI@2
