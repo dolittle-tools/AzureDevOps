@@ -55,6 +55,7 @@ jobs:
     inputs:
       projects: 'Source'
       command: 'pack'
+      arguments: '-p:PackageVersion=$(VERSION)'
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
   - template: cascades.yml
