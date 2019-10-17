@@ -23,14 +23,14 @@ jobs:
     inputs:
       version: '2.2.203'
 
-  - task: DotNetCoreCLI@2
-    displayName: Restore from nuget
-    inputs:
-      command: 'restore'
-      feedsToUse: 'select'
-      versioningScheme: 'off'
-      nuGetFeedType: 'internal'
-      nugetConfigPath: $(Build.ArtifactStagingDirectory)
+#  - task: DotNetCoreCLI@2
+#    displayName: Restore from nuget
+#    inputs:
+#      command: 'restore'
+#      feedsToUse: 'select'
+#      versioningScheme: 'off'
+#      nuGetFeedType: 'internal'
+#      nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
   - task: DotNetCoreCLI@2
     displayName: Build release
@@ -40,12 +40,12 @@ jobs:
       arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore' # Update this to match your need
       packagesDirectory: $(Build.ArtifactStagingDirectory)
   
-  - task: DotNetCoreCLI@2
-    displayName: Run Tests
-    inputs:
-      command: test
-      projects: 'Specifications/**/*.csproj'
-      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+#  - task: DotNetCoreCLI@2
+#    displayName: Run Tests
+#    inputs:
+#      command: test
+#      projects: 'Specifications/**/*.csproj'
+#      arguments: '--configuration ${{ parameters.buildConfiguration }}'
   
   - template: ../Versioning/set_version_variable.yml
       
