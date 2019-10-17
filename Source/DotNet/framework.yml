@@ -11,11 +11,6 @@ jobs:
   - group: global-var-pipelines
 
   steps:
-  - script: |
-      export VERSION=$(git tag --sort=-version:refname | head -1)
-      echo The version is $(VERSION)
-    displayName: Show version
-
   - checkout: self
     submodules: recursive
 
