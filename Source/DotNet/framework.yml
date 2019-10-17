@@ -53,6 +53,7 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: Packing
     inputs:
+      projects: 'Source'
       command: 'pack'
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
