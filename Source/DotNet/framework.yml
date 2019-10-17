@@ -85,8 +85,8 @@ jobs:
 
 - job: 'Documentation'
   pool: Default
-  dependsOn: ${{ parameters.name }}
-  condition: always()
+  dependsOn: DotNetCore_Build
+  condition: succeeded()
   variables:
   - group: global-var-pipelines
   steps:
