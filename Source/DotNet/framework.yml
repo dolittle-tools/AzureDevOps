@@ -74,7 +74,7 @@ jobs:
   - template: ../Versioning/commit_version_tag.yml
   
   - download: current
-      artifact: 'packages'
+    artifact: 'NugetPack'
   
   - task: NuGetCommand@2
     displayName: Push Nuget packs
