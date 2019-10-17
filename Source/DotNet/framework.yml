@@ -32,7 +32,6 @@ jobs:
       nuGetFeedType: 'internal'
       nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
-
   - task: DotNetCoreCLI@2
     displayName: Build release
     inputs:
@@ -78,12 +77,12 @@ jobs:
   - download: current
     artifact: 'NugetPack'
   
-  - script: ls -R $(Build.ArtifactStagingDirectory)  $(Pipeline.Workspace)
+  - script: ls -R  $(Pipeline.Workspace)
     displayName: Checking packages
   
   - task: NuGetCommand@2
     displayName: Push Nuget packs
-    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
+    condition: ne($(NEW_VERSION), 'empty')
     inputs:
       command: push
       nugetFeedType: 'external'
