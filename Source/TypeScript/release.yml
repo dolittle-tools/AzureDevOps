@@ -54,7 +54,7 @@ steps:
     }
     main () {
         setup
-        VERSION="$(set_version.Version)"
+        VERSION="$(Version)"
 
         if [ -z "${VERSION+xxx}" ] then
             echoerr Version was not set
