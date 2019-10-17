@@ -1,0 +1,17 @@
+steps:
+- task: NodeTool@0
+  displayName: 'Ensuring version'
+  inputs:
+    versionSpec: '>=12.0.0'
+  
+- script: npm i yarn -g
+  displayName: Installing yarn
+  
+- script: yarn
+  displayName: Installing dependencies
+    
+- script: yarn build
+  displayName: Building the typescript project
+
+- script: yarn test:run
+  displayName: 'Running tests'

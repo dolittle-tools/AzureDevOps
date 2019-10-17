@@ -1,62 +1,81 @@
-parameters:
-  name: 'Versioning'
-  buildConfiguration: 'Release'
-  pool: Default
 
 steps:
-- template: ../Versioning/handle_version.yml
+- template: ../Versioning/set_version_variable.yml
 - bash: |
-    if [ "$(Version)" != "empty" ]
-    then
-        URL=$(Build.Repository.Uri)
-        BRANCH=$(Build.SourceBranch) 
-        REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
-        BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
-        
+    setup () {
+        set -o errexit
+        set -o nounset
+    }
+    echoerr () { 
+        printf "%s\n" "$*" >&2;
+    }
+
+    setup_git_config () {
         git config user.name \"$GIT_USERNAME\"
         git config user.email \"$GIT_EMAIL\"
+    }
 
-        echo Triggering new release of version "$(Version)"
-        
+    setup_npm_token () {
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
-        echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
+        #echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
+    }
+    push_all_to_git () {
+        git commit -m "Increment version"
+        git push https://${GIT_USERNAME}:${PAT}@github.com/${REPO} HEAD:$BRANCH
 
-        WORKSPACES=$(jq '.workspaces' package.json)
-        if [ "$WORKSPACES" = null ]
+        git tag -d "$VERSION" && git tag "$VERSION"
+        git push https://$GIT_USERNAME:$PAT@github.com/$REPO :"$VERSION"
+        git push https://$GIT_USERNAME:$PAT@github.com/$REPO "$VERSION"
+    }
+    release_single_package () {
+        echo Releasing single package
+        local JSON=$(jq -r -e --arg ver "$VERSION" '.version = $ver' package.json)
+        echo "$JSON" > package.json
+        git add package.json
+        npm publish
+        push_all_to_git
+    }
+    release_workspace () {
+        echo "Releasing multiple packages"
+        for package in Source/*/package.json
+        do
+            echo "$package"
+            local JSON=$(jq -r -e --arg ver "$VERSION" '.version = $ver' ./"$package")
+            echo "$JSON" > ./"$package"
+            dir=$(dirname "$package")
+            git add ./"$package"
+            npm publish ./"$dir"   
+        done
+        push_all_to_git
+    }
+    main () {
+        setup
+        VERSION="$(Version)"
+        echo "$VERSION"
+        if [ "$VERSION" != "empty" ]
         then
-            echo Releasing single package
-            JSON=$(jq -r -e --arg ver $(Version) '.version = $ver' package.json)
-            echo "$JSON" > package.json
-            git add package.json
-            npm publish
-            git commit -m "Increment version"
-            git push https://$GIT_USERNAME:$PAT@github.com/$REPO HEAD:$BRANCH
+            echo Triggering new release of version "$VERSION"
+            URL=$(Build.Repository.Uri)
+            BRANCH=$(Build.SourceBranch) 
+            REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
+            BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
+            
+            setup_git_config
 
-            git tag -d $(Version) && git tag $(Version)
-            git push https://$GIT_USERNAME:$PAT@github.com/$REPO :$(Version)
-            git push https://$GIT_USERNAME:$PAT@github.com/$REPO $(Version)
+            setup_npm_token
+            
+            WORKSPACES=$(jq '.workspaces' package.json)
+            if [ "$WORKSPACES" = null ]
+            then
+                release_single_package
+            else
+               release_workspace
+            fi
         else
-            echo "Releasing multiple packages"
-            for package in Source/*/package.json
-            do
-                echo "$package"
-                JSON=$(jq -r -e --arg ver $(Version) '.version = $ver' ./"$package")
-                echo "$JSON" > ./"$package"
-                dir=$(dirname "$package")
-                git add ./"$package"
-                npm publish ./"$dir"   
-            done
-
-            git commit -m "Increment versions"
-            git push https://$GIT_USERNAME:$PAT@github.com/$REPO HEAD:$BRANCH
-
-            git tag -d $(Version) && git tag $(Version)
-            git push https://$GIT_USERNAME:$PAT@github.com/$REPO :$(Version)
-            git push https://$GIT_USERNAME:$PAT@github.com/$REPO $(Version)
+            echoerr No new version to release
         fi
-    else
-        echo "No new version to release"
-    fi
+    }
+    main
   displayName: Handling release
   env:
     NPM_TOKEN: $(NpmToken)

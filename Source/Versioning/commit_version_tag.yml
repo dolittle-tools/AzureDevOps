@@ -1,0 +1,45 @@
+steps:
+- bash: |
+    setup () {
+        set -o errexit
+        set -o nounset
+    }
+    echoerr () { 
+        printf "%s\n" "$*" >&2;
+    }
+    setup_git_config () {
+        git config user.name \"$GIT_USERNAME\"
+        git config user.email \"$GIT_EMAIL\"
+    }
+    tag_git () {
+        declare version_tag="$1"
+        declare branch="$2"
+
+        echo Pushing new version tag to github.com/"$REPO" HEAD:"$branch"
+        git tag -a "$version_tag" -m "Azure Devops Pipelines Versioning Strategy: Tagging new version"
+        git push https://"${GIT_USERNAME}":"${PAT}"@github.com/"${REPO}" HEAD:"${branch}" --tags
+    }
+    main () {
+        setup
+        VERSION="$(Version)"
+        echo "$VERSION"
+        if [ "$VERSION" != "empty" ]
+        then
+            URL=$(Build.Repository.Uri)
+            REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
+            BRANCH=$(Build.SourceBranch)
+            BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
+
+            setup_git_config
+            tag_git "$VERSION" "$BRANCH" 
+        else
+            echoerr No new version to tag
+        fi
+    }
+
+    main
+  displayName: Commit version tag
+  env:
+    GIT_EMAIL: $(GitEmail)
+    GIT_USERNAME: $(GitUsername)
+    PAT: $(CascadingBuild)
