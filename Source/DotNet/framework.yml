@@ -81,7 +81,7 @@ jobs:
     inputs:
       command: push
       nugetFeedType: 'external'
-      packagesToPush: ' $(Pipeline.Workspace)/**/*.nupkg'
+#      packagesToPush: ' $(Pipeline.Workspace)/**/*.nupkg'
       publishFeedCredentials: 'myget_mathieu'
 
 
