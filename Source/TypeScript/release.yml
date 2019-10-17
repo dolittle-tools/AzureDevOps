@@ -56,7 +56,8 @@ steps:
         setup
         VERSION="$(Version)"
 
-        if [ -z "${VERSION+xxx}" ] then
+        if [ -z "${VERSION+xxx}" ] 
+        then
             echoerr Version was not set
             exit 1
         fi
