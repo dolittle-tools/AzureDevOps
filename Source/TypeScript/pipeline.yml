@@ -10,7 +10,7 @@ jobs:
   - group: global-var-pipelines
   steps:
   - template: ./build.yml
-
+  
 - job: Release
   pool: ${{ parameters.pool }}
   dependsOn: Build

@@ -54,6 +54,8 @@ steps:
     }
     main () {
         setup
+        echo "$VERSION"
+        echo "$Version"
         echo "$(VERSION)"
         echo "$(Version)"
         VERSION="$(Version)"
