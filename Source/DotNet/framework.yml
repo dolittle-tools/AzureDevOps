@@ -76,6 +76,9 @@ jobs:
   - download: current
     artifact: 'NugetPack'
   
+  - script: ls -R $(Build.ArtifactStagingDirectory)
+    displayName: Checking packages
+  
   - task: NuGetCommand@2
     displayName: Push Nuget packs
     inputs:
