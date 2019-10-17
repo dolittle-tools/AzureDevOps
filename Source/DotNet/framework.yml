@@ -47,7 +47,10 @@ jobs:
       command: test
       projects: 'Specifications/**/*.csproj'
       arguments: '--configuration ${{ parameters.buildConfiguration }}'
-      
+  
+  - template: ../Versioning/set_version_variable.yml
+    name: set_version
+   
   - task: DotNetCoreCLI@2
     displayName: Packing
     inputs:
@@ -58,28 +61,28 @@ jobs:
     parameters:
       CASCADES: ${{ parameters.CASCADES }}
 
-- job: 'Versioning'
-  pool: Default
-  dependsOn: DotNetCore_Build
-  condition: succeeded()
-  steps:
-  - template: ../Versioning/handle_version_tag.yml
-
 - job: 'Release'
   pool: Default
   dependsOn: 'Versioning'
   condition: succeeded()
   variables:
   - group: global-var-pipelines
+  - name: NEW_VERSION
+    value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
   steps:
+  
+  - template: ../Versioning/commit_version_tag.yml
+  
+  - download: current
+      artifact: 'packages'
   
   - task: NuGetCommand@2
     displayName: Push Nuget packs
     inputs:
       command: push
       nugetFeedType: 'external'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/*'
       publishFeedCredentials: 'nuget_credential'
 
 
