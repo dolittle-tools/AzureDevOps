@@ -74,16 +74,16 @@ steps:
                     PATCH=$((PATCH+1))
                 fi
                 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-                echo "##vso[task.setvariable variable=Version]$NEW_VERSION"
+                echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
                 echo Previous version "$VERSION"
                 echo New version "$NEW_VERSION"
             else
                 echoerr No label triggering new version
-                echo "##vso[task.setvariable variable=Version]empty"
+                echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
             fi
         else
             echo No commit to master
-            echo "##vso[task.setvariable variable=Version]empty"
+            echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
         fi
     }
     main
