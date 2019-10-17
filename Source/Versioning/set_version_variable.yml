@@ -8,6 +8,7 @@ steps:
         printf "%s\n" "$*" >&2;
     }
     get_labels_from_pull_request () {
+        set -o xtrace
         local MERGED_PR_JSON=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | jq '.[] | select(.merge_commit_sha=="'$COMMIT_SHA'")')
         local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
         echo "$LABELS"
