@@ -4,10 +4,12 @@ steps:
   displayName: 'Ensuring version'
   inputs:
     versionSpec: '>=12.0.0'
-  
+
 - script: npm i yarn -g
   displayName: Installing yarn
+
 - template: ../Versioning/set_version_variable.yml
+
 - bash: |
     setup () {
         set -o nounset
@@ -51,8 +53,9 @@ steps:
         push_all_to_git
     }
     main () {
-        which npm
         setup
+        echo "$(VERSION)"
+        echo "$(Version)"
         VERSION="$(Version)"
         echo "$VERSION"
         if [ "$VERSION" != "empty" ]
