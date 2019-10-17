@@ -44,7 +44,7 @@ steps:
             echo "$package"
             local JSON=$(jq -r -e --arg ver "$VERSION" '.version = $ver' ./"$package")
             echo "$JSON" > ./"$package"
-            dir=$(dirname "$package")
+            local dir=$(dirname "$package")
             git add ./"$package"
             npm publish ./"$dir"   
         done
