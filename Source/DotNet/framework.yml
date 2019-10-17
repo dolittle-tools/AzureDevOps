@@ -65,7 +65,7 @@ jobs:
   steps:
   - template: ../Versioning/handle_version_tag.yml
 
-- job: 'Release
+- job: 'Release'
   pool: Default
   dependsOn: 'Versioning'
   condition: succeeded()
