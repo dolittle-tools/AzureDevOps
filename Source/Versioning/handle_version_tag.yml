@@ -1,3 +1,0 @@
-steps:
-- template: './set_version_variable.yml'
-- template: './commit_version_tag.yml'
