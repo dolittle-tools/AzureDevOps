@@ -76,7 +76,7 @@ jobs:
   - download: current
     artifact: 'NugetPack'
   
-  - script: ls -R $(Build.ArtifactStagingDirectory)
+  - script: ls -R $(Build.ArtifactStagingDirectory)  $(Pipeline.Workspace)
     displayName: Checking packages
   
   - task: NuGetCommand@2
