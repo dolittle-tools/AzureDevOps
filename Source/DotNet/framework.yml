@@ -23,14 +23,14 @@ jobs:
     inputs:
       version: '2.2.203'
 
-#  - task: DotNetCoreCLI@2
-#    displayName: Restore from nuget
-#    inputs:
-#      command: 'restore'
-#      feedsToUse: 'select'
-#      versioningScheme: 'off'
-#      nuGetFeedType: 'internal'
-#      nugetConfigPath: $(Build.ArtifactStagingDirectory)
+  - task: DotNetCoreCLI@2
+    displayName: Restore from nuget
+    inputs:
+      command: 'restore'
+      feedsToUse: 'select'
+      versioningScheme: 'off'
+      nuGetFeedType: 'internal'
+      nugetConfigPath: $(Build.ArtifactStagingDirectory)
 
   - task: DotNetCoreCLI@2
     displayName: Build release
