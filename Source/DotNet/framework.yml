@@ -47,7 +47,7 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: Packing
     inputs:
-      projects: 'Source'
+      projects: 'Source/**/*.csproj'
       command: 'pack'
       arguments: '-p:PackageVersion=$(VERSION)'
       outputDir: '$(Build.ArtifactStagingDirectory)'
@@ -66,7 +66,6 @@ jobs:
     value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
   steps:
-  
   - template: ../Versioning/commit_version_tag.yml
   
   - download: current
