@@ -83,7 +83,7 @@ jobs:
   
   - task: NuGetCommand@2
     displayName: Push Nuget packs
-    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], ''))
+    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
     inputs:
       command: push
       nugetFeedType: 'external'
