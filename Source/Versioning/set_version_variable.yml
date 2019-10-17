@@ -89,4 +89,4 @@ steps:
     main
 
   displayName: Setting version pipeline variable
-  name: VersionSetting
+  name: set_version
