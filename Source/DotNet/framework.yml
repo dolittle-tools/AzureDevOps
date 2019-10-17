@@ -82,7 +82,7 @@ jobs:
   
   - task: NuGetCommand@2
     displayName: Push Nuget packs
-    condition: ne( ${{ variables.NEW_VERSION }}, 'empty')
+    condition: ne( variables.NEW_VERSION , 'empty')
     inputs:
       command: push
       nugetFeedType: 'external'
