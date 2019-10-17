@@ -54,13 +54,7 @@ steps:
     }
     main () {
         setup
-        VERSION="$(Version)"
-
-        if [ -z "${VERSION+xxx}" ] 
-        then
-            echoerr Version was not set
-            exit 1
-        fi
+        VERSION="$(set_version.Version)"
         if [ "$VERSION" != "empty" ]
         then
             echo Triggering new release of version "$VERSION"
