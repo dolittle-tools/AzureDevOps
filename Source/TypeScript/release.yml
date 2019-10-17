@@ -1,5 +1,12 @@
 
 steps:
+- task: NodeTool@0
+  displayName: 'Ensuring version'
+  inputs:
+    versionSpec: '>=12.0.0'
+  
+- script: npm i yarn -g
+  displayName: Installing yarn
 - template: ../Versioning/set_version_variable.yml
 - bash: |
     setup () {
@@ -8,22 +15,18 @@ steps:
     echoerr () { 
         printf "%s\n" "$*" >&2;
     }
-
     setup_git_config () {
         git config user.name \"$GIT_USERNAME\"
         git config user.email \"$GIT_EMAIL\"
     }
-
     setup_npm_token () {
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
-        #echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
     }
     push_all_to_git () {
         git commit -m "Increment version"
-        git push https://${GIT_USERNAME}:${PAT}@github.com/${REPO} HEAD:$BRANCH
+        git push https://"${GIT_USERNAME}":"${PAT}"@github.com/"${REPO}" HEAD:"$BRANCH"
 
-        git tag -d "$VERSION" && git tag "$VERSION"
-        git push https://$GIT_USERNAME:$PAT@github.com/$REPO :"$VERSION"
+        git tag "$VERSION"
         git push https://$GIT_USERNAME:$PAT@github.com/$REPO "$VERSION"
     }
     release_single_package () {
@@ -48,6 +51,7 @@ steps:
         push_all_to_git
     }
     main () {
+        which npm
         setup
         VERSION="$(Version)"
         echo "$VERSION"
