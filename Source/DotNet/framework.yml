@@ -82,7 +82,7 @@ jobs:
       command: push
       nugetFeedType: 'external'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/NugetPack/*.nupkg'
-      publishFeedCredentials: 'nuget_credential'
+      publishFeedCredentials: 'myget_mathieu'
 
 
 - job: 'Documentation'
