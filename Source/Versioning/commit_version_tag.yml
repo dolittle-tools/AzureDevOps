@@ -1,7 +1,6 @@
 steps:
 - bash: |
     setup () {
-        set -o errexit
         set -o nounset
     }
     echoerr () { 

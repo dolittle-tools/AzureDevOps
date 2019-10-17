@@ -3,7 +3,6 @@ steps:
 - template: ../Versioning/set_version_variable.yml
 - bash: |
     setup () {
-        set -o errexit
         set -o nounset
     }
     echoerr () { 
