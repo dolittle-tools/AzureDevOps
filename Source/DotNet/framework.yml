@@ -50,7 +50,8 @@ jobs:
     inputs:
       projects: 'Source/**/*.csproj'
       command: 'pack'
-      arguments: '-p:PackageVersion=$(VERSION)'
+      versioningScheme: byEnvVar
+      versionEnvVar: NEW_VERSION
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
   - template: cascades.yml
