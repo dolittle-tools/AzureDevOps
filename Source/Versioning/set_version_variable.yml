@@ -48,7 +48,7 @@ steps:
             echo Last commit message
             echo "$COMMIT_MESSAGE"
 
-            if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
+            if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "[Auto] Triggered from another pipeline (cascading)" ]
             then
                 echo "Getting version tag..."
                 
