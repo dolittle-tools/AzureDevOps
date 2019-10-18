@@ -81,6 +81,7 @@ steps:
                     echo "New patch release"
                     PATCH=$((PATCH+1))
                 elif [ "$COMMIT_MESSAGE" = "[Auto] Triggered from another pipeline (cascading)" ] && [ "$NEW_PROJECT" = false ]
+                then
                     echo "New patch release, dependency has been upgraded."
                     PATCH=$((PATCH+1))
                 fi
