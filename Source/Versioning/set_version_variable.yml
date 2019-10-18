@@ -11,6 +11,10 @@ steps:
         local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
         echo "$LABELS"
     }
+    get_last_commit_message () {
+        local COMMIT_MSG=curl https://api.github.com/repos/dolittle-runtime/Runtime/commits/master | tr ',' '\n' | grep message | head -1 | cut -d ":" -f 2 | tr -d "\""
+        echo "$COMMIT_MSG"
+    }
     get_latest_version_tag () {
         local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
         while [ ! "$TAG_REFS" ]
@@ -29,6 +33,7 @@ steps:
         COMMIT_SHA=$(Build.SourceVersion)
         REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
         BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
+        COMMIT=$(get_last_commit_message)
 
         if [ "$BRANCH" = "master" ]
         then
@@ -71,6 +76,9 @@ steps:
                 elif [ "$PATCH_LABEL" = "patch" ] && [ "$NEW_PROJECT" = false ]
                 then
                     echo "New patch release"
+                    PATCH=$((PATCH+1))
+                elif [ "$COMMIT" = "[Auto] Triggered from another pipeline (cascading)" ] && [ "$NEW_PROJECT" = false ]
+                    echo "New patch release, dependency has been upgraded."
                     PATCH=$((PATCH+1))
                 fi
                 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
