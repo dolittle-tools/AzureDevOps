@@ -45,13 +45,15 @@ jobs:
   
   - template: ../Versioning/set_version_variable.yml
       
+  - bash: echo $(Version)
+  
   - task: DotNetCoreCLI@2
     displayName: Packing
     inputs:
       projects: 'Source/**/*.csproj'
       command: 'pack'
       versioningScheme: byEnvVar
-      versionEnvVar: outputs['set_version.Version']
+      versionEnvVar: Version
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
   - template: cascades.yml
