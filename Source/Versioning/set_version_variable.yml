@@ -11,8 +11,8 @@ steps:
         local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
         echo "$LABELS"
     }
-    get_last_commit_message () {
-        local COMMIT_MSG=curl https://api.github.com/repos/dolittle-runtime/Runtime/commits/master | tr ',' '\n' | grep message | head -1 | cut -d ":" -f 2 | tr -d "\""
+    get_last_commit_message_to_master () {
+        local COMMIT_MSG=$(curl https://api.github.com/repos/$REPO/commits\?state\=all | jq -r '.[0].commit.message') 
         echo "$COMMIT_MSG"
     }
     get_latest_version_tag () {
@@ -33,7 +33,6 @@ steps:
         COMMIT_SHA=$(Build.SourceVersion)
         REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
         BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
-        COMMIT=$(get_last_commit_message)
 
         if [ "$BRANCH" = "master" ]
         then
@@ -44,6 +43,10 @@ steps:
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
             echo "Got labels from pull request:"
             echo "$LABELS"
+
+            COMMIT_MESSAGE=$(get_last_commit_message_to_master)
+            echo Last commit message
+            echo "$COMMIT_MESSAGE"
 
             if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
             then
@@ -77,7 +80,7 @@ steps:
                 then
                     echo "New patch release"
                     PATCH=$((PATCH+1))
-                elif [ "$COMMIT" = "[Auto] Triggered from another pipeline (cascading)" ] && [ "$NEW_PROJECT" = false ]
+                elif [ "$COMMIT_MESSAGE" = "[Auto] Triggered from another pipeline (cascading)" ] && [ "$NEW_PROJECT" = false ]
                     echo "New patch release, dependency has been upgraded."
                     PATCH=$((PATCH+1))
                 fi
@@ -98,3 +101,5 @@ steps:
 
   displayName: Setting version pipeline variable
   name: set_version
+  env:
+    CASCADING_BUILD_MESSAGE: $(CascadingTriggerMessage)
