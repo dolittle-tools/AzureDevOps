@@ -22,6 +22,7 @@ jobs:
     displayName: Restore from nuget
     inputs:
       command: 'restore'
+      arguments: '--no-build'
       feedsToUse: 'select'
       versioningScheme: 'off'
       nuGetFeedType: 'internal'
