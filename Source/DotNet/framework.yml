@@ -64,7 +64,7 @@ jobs:
   condition: succeeded()
   variables:
   - group: global-var-pipelines
-  - name: NEW_VERSION
+  - name: Version
     value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
   steps:
