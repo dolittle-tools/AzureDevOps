@@ -53,7 +53,7 @@ jobs:
       projects: 'Source/**/*.csproj'
       command: 'pack'
       versioningScheme: byEnvVar
-      versionEnvVar: $(set_version.Version)
+      versionEnvVar: set_version.Version
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
   - template: cascades.yml
