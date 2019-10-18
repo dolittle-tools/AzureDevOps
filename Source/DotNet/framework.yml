@@ -45,7 +45,7 @@ jobs:
   
   - template: ../Versioning/set_version_variable.yml
       
-  - bash: echo $(outputs['set_version.Version'(Version)])
+  - bash: echo $(outputs['set_version.Version'])
   
   - task: DotNetCoreCLI@2
     displayName: Packing
