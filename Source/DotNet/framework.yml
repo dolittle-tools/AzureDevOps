@@ -51,7 +51,7 @@ jobs:
       projects: 'Source/**/*.csproj'
       command: 'pack'
       versioningScheme: byEnvVar
-      versionEnvVar: NEW_VERSION
+      versionEnvVar: Version
       outputDir: '$(Build.ArtifactStagingDirectory)'
 
   - template: cascades.yml
@@ -64,7 +64,7 @@ jobs:
   condition: succeeded()
   variables:
   - group: global-var-pipelines
-  - name: Version
+  - name: NEW_VERSION
     value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
   steps:
