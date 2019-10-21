@@ -65,8 +65,7 @@ steps:
         }
         main
       name: set_version
-      parameters:
-        CWD: '$(Agent.BuildDirectory)/$(clone_repo.Folder)'
+      workingDirectory: '$(Agent.BuildDirectory)/$(clone_repo.Folder)'
     
     - task: DotNetCoreCLI@2
       displayName: Packing
