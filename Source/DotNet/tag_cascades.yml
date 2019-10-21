@@ -70,12 +70,12 @@ steps:
 
     - bash: |
         CASCADES=$(curl https://raw.githubusercontent.com/${{ repo }}/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}')
-        echo "##vso[task.setvariable variable=Cascades;isOutput=true]$CASCADES"
+        echo "##vso[task.setvariable variable=Cascades]$CASCADES"
       name: get_cascades
     - template: './tag_cascades.yml'
       parameters:
         CASCADES:
-          - ${{ each cascade in $(get_cascades.CASCADES) }}:
+          - ${{ each cascade in Cascades }}:
             - ${{ cascade }}
 
 
