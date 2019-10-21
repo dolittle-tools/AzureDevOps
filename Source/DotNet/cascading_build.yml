@@ -53,7 +53,7 @@ steps:
             MINOR=`echo $VERSION | awk -F "." '{print $2}'`
             PATCH=`echo $VERSION | awk -F "." '{print $3}'`
             
-            if [[ "$NEW_PROJECT" = false ]
+            if [ "$NEW_PROJECT" = false ]
             then
                 echo "New patch release, dependency has been upgraded."
                 PATCH=$((PATCH+1))
