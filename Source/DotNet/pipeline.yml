@@ -45,62 +45,57 @@ jobs:
 
 
 #new job cascading with packing first do only on pull request
-  - task: DotNetCoreCLI@2
-    condition: and(ne(${{  parameters.CASCADES }}, []), ne($(set_version.Version), 'empty')) # If it's a pull request and it does not have any CASCADES
-    displayName: Packing
-    inputs:
-      projects: './Source/**/*.csproj'
-      command: 'pack'
-      versioningScheme: byEnvVar
-      versionEnvVar: set_version.Version
-      outputDir: '/root/.nuget/dolittle-packages'
+  # - task: DotNetCoreCLI@2
+  #   condition: and(ne(${{  parameters.CASCADES }}, []), ne($(set_version.Version), 'empty')) # If it's a pull request and it does not have any CASCADES
+  #   displayName: Packing
+  #   inputs:
+  #     projects: './Source/**/*.csproj'
+  #     command: 'pack'
+  #     versioningScheme: byEnvVar
+  #     versionEnvVar: set_version.Version
+  #     outputDir: '/root/.nuget/dolittle-packages'
 
   - template: './cascading_build.yml'
     condition: ne($(set_version.Version), 'empty')
     parameters:
       CASCADES: ${{ parameters.CASCADES }}
+
+# - job: 'Release'
+#   pool: ${{ parameters.buildConfiguration }}
+#   dependsOn: 'DotNetCore_Build'
+#   condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
+#   variables:
+#   - group: global-var-pipelines
+#   - name: NEW_VERSION
+#     value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+
+#   steps:
+#   - template: ../Versioning/commit_version_tag.yml
   
-
-  - template: cascades.yml
-    parameters:
-      CASCADES: ${{ parameters.CASCADES }}
-
-- job: 'Release'
-  pool: ${{ parameters.buildConfiguration }}
-  dependsOn: 'DotNetCore_Build'
-  condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
-  variables:
-  - group: global-var-pipelines
-  - name: NEW_VERSION
-    value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
-
-  steps:
-  - template: ../Versioning/commit_version_tag.yml
+#   - download: current
+#     artifact: 'NugetPack'
   
-  - download: current
-    artifact: 'NugetPack'
+#   - script: ls -R  $(Pipeline.Workspace)
+#     displayName: Checking packages
   
-  - script: ls -R  $(Pipeline.Workspace)
-    displayName: Checking packages
-  
-  - task: NuGetCommand@2
-    displayName: Push Nuget packs
-    condition: ne( variables.NEW_VERSION , 'empty')
-    inputs:
-      command: push
-      nugetFeedType: 'external'
-      packagesToPush: '/root/.nuget/dolittle-packages/**/*.nupkg'
-      publishFeedCredentials: 'myget_mathieu'
+#   - task: NuGetCommand@2
+#     displayName: Push Nuget packs
+#     condition: ne( variables.NEW_VERSION , 'empty')
+#     inputs:
+#       command: push
+#       nugetFeedType: 'external'
+#       packagesToPush: '/root/.nuget/dolittle-packages/**/*.nupkg'
+#       publishFeedCredentials: 'myget_mathieu'
 
 
-- job: 'Documentation'
-  pool: ${{ parameters.buildConfiguration }}
-  dependsOn: DotNetCore_Build
-  condition: succeeded()
-  variables:
-  - group: global-var-pipelines
-  steps:
-  - template: ../Documentation/documentation.yml
+# - job: 'Documentation'
+#   pool: ${{ parameters.buildConfiguration }}
+#   dependsOn: DotNetCore_Build
+#   condition: succeeded()
+#   variables:
+#   - group: global-var-pipelines
+#   steps:
+#   - template: ../Documentation/documentation.yml
    
    
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
