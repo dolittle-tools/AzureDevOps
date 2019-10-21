@@ -25,14 +25,14 @@ steps:
 
     # do dotnet pack if it has cascading repos using the new version
 
-    # - task: DotNetCoreCLI@2
-    #   displayName: Packing
-    #   inputs:
-    #     projects: './Source/**/*.csproj'
-    #     command: 'pack'
-    #     versioningScheme: byEnvVar
-    #     versionEnvVar: set_version.Version
-    #     outputDir: '/root/.nuget/dolittle-packages'
+    - task: DotNetCoreCLI@2
+      displayName: Packing
+      inputs:
+        projects: './Source/**/*.csproj'
+        command: 'pack'
+        versioningScheme: byEnvVar
+        versionEnvVar: set_version.Version
+        outputDir: '/root/.nuget/dolittle-packages'
     
   # - ${{ each repo in parameters.CASCADES }}:
   #  -  Get CASCADES from each of the repos git links and do cascading build on those
