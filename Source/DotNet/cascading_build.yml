@@ -3,8 +3,6 @@ parameters:
   DIRECTORY: $(Agent.TempDirectory)
 
 steps:
-  - script: echo Looking for cascades and creating steps for them if any
-    displayName: Cascading Build initial log
   - ${{ each repo in parameters.CASCADES }}:
     - bash: |
         DIR=$(echo ${{ repo }} | cut -d "/" -f 2)
@@ -68,8 +66,13 @@ steps:
     - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
       workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo.Folder)'
 
-  # Use command to get cascades:
-  # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
-
-  # - ${{ each repo in parameters.CASCADES }}:
-  #  -  Get CASCADES from each of the repos git links and do cascading build on those
+    - bash: |
+        CASCADES=$(curl https://raw.githubusercontent.com/${{ repo }}/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}')
+        echo "##vso[task.setvariable variable=Cascades;isOutput=true]$CASCADES"
+      name: get_cascades
+    
+    - template: './cascading_build.yml'
+      parameters:
+        CASCADES:
+          - ${{ each cascade in get_cascades.CASCADES }}:
+            - ${{ cascade }}
