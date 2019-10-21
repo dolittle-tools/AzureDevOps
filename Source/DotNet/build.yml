@@ -6,6 +6,9 @@ steps:
 - bash: ls /root/.nuget
   displayName: Ls in .nuget folder
 
+- bash: echo CWD ${{ parameters.CWD }}
+  displayName: Printing cwd
+
 - task: DotNetCoreCLI@2
   displayName: Restore packages
   inputs:
@@ -22,7 +25,7 @@ steps:
     command: build
     projects: './Source/**/*.csproj'
     arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
-    packagesDirectory: $(Build.ArtifactStagingDirectory)
+    workingDirectory: ${{ parameters.CWD }}
 
 - task: DotNetCoreCLI@2
   displayName: Run Tests
@@ -30,3 +33,4 @@ steps:
     command: test
     projects: './Specifications/**/*.csproj'
     arguments: '--configuration ${{ parameters.buildConfiguration }}'
+    workingDirectory: ${{ parameters.CWD }}
