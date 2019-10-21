@@ -26,59 +26,80 @@ jobs:
 
 
   - job: "Cascading_Build"
-    variables:
-      - group: global-var-pipelines
     pool: ${{ parameters.pool }}
     dependsOn: "DotNetCore_Build"
     condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
+    variables:
+      - group: global-var-pipelines
+
     steps:
       - checkout: none
+
       - task: DotNetCoreInstaller@0
         inputs:
-          version: "2.2.203"
+          version: "3.0.100-preview8-013656"
 
       - template: "./cascading_build.yml"
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
 
+  - job: "Release"
+    pool: ${{ parameters.pool }}
+    dependsOn: "Cascading_Build"
+    condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'], 'true'))
+    variables:
+      - group: global-var-pipelines
+      - name: NEW_VERSION
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+
+    steps:
+      - checkout: none
+
+      - template: ../Github/set_github_constants.yml
+
+      - task: NuGetCommand@2
+        displayName: Push Nuget packs
+        inputs:
+          command: push
+          nugetFeedType: "external"
+          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
+          publishFeedCredentials: "myget_mathieu"
+
+      - template: ../Versioning/commit_version_tag.yml
+        parameters:
+          NEW_VERSION: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+          REPO: $(github_constants.Repo)
+          BRANCH: $(github_constants.Branch)
+
+      - template: ./tag_cascades.yml
+
+      
+      
+  - job: "Cleanup"
+    pool: ${{ parameters.pool }}
+    dependsOn: "Release"
+    condition: always()
+
+    steps:
+      - checkout: none
+      
       - script: ls /root/.nuget/dolittle-packages
+        displayName: Packages before clean
+      
       - script: rm -rf /root/.nuget/dolittle-packages/*
+        displayName: Clean Packages
+
       - script: ls /root/.nuget/dolittle-packages
+        displayName: Packages after clean
 
-  # - job: "Release"
-  #   pool: ${{ parameters.buildConfiguration }}
-  #   dependsOn: "DotNetCore_Build"
-  #   condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
-  #   variables:
-  #     - group: global-var-pipelines
-  #     - name: NEW_VERSION
-  #       value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
-
-  #   steps:
-  #     - template: ../Versioning/commit_version_tag.yml
-
-    #   - download: current
-    #     artifact: 'NugetPack'
-
-    #   - script: ls -R  $(Pipeline.Workspace)
-    #     displayName: Checking packages
-
-  #     - task: NuGetCommand@2
-  #       displayName: Push Nuget packs
-  #       condition: ne( variables.NEW_VERSION , 'empty')
-  #       inputs:
-  #         command: push
-  #         nugetFeedType: "external"
-  #         packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
-  #         publishFeedCredentials: "myget_mathieu"
-# - job: 'Documentation'
-#   pool: ${{ parameters.buildConfiguration }}
-#   dependsOn: DotNetCore_Build
-#   condition: succeeded()
-#   variables:
-#   - group: global-var-pipelines
-#   steps:
-#   - template: ../Documentation/documentation.yml
+  - job: 'Documentation'
+    pool: ${{ parameters.buildConfiguration }}
+    dependsOn: "Cascading_Build"
+    condition: succeeded()
+    variables:
+    - group: global-var-pipelines
+    steps:
+    - template: ../Documentation/documentation.yml
 
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
 # echo IndividualCI 036100265b6d83d536827451131bf8c306ce9d43 2.0.0
