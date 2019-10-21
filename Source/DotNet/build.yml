@@ -15,7 +15,7 @@ steps:
     feedsToUse: 'config'
     versioningScheme: 'off'
     nugetConfigPath: '/root/.nuget/NuGet.Config'
-    workingDirectory: ${{ parameters.CWD }}
+    workingDirectory: '${{ parameters.CWD }}'
 
 - task: DotNetCoreCLI@2
   displayName: Build
@@ -23,7 +23,7 @@ steps:
     command: build
     projects: './Source/**/*.csproj'
     arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
-    workingDirectory: ${{ parameters.CWD }}
+    workingDirectory: '${{ parameters.CWD }}'
 
 - task: DotNetCoreCLI@2
   displayName: Run Tests
@@ -31,4 +31,4 @@ steps:
     command: test
     projects: './Specifications/**/*.csproj'
     arguments: '--configuration ${{ parameters.buildConfiguration }}'
-    workingDirectory: ${{ parameters.CWD }}
+    workingDirectory: '${{ parameters.CWD }}'
