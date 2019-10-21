@@ -1,3 +1,8 @@
+parameters:
+    NEW_VERSION: 'empty'
+    REPO: ''
+    BRANCH: 'master'
+
 steps:
 - bash: |
     setup () {
@@ -11,26 +16,16 @@ steps:
         git config user.email \"$GIT_EMAIL\"
     }
     tag_git () {
-        declare version_tag="$1"
-        declare branch="$2"
-
-        echo Pushing new version tag to github.com/"$REPO" HEAD:"$branch"
-        git tag -a "$version_tag" -m "Azure Devops Pipelines Versioning Strategy: Tagging new version"
-        git push https://"${GIT_USERNAME}":"${PAT}"@github.com/"${REPO}" HEAD:"${branch}" --tags
+        echo Pushing new version tag to github.com/"$REPO" HEAD:"$BRANCH"
+        git tag -a ${{ parameters.NEW_VERSION }} -m "Azure Devops Pipelines Versioning Strategy: Tagging new version"
+        git push https://"${GIT_USERNAME}":"${PAT}"@github.com/${{ parameters.REPO }} HEAD:${{ parameters.BRANCH }} --tags
     }
     main () {
         setup
-        VERSION="$(NEW_VERSION)"
-        echo "$VERSION"
-        if [ -n "${VERSION}" ] && [ "$VERSION" != "empty" ]
+        if [ -n ${{ parameters.NEW_VERSION }} ] && [ ${{ parameters.NEW_VERSION }} != "empty" ]
         then
-            URL=$(Build.Repository.Uri)
-            REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
-            BRANCH=$(Build.SourceBranch)
-            BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
-
             setup_git_config
-            tag_git "$VERSION" "$BRANCH" 
+            tag_git
         else
             echoerr No new version to tag
         fi
