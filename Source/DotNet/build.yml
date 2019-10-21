@@ -1,0 +1,30 @@
+parameters:
+  buildConfiguration: 'Release'
+
+steps:
+- bash: ls /root/.nuget
+  displayName: Ls in .nuget folder
+
+- task: DotNetCoreCLI@2
+  displayName: Restore packages
+  inputs:
+    command: 'restore'
+    arguments: '--no-build'
+    feedsToUse: 'config'
+    versioningScheme: 'off'
+    nugetConfigPath: '/root/.nuget/NuGet.Config'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: './Source/**/*.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
+    packagesDirectory: $(Build.ArtifactStagingDirectory)
+
+- task: DotNetCoreCLI@2
+  displayName: Run Tests
+  inputs:
+    command: test
+    projects: './Specifications/**/*.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}'
