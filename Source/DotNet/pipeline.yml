@@ -1,50 +1,49 @@
 parameters:
-  buildConfiguration: 'Release'
+  buildConfiguration: "Release"
   pool: Default
   CASCADES: []
 
 jobs:
-- job: 'DotNetCore_Build'
-  pool: ${{ parameters.pool }}
-  variables:
-  - group: global-var-pipelines
+  - job: "DotNetCore_Build"
+    pool: ${{ parameters.pool }}
+    variables:
+      - group: global-var-pipelines
 
-  steps:
-  - checkout: self
-    submodules: recursive
+    steps:
+      - checkout: self
+        submodules: recursive
 
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: '2.2.203'
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: "2.2.203"
 
-  - template: './build.yml'
-    parameters:
-      buildConfiguration: 'Release'
-      CWD: $(System.DefaultWorkingDirectory)
-  
-  - template: ../Versioning/set_version_variable.yml
-      
-#  - script: echo Version is $(set_version.Version)
-#    displayName: Print version
+      - template: "./build.yml"
+        parameters:
+          buildConfiguration: "Release"
+          CWD: $(System.DefaultWorkingDirectory)
 
-  - script: echo Is merging $(set_version.IsMerge)
-    displayName: Print is merge
+      - template: ../Versioning/set_version_variable.yml
 
-  - script: echo Version is not empty
-    condition: ne('$(set_version.Version)', 'empty')
-    displayName: Print on version not empty
+      #  - script: echo Version is $(set_version.Version)
+      #    displayName: Print version
 
-    # Should trigger a cascading build on pull requests ensuring that the other cascading projects does not break when a patch or major has been made.  
-  
-    # Dynamically create jobs to build cascading. Only on PRs. Should only pack locally when it's a PR or triggered and has cascades 
+      - script: echo Is merging $(set_version.IsMerge)
+        displayName: Print is merge
 
-    # Use command to get cascades:
-    # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
+      - script: echo Version is not empty
+        condition: ne('$(set_version.Version)', 'empty')
+        displayName: Print on version not empty
 
-    # Use yq to parse yaml azure-pipelines.yml to get cascades. See yaml list og strings as value 
+        # Should trigger a cascading build on pull requests ensuring that the other cascading projects does not break when a patch or major has been made.
 
+        # Dynamically create jobs to build cascading. Only on PRs. Should only pack locally when it's a PR or triggered and has cascades
 
-#new job cascading with packing first do only on pull request
+        # Use command to get cascades:
+        # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
+
+        # Use yq to parse yaml azure-pipelines.yml to get cascades. See yaml list og strings as value
+
+  #new job cascading with packing first do only on pull request
   # - task: DotNetCoreCLI@2
   #   condition: and(ne(${{  parameters.CASCADES }}, []), ne($(set_version.Version), 'empty')) # If it's a pull request and it does not have any CASCADES
   #   displayName: Packing
@@ -54,49 +53,47 @@ jobs:
   #     versioningScheme: byEnvVar
   #     versionEnvVar: set_version.Version
   #     outputDir: '/root/.nuget/dolittle-packages'
-- job: 'Cascading_Build'
-  variables:
-  - group: global-var-pipelines
-  pool: ${{ parameters.pool }}
-  dependsOn: 'DotNetCore_Build'
-  condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
-  steps:
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: '2.2.203'
+  - job: "Cascading_Build"
+    variables:
+      - group: global-var-pipelines
+    pool: ${{ parameters.pool }}
+    dependsOn: "DotNetCore_Build"
+    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
+    steps:
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: "2.2.203"
 
-  - template: './cascading_build.yml'
-    parameters:
-      CASCADES: ${{ parameters.CASCADES }}
+      - template: "./cascading_build.yml"
+        parameters:
+          CASCADES: ${{ parameters.CASCADES }}
 
-- job: 'Release'
-  pool: ${{ parameters.buildConfiguration }}
-  dependsOn: 'DotNetCore_Build'
-  condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
-  variables:
-  - group: global-var-pipelines
-  - name: NEW_VERSION
-    value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+  - job: "Release"
+    pool: ${{ parameters.buildConfiguration }}
+    dependsOn: "DotNetCore_Build"
+    condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
+    variables:
+      - group: global-var-pipelines
+      - name: NEW_VERSION
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
-  steps:
-  - template: ../Versioning/commit_version_tag.yml
-  
-#   - download: current
-#     artifact: 'NugetPack'
-  
-#   - script: ls -R  $(Pipeline.Workspace)
-#     displayName: Checking packages
-  
-  - task: NuGetCommand@2
-    displayName: Push Nuget packs
-    condition: ne( variables.NEW_VERSION , 'empty')
-    inputs:
-      command: push
-      nugetFeedType: 'external'
-      packagesToPush: '/root/.nuget/dolittle-packages/**/*.nupkg'
-      publishFeedCredentials: 'myget_mathieu'
+    steps:
+      - template: ../Versioning/commit_version_tag.yml
 
+      #   - download: current
+      #     artifact: 'NugetPack'
 
+      #   - script: ls -R  $(Pipeline.Workspace)
+      #     displayName: Checking packages
+
+      - task: NuGetCommand@2
+        displayName: Push Nuget packs
+        condition: ne( variables.NEW_VERSION , 'empty')
+        inputs:
+          command: push
+          nugetFeedType: "external"
+          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
+          publishFeedCredentials: "myget_mathieu"
 # - job: 'Documentation'
 #   pool: ${{ parameters.buildConfiguration }}
 #   dependsOn: DotNetCore_Build
@@ -105,7 +102,6 @@ jobs:
 #   - group: global-var-pipelines
 #   steps:
 #   - template: ../Documentation/documentation.yml
-   
-   
+
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
 # echo IndividualCI 036100265b6d83d536827451131bf8c306ce9d43 2.0.0
