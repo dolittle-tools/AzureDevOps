@@ -68,32 +68,32 @@ jobs:
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
 
-  - job: "Release"
-    pool: ${{ parameters.buildConfiguration }}
-    dependsOn: "DotNetCore_Build"
-    condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
-    variables:
-      - group: global-var-pipelines
-      - name: NEW_VERSION
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+  # - job: "Release"
+  #   pool: ${{ parameters.buildConfiguration }}
+  #   dependsOn: "DotNetCore_Build"
+  #   condition: and(succeeded(), ne($(set_version.Version), 'empty'), eq($(set_version.IsMerge), 'true'))
+  #   variables:
+  #     - group: global-var-pipelines
+  #     - name: NEW_VERSION
+  #       value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
-    steps:
-      - template: ../Versioning/commit_version_tag.yml
+  #   steps:
+  #     - template: ../Versioning/commit_version_tag.yml
 
-      #   - download: current
-      #     artifact: 'NugetPack'
+    #   - download: current
+    #     artifact: 'NugetPack'
 
-      #   - script: ls -R  $(Pipeline.Workspace)
-      #     displayName: Checking packages
+    #   - script: ls -R  $(Pipeline.Workspace)
+    #     displayName: Checking packages
 
-      - task: NuGetCommand@2
-        displayName: Push Nuget packs
-        condition: ne( variables.NEW_VERSION , 'empty')
-        inputs:
-          command: push
-          nugetFeedType: "external"
-          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
-          publishFeedCredentials: "myget_mathieu"
+  #     - task: NuGetCommand@2
+  #       displayName: Push Nuget packs
+  #       condition: ne( variables.NEW_VERSION , 'empty')
+  #       inputs:
+  #         command: push
+  #         nugetFeedType: "external"
+  #         packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
+  #         publishFeedCredentials: "myget_mathieu"
 # - job: 'Documentation'
 #   pool: ${{ parameters.buildConfiguration }}
 #   dependsOn: DotNetCore_Build
