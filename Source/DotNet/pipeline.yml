@@ -59,7 +59,7 @@ jobs:
   - group: global-var-pipelines
   pool: ${{ parameters.buildConfiguration }}
   dependsOn: 'DotNetCore_Build'
-  condition: and(succeeded(), ne($[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ], 'empty'))
+  condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
   steps:
   - template: './cascading_build.yml'
     parameters:
