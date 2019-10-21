@@ -3,7 +3,7 @@ parameters:
   CWD: $(System.DefaultWorkingDirectory)
 
 steps:
-- bash: ls
+- bash: ls ${{ parameters.CWD }}
 - bash: echo CWD ${{ parameters.CWD }}
   displayName: Printing cwd
 
