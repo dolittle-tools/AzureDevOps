@@ -24,6 +24,8 @@ steps:
     # Increment the patch version, simply do it with bash script (look at set_version_variable.yml)
 
     # do dotnet pack if it has cascading repos using the new version
+    
+    - script: echo $(Version)
 
     - task: DotNetCoreCLI@2
       displayName: Packing
