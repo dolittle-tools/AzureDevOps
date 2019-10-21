@@ -1,6 +1,5 @@
 parameters:
   CASCADES: []
-  START_DIRECTORY: ''
 
 steps:
   - script: echo Looking for cascades and creating steps for them if any
@@ -70,14 +69,8 @@ steps:
     - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
       workingDirectory: '$(Agent.BuildDirectory)/$(clone_repo.Folder)'
 
-    # - task: DotNetCoreCLI@2
-    #   displayName: Packing
-    #   inputs:
-    #     projects: 'Source/**/*.csproj'
-    #     command: 'pack'
-    #     versioningScheme: byEnvVar
-    #     versionEnvVar: set_version.Version
-    #     outputDir: '/root/.nuget/dolittle-packages'
-    
+  # Use command to get cascades:
+  # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
+
   # - ${{ each repo in parameters.CASCADES }}:
   #  -  Get CASCADES from each of the repos git links and do cascading build on those

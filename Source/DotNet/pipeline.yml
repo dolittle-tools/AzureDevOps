@@ -24,35 +24,7 @@ jobs:
 
       - template: ../Versioning/set_version_variable.yml
 
-      #  - script: echo Version is $(set_version.Version)
-      #    displayName: Print version
 
-      - script: echo Is merging $(set_version.IsMerge)
-        displayName: Print is merge
-
-      - script: echo Version is not empty
-        condition: ne('$(set_version.Version)', 'empty')
-        displayName: Print on version not empty
-
-        # Should trigger a cascading build on pull requests ensuring that the other cascading projects does not break when a patch or major has been made.
-
-        # Dynamically create jobs to build cascading. Only on PRs. Should only pack locally when it's a PR or triggered and has cascades
-
-        # Use command to get cascades:
-        # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
-
-        # Use yq to parse yaml azure-pipelines.yml to get cascades. See yaml list og strings as value
-
-  #new job cascading with packing first do only on pull request
-  # - task: DotNetCoreCLI@2
-  #   condition: and(ne(${{  parameters.CASCADES }}, []), ne($(set_version.Version), 'empty')) # If it's a pull request and it does not have any CASCADES
-  #   displayName: Packing
-  #   inputs:
-  #     projects: './Source/**/*.csproj'
-  #     command: 'pack'
-  #     versioningScheme: byEnvVar
-  #     versionEnvVar: set_version.Version
-  #     outputDir: '/root/.nuget/dolittle-packages'
   - job: "Cascading_Build"
     variables:
       - group: global-var-pipelines
