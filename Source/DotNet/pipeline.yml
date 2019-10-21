@@ -78,6 +78,7 @@ jobs:
   - name: NEW_VERSION
     value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
+  steps:
   - template: ../Versioning/commit_version_tag.yml
   
 #   - download: current
