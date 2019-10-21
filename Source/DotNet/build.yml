@@ -1,5 +1,6 @@
 parameters:
   buildConfiguration: 'Release'
+  CWD: $(System.DefaultWorkingDirectory)
 
 steps:
 - bash: ls /root/.nuget
@@ -13,6 +14,7 @@ steps:
     feedsToUse: 'config'
     versioningScheme: 'off'
     nugetConfigPath: '/root/.nuget/NuGet.Config'
+    workingDirectory: ${{ parameters.CWD }}
 
 - task: DotNetCoreCLI@2
   displayName: Build
