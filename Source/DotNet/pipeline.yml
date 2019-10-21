@@ -53,8 +53,6 @@ jobs:
         value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
 
     steps:
-      - checkout: none
-
       - template: ../Github/set_github_constants.yml
 
       - task: NuGetCommand@2
@@ -72,9 +70,9 @@ jobs:
           BRANCH: $(github_constants.Branch)
 
       - template: ./tag_cascades.yml
+        parameters:
+          CASCADES: ${{ parameters.CASCADES }}
 
-      
-      
   - job: "Cleanup"
     pool: ${{ parameters.pool }}
     dependsOn: "Release"
