@@ -24,11 +24,11 @@ jobs:
   
   - template: ../Versioning/set_version_variable.yml
       
-  - script: echo Version is $(set_version.Version)
-    displayName: Print version
+#  - script: echo Version is $(set_version.Version)
+#    displayName: Print version
 
-  - script: echo Is merging $(set_version.IsMerge)
-    displayName: Print is merge
+#  - script: echo Is merging $(set_version.IsMerge)
+#    displayName: Print is merge
 
   - script: echo Version is not empty
     condition: ne('$(set_version.Version)', 'empty')
