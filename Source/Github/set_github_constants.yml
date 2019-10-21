@@ -1,0 +1,23 @@
+parameters:
+    URL: $(Build.Repository.Uri)
+    SOURCE_BRANCH: $(Build.SourceBranch)
+steps:
+- bash: |
+    setup () {
+        set -o nounset
+    }
+    echoerr () { 
+        printf "%s\n" "$*" >&2;
+    }
+    main () {
+        setup
+        REPO=`echo "${{ parameters.URL }}" | awk -F ".com/" '{ print $2 }'`
+        BRANCH=$(echo ${{ parameters.SOURCE_BRANCH }} | cut -d "/" -f 3)
+        
+        echo "##vso[task.setvariable variable=Branch;isOutput=true]$BRANCH"
+        echo "##vso[task.setvariable variable=Repo;isOutput=true]$REPO"
+    }
+    main
+
+  displayName: Setting Github constants
+  name: github_constants
