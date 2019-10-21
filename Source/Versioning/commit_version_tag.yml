@@ -2,6 +2,7 @@ parameters:
     NEW_VERSION: 'empty'
     REPO: ''
     BRANCH: 'master'
+    CWD: $(System.DefaultWorkingDirectory)
 
 steps:
 - bash: |
@@ -30,9 +31,9 @@ steps:
             echoerr No new version to tag
         fi
     }
-
     main
   displayName: Commit version tag
+  workingDirectory: ${{ parameters.CWD }}
   env:
     GIT_EMAIL: $(GitEmail)
     GIT_USERNAME: $(GitUsername)
