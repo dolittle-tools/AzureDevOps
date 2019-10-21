@@ -75,7 +75,7 @@ steps:
     - template: './tag_cascades.yml'
       parameters:
         CASCADES:
-          - ${{ each cascade in get_cascades.CASCADES }}:
+          - ${{ each cascade in $(get_cascades.CASCADES) }}:
             - ${{ cascade }}
 
 
