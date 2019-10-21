@@ -55,6 +55,8 @@ jobs:
   #     versionEnvVar: set_version.Version
   #     outputDir: '/root/.nuget/dolittle-packages'
 - job: 'Cascading_Build'
+  variables:
+  - group: global-var-pipelines
   pool: ${{ parameters.buildConfiguration }}
   dependsOn: 'DotNetCore_Build'
   condition: and(success(), ne($[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ], 'empty'))
