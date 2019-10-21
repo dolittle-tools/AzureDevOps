@@ -22,7 +22,7 @@ steps:
             sleep 1
         done
 
-        local VERSION=$(echo $TAG_REFS | grep -o -E "refs/tags/\S+" | grep -o -e "[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
+        local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -1)
         echo "$VERSION"
     }
 
@@ -48,7 +48,7 @@ steps:
             echo Last commit message
             echo "$COMMIT_MESSAGE"
 
-            if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "[Auto] Triggered from another pipeline (cascading)" ]
+            if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ]
             then
                 echo "Getting version tag..."
                 
@@ -80,7 +80,7 @@ steps:
                 then
                     echo "New patch release"
                     PATCH=$((PATCH+1))
-                elif [ "$COMMIT_MESSAGE" = "[Auto] Triggered from another pipeline (cascading)" ] && [ "$NEW_PROJECT" = false ]
+                elif [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ] && [ "$NEW_PROJECT" = false ]
                 then
                     echo "New patch release, dependency has been upgraded."
                     PATCH=$((PATCH+1))
