@@ -31,7 +31,7 @@ jobs:
     displayName: Print is merge
 
   - script: echo Version is not empty
-    condition: ne('$(set_version.Version)'', 'empty')
+    condition: ne('$(set_version.Version)', 'empty')
     displayName: Print on version not empty
 
     # Should trigger a cascading build on pull requests ensuring that the other cascading projects does not break when a patch or major has been made.  
