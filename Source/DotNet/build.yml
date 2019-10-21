@@ -21,7 +21,7 @@ steps:
   displayName: Build
   inputs:
     command: build
-    projects: './Source/**/*.csproj'
+    projects: 'Source/**/*.csproj'
     arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
     workingDirectory: '${{ parameters.CWD }}'
 
@@ -29,6 +29,6 @@ steps:
   displayName: Run Tests
   inputs:
     command: test
-    projects: './Specifications/**/*.csproj'
+    projects: 'Specifications/**/*.csproj'
     arguments: '--configuration ${{ parameters.buildConfiguration }}'
     workingDirectory: '${{ parameters.CWD }}'
