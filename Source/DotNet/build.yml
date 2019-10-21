@@ -3,9 +3,7 @@ parameters:
   CWD: $(System.DefaultWorkingDirectory)
 
 steps:
-- bash: ls /root/.nuget
-  displayName: Ls in .nuget folder
-
+- bash: ls
 - bash: echo CWD ${{ parameters.CWD }}
   displayName: Printing cwd
 
