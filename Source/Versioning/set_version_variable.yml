@@ -16,10 +16,6 @@ steps:
         local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
         echo "$LABELS"
     }
-    get_last_commit_message_to_master () {
-        local COMMIT_MSG=$(curl https://api.github.com/repos/$REPO/commits\?state\=all | jq -r '.[0].commit.message') 
-        echo "$COMMIT_MSG"
-    }
     get_latest_version_tag () {
         local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
         while [ ! "$TAG_REFS" ]
@@ -62,11 +58,7 @@ steps:
             echo "$LABELS"
         fi
 
-        COMMIT_MESSAGE=$(get_last_commit_message_to_master)
-        echo Last commit message
-        echo "$COMMIT_MESSAGE"
-
-        if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ]
+        if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]]
         then
             echo "Getting version tag..."
             
@@ -109,7 +101,7 @@ steps:
             echo New version "$NEW_VERSION"
         else
             echoerr No label triggering new version
-            echo "##vso[task.setvariable variable=Version;isOutput=true]<"
+            echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
         fi
     }
     main
