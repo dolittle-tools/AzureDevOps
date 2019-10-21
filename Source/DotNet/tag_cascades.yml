@@ -1,0 +1,86 @@
+parameters:
+  CASCADES: []
+  DIRECTORY: $(Agent.TempDirectory)
+
+steps:
+  - ${{ each repo in parameters.CASCADES }}:
+    - template: '../Github/set_github_constants.yml'
+      parameters: 
+        URL: 'https://github.com/${{ repo }}'
+        SOURCE_BRANCH: 'refs/heads/master'
+
+    - bash: |
+        DIR=$(echo ${{ repo }} | cut -d "/" -f 2)
+        echo "##vso[task.setvariable variable=Folder;isOutput=true]$DIR"
+      workingDirectory: ${{ parameters.DIRECTORY }}
+      displayName: Setting the repo folder variable
+      name: set_folder
+      
+    - bash: |
+        setup () {
+          set -o nounset
+        }
+        echoerr () { 
+            printf "%s\n" "$*" >&2;
+        }
+        get_latest_version_tag () {
+            local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
+            while [ ! "$TAG_REFS" ]
+            do
+                sleep 1
+            done
+
+            local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -1)
+            echo "$VERSION"
+        }
+        main () {
+            setup
+            VERSION=$(get_latest_version_tag)
+            NEW_PROJECT=false
+            if [ ! "$VERSION" ]
+            then
+                NEW_PROJECT=true
+                VERSION=1.0.0
+                echo No version tag found. Setting version to "$VERSION"
+            fi
+            MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
+            MINOR=`echo $VERSION | awk -F "." '{print $2}'`
+            PATCH=`echo $VERSION | awk -F "." '{print $3}'`
+            
+            if [ "$NEW_PROJECT" = false ]
+            then
+                echo "New patch release, dependency has been upgraded."
+                PATCH=$((PATCH+1))
+            fi
+            NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+            echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+            echo Previous version "$VERSION"
+            echo New version "$NEW_VERSION"
+        }
+        main
+      name: set_version
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(set_folder.Folder)'
+
+    - template: '../Versioning/commit_version_tag.yml'
+      parameters:
+        CWD: '${{ parameters.DIRECTORY }}/$(set_repo.Folder)'
+        NEW_VERSION: $(set_version.Version)
+        REPO: '${{ repo }}'
+        BRANCH: '$(github_constants.Branch)'
+
+    - bash: |
+        CASCADES=$(curl https://raw.githubusercontent.com/${{ repo }}/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}')
+        echo "##vso[task.setvariable variable=Cascades;isOutput=true]$CASCADES"
+      name: get_cascades
+    - template: './tag_cascades.yml'
+      parameters:
+        CASCADES:
+          - ${{ each cascade in get_cascades.CASCADES }}:
+            - ${{ cascade }}
+
+
+  # Use command to get cascades:
+  # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
+
+  # - ${{ each repo in parameters.CASCADES }}:
+  #  -  Get CASCADES from each of the repos git links and do cascading build on those
