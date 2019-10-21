@@ -67,14 +67,17 @@ steps:
       name: set_version
       workingDirectory: '$(Agent.BuildDirectory)/$(clone_repo.Folder)'
     
-    - task: DotNetCoreCLI@2
-      displayName: Packing
-      inputs:
-        projects: 'Source/**/*.csproj'
-        command: 'pack'
-        versioningScheme: byEnvVar
-        versionEnvVar: set_version.Version
-        outputDir: '/root/.nuget/dolittle-packages'
+    - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
+      workingDirectory: '$(Agent.BuildDirectory)/$(clone_repo.Folder)'
+
+    # - task: DotNetCoreCLI@2
+    #   displayName: Packing
+    #   inputs:
+    #     projects: 'Source/**/*.csproj'
+    #     command: 'pack'
+    #     versioningScheme: byEnvVar
+    #     versionEnvVar: set_version.Version
+    #     outputDir: '/root/.nuget/dolittle-packages'
     
   # - ${{ each repo in parameters.CASCADES }}:
   #  -  Get CASCADES from each of the repos git links and do cascading build on those

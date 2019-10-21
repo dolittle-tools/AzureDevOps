@@ -69,6 +69,10 @@ jobs:
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
 
+      - script: ls /root/.nuget/dolittle-packages
+      - script: rm -rf /root/.nuget/dolittle-packages
+      - script: ls /root/.nuget/dolittle-packages
+
   # - job: "Release"
   #   pool: ${{ parameters.buildConfiguration }}
   #   dependsOn: "DotNetCore_Build"

@@ -19,10 +19,14 @@ steps:
 
 - bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
   workingDirectory: ${{ parameters.CWD }}
+  displayName: Restore
 - bash: dotnet build --no-restore
   workingDirectory: ${{ parameters.CWD }}
+  displayName: Build
 - bash: dotnet test
   workingDirectory: ${{ parameters.CWD }}    
+  displayName: Test
+
 # - task: DotNetCoreCLI@2
 #   displayName: Build
 #   inputs:
