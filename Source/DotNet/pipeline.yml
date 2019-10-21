@@ -57,7 +57,7 @@ jobs:
 - job: 'Cascading_Build'
   variables:
   - group: global-var-pipelines
-  pool: ${{ parameters.buildConfiguration }}
+  pool: ${{ parameters.pool }}
   dependsOn: 'DotNetCore_Build'
   condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
   steps:
