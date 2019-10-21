@@ -61,7 +61,7 @@ jobs:
   dependsOn: 'DotNetCore_Build'
   condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
   steps:
-   - task: DotNetCoreInstaller@0
+  - task: DotNetCoreInstaller@0
     inputs:
       version: '2.2.203'
 
