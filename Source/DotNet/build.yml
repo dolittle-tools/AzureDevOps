@@ -12,6 +12,6 @@ steps:
   workingDirectory: ${{ parameters.CWD }}
   displayName: Build
 
-- bash: dotnet test
+- bash: dotnet test --no-build
   workingDirectory: ${{ parameters.CWD }}    
   displayName: Test
