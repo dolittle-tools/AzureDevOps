@@ -7,28 +7,37 @@ steps:
 - bash: echo CWD ${{ parameters.CWD }}
   displayName: Printing cwd
 
-- task: DotNetCoreCLI@2
-  displayName: Restore packages
-  inputs:
-    command: 'restore'
-    arguments: '--no-build'
-    feedsToUse: 'config'
-    versioningScheme: 'off'
-    nugetConfigPath: '/root/.nuget/NuGet.Config'
-    workingDirectory: '${{ parameters.CWD }}'
+# - task: DotNetCoreCLI@2
+#   displayName: Restore packages
+#   inputs:
+#     command: 'restore'
+#     arguments: '--no-build'
+#     feedsToUse: 'config'
+#     versioningScheme: 'off'
+#     nugetConfigPath: '/root/.nuget/NuGet.Config'
+#     workingDirectory: '${{ parameters.CWD }}'
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: build
-    projects: 'Source/**/*.csproj'
-    arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
-    workingDirectory: '${{ parameters.CWD }}'
+- script: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
+  workingDirectory: ${{ parameters.CWD }}'
+- script: dotnet build --no-restore
+  workingDirectory: ${{ parameters.CWD }}'
+- script: dotnet test
+  workingDirectory: ${{ parameters.CWD }}'    
+# - task: DotNetCoreCLI@2
+#   displayName: Build
+#   inputs:
+#     command: build
+#     projects: '${{ parameters.CWD }}/Source/**/*.csproj'
+#     arguments: '--configuration ${{ parameters.buildConfiguration }}'
+#     feedsToUse: 'config'
+#     versioningScheme: 'off'
+#     nugetConfigPath: '/root/.nuget/NuGet.Config'
+#     workingDirectory: '${{ parameters.CWD }}'
 
-- task: DotNetCoreCLI@2
-  displayName: Run Tests
-  inputs:
-    command: test
-    projects: 'Specifications/**/*.csproj'
-    arguments: '--configuration ${{ parameters.buildConfiguration }}'
-    workingDirectory: '${{ parameters.CWD }}'
+# - task: DotNetCoreCLI@2
+#   displayName: Run Tests
+#   inputs:
+#     command: test
+#     projects: '${{ parameters.CWD }}/Specifications/**/*.csproj'
+#     arguments: '--configuration ${{ parameters.buildConfiguration }}'
+#     workingDirectory: '${{ parameters.CWD }}'
