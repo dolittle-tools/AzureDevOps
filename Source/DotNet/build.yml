@@ -1,0 +1,36 @@
+parameters:
+  buildConfiguration: 'Release'
+  CWD: $(System.DefaultWorkingDirectory)
+
+steps:
+- bash: ls /root/.nuget
+  displayName: Ls in .nuget folder
+
+- bash: echo CWD ${{ parameters.CWD }}
+  displayName: Printing cwd
+
+- task: DotNetCoreCLI@2
+  displayName: Restore packages
+  inputs:
+    command: 'restore'
+    arguments: '--no-build'
+    feedsToUse: 'config'
+    versioningScheme: 'off'
+    nugetConfigPath: '/root/.nuget/NuGet.Config'
+    workingDirectory: ${{ parameters.CWD }}
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: './Source/**/*.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
+    workingDirectory: ${{ parameters.CWD }}
+
+- task: DotNetCoreCLI@2
+  displayName: Run Tests
+  inputs:
+    command: test
+    projects: './Specifications/**/*.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}'
+    workingDirectory: ${{ parameters.CWD }}
