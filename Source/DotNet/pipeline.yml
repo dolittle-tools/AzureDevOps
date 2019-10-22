@@ -81,8 +81,8 @@ jobs:
     pool: ${{ parameters.pool }}
     condition: always()
     variables:
-      - NEW_VERSION: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
-      - IsMerge: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
+      NEW_VERSION: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+      IsMerge: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
     steps:
       - bash: |
           echo "Version : $(NEW_VERSION)"
