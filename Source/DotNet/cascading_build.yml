@@ -5,12 +5,21 @@ parameters:
 steps:
   - ${{ each repo in parameters.CASCADES }}:
     - bash: |
+        setup_git_config () {
+            git config user.name \"$GIT_USERNAME\"
+            git config user.email \"$GIT_EMAIL\"
+        }
+        setup_git_config
         DIR=$(echo ${{ repo }} | cut -d "/" -f 2)
         rm -rf $DIR
-        git clone --recursive https://github.com/${{ repo }}.git
+        git clone --recursive https://"${GIT_USERNAME}":"${PAT}"@github.com/${{ repo }}.git
         echo "##vso[task.setvariable variable=Folder]$DIR"
       workingDirectory: ${{ parameters.DIRECTORY }}
       displayName: Clone cascading repo
+      env:
+        GIT_EMAIL: $(GitEmail)
+        GIT_USERNAME: $(GitUsername)
+        PAT: $(CascadingBuild)
     
     - template: './build.yml'
       parameters:
