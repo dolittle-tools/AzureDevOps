@@ -113,5 +113,5 @@ steps:
     CASCADING_BUILD_MESSAGE: $(CascadingTriggerMessage)
     
 - bash: |
-    echo "New version = $(Version)"
-    echo "PullResuest has been merged = $(IsMerge)"
+    echo "New version = $(set_version.Version)"
+    echo "PullResuest has been merged = $(set_version.IsMerge)"
