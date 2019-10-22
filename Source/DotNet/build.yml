@@ -3,15 +3,14 @@ parameters:
   CWD: $(System.DefaultWorkingDirectory)
 
 steps:
-- script: echo $CWD
 - bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
   workingDirectory: ${{ parameters.CWD }}
   displayName: Restore
 
-- bash: dotnet build --no-restore
+- bash: dotnet build --no-restore --configuration ${{ parameters.buildConfiguration }}
   workingDirectory: ${{ parameters.CWD }}
   displayName: Build
 
-- bash: dotnet test --no-build
+- bash: dotnet test --no-build --configuration ${{ parameters.buildConfiguration }}
   workingDirectory: ${{ parameters.CWD }}    
   displayName: Test

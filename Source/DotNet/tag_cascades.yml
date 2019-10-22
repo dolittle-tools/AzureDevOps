@@ -67,18 +67,3 @@ steps:
         NEW_VERSION: $(set_version.Version)
         REPO: '${{ repo }}'
         BRANCH: '$(github_constants.Branch)'
-
-    - bash: |
-        CASCADES=$(curl https://raw.githubusercontent.com/${{ repo }}/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}')
-        echo "##vso[task.setvariable variable=Cascades]$CASCADES"
-      name: get_cascades
-    - template: './tag_cascades.yml'
-      parameters:
-        CASCADES: $[get_cascades.Cascades]
-
-
-  # Use command to get cascades:
-  # curl https://raw.githubusercontent.com/$REPO/master/azure-pipelines.yml | yq r - jobs[0].parameters.CASCADES | awk '/-\S*/ {print $2}'
-
-  # - ${{ each repo in parameters.CASCADES }}:
-  #  -  Get CASCADES from each of the repos git links and do cascading build on those
