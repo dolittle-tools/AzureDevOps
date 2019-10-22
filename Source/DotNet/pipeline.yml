@@ -42,6 +42,10 @@ jobs:
       - task: DotNetCoreInstaller@0
         inputs:
           version: "2.2.203"
+      
+      - bash: |
+          echo "$(dependencies.DotNetCore_Build.outputs['set_version.Version'])"
+          echo "$(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'])"
 
       - template: "./cascading_build.yml"
         parameters:
