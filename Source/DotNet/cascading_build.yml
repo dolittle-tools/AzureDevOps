@@ -11,11 +11,11 @@ steps:
         echo "##vso[task.setvariable variable=Folder;isOutput=true]$DIR"
       workingDirectory: ${{ parameters.DIRECTORY }}
       displayName: Clone cascading repo
-      name: clone_repo
+      name: clone_repo_${{ repo }}
     
     - template: './build.yml'
       parameters:
-        CWD: '${{ parameters.DIRECTORY }}/$(clone_repo.Folder)'
+        CWD: '${{ parameters.DIRECTORY }}/$(clone_repo_${{ repo }}.Folder)'
         buildConfiguration: 'Release'
 
     - bash: |
@@ -61,7 +61,7 @@ steps:
         }
         main
       name: set_version
-      workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo.Folder)'
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo_${{ repo }}.Folder)'
     
     - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
-      workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo.Folder)'
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo_${{ repo }}.Folder)'
