@@ -103,8 +103,6 @@ steps:
             echoerr No label triggering new version
             echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
         fi
-        echo "New version = $(Version)"
-        echo "Pr has been merged : $(IsMerge)"
     }
     main
 
