@@ -26,7 +26,7 @@ jobs:
 
       - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
         displayName: Packing
-        condition: ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty')
+        condition: ne(outputs['set_version.Version'], 'empty')
 
 
   - job: "Cascading_Build"
