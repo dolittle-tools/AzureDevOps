@@ -9,6 +9,7 @@ steps:
         echo "##vso[task.setvariable variable=Folder]$DIR"
       workingDirectory: ${{ parameters.DIRECTORY }}
       displayName: Setting the repo folder variable
+      condition: eq(variables['IsMerge'], 'true')
       
     - bash: |
         setup () {
