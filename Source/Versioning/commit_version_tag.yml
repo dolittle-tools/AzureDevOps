@@ -33,6 +33,7 @@ steps:
     }
     main
   displayName: Commit version tag
+  condition: and( ne(NEW_VERSION, 'empty'), eq(IsMerge, 'true') )
   workingDirectory: ${{ parameters.CWD }}
   env:
     GIT_EMAIL: $(GitEmail)
