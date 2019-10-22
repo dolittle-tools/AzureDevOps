@@ -12,7 +12,10 @@ steps:
         echo "$LABELS"
     }
     get_labels_from_not_merged_pull_request () {
+        echo https://api.github.com/repos/$REPO/pulls\?state\=all
+        echo $COMMIT_SHA
         local MERGED_PR_JSON=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | jq '.[] | select(.head.sha=="'$COMMIT_SHA'")')
+        echo $MERGED_PR_JSON
         local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
         echo "$LABELS"
     }
@@ -41,21 +44,21 @@ steps:
             echo "##vso[task.setvariable variable=IsMerge;isOutput=true]true"
 
             LABELS=$(get_labels_from_merged_pull_request)
+            echo "Got labels from pull request:"
+            echo "$LABELS"
             MAJOR_LABEL=$(echo "$LABELS" | grep -E '^major$')
             MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
-            echo "Got labels from pull request:"
-            echo "$LABELS"
         else
             echo No commit to master
             echo "##vso[task.setvariable variable=IsMerge;isOutput=true]false"
             
             LABELS=$(get_labels_from_not_merged_pull_request)
+            echo "Got labels from pull request:"
+            echo "$LABELS"
             MAJOR_LABEL=$(echo "$LABELS" | grep -E '^major$')
             MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
-            echo "Got labels from pull request:"
-            echo "$LABELS"
         fi
 
         if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
