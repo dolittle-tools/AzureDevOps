@@ -73,4 +73,4 @@ steps:
     
     - template: './cascading_build.yml'
       parameters:
-        CASCADES: $(CASCADES)
+        CASCADES: $[get_cascades.Cascades]

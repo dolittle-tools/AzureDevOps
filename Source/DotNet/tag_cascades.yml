@@ -74,7 +74,7 @@ steps:
       name: get_cascades
     - template: './tag_cascades.yml'
       parameters:
-        CASCADES: $(CASCADES)
+        CASCADES: $[get_cascades.Cascades]
 
 
   # Use command to get cascades:
