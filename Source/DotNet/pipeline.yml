@@ -71,7 +71,7 @@ jobs:
 
       - task: NuGetCommand@2
         displayName: Push Nuget packs
-        condition: eq(variables[IsMerge], 'true')
+        condition: eq($(IsMerge), 'true')
         inputs:
           command: push
           nugetFeedType: "external"
