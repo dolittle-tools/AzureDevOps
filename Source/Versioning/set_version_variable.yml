@@ -103,8 +103,7 @@ steps:
             echoerr No label triggering new version
             echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
         fi
-        echo "New version = $(Version)"
-        echo "PullResuest has been merged = $(IsMerge)"
+        
     }
     main
 
@@ -112,3 +111,7 @@ steps:
   name: set_version
   env:
     CASCADING_BUILD_MESSAGE: $(CascadingTriggerMessage)
+    
+- bash: |
+    echo "New version = $(Version)"
+    echo "PullResuest has been merged = $(IsMerge)"
