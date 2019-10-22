@@ -15,7 +15,7 @@ jobs:
 
       - task: DotNetCoreInstaller@0
         inputs:
-          version: "3.*"
+          version: "2.2.203"
 
       - template: "./build.yml"
         parameters:
@@ -37,7 +37,7 @@ jobs:
 
       - task: DotNetCoreInstaller@0
         inputs:
-          version: "3.*"
+          version: "2.2.203"
 
       - template: "./cascading_build.yml"
         parameters:
