@@ -53,6 +53,7 @@ steps:
         }
         main
       displayName: Setting version
+      condition: and( ne(NEW_VERSION, 'empty'), eq(IsMerge, 'true') )
       workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
 
     - template: '../Versioning/commit_version_tag.yml'
