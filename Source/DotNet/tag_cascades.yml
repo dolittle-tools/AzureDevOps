@@ -4,17 +4,11 @@ parameters:
 
 steps:
   - ${{ each repo in parameters.CASCADES }}:
-    - template: '../Github/set_github_constants.yml'
-      parameters: 
-        URL: 'https://github.com/${{ repo }}'
-        SOURCE_BRANCH: 'refs/heads/master'
-
     - bash: |
         DIR=$(echo ${{ repo }} | cut -d "/" -f 2)
-        echo "##vso[task.setvariable variable=Folder;isOutput=true]$DIR"
+        echo "##vso[task.setvariable variable=Folder]$DIR"
       workingDirectory: ${{ parameters.DIRECTORY }}
       displayName: Setting the repo folder variable
-      name: set_folder
       
     - bash: |
         setup () {
@@ -53,17 +47,17 @@ steps:
                 PATCH=$((PATCH+1))
             fi
             NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-            echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+            echo "##vso[task.setvariable variable=Version]$NEW_VERSION"
             echo Previous version "$VERSION"
             echo New version "$NEW_VERSION"
         }
         main
-      name: set_version
-      workingDirectory: '${{ parameters.DIRECTORY }}/$(set_folder.Folder)'
+      displayName: Setting version
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
 
     - template: '../Versioning/commit_version_tag.yml'
       parameters:
-        CWD: '${{ parameters.DIRECTORY }}/$(set_repo.Folder)'
-        NEW_VERSION: $(set_version.Version)
+        CWD: '${{ parameters.DIRECTORY }}/$(Folder)'
+        NEW_VERSION: $(Version)
         REPO: '${{ repo }}'
-        BRANCH: '$(github_constants.Branch)'
+        BRANCH: 'master'

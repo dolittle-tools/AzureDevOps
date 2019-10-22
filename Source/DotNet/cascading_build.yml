@@ -8,14 +8,13 @@ steps:
         DIR=$(echo ${{ repo }} | cut -d "/" -f 2)
         rm -rf $DIR
         git clone --recursive https://github.com/${{ repo }}.git
-        echo "##vso[task.setvariable variable=Folder;isOutput=true]$DIR"
+        echo "##vso[task.setvariable variable=Folder]$DIR"
       workingDirectory: ${{ parameters.DIRECTORY }}
       displayName: Clone cascading repo
-      name: clone_repo_${{ repo }}
     
     - template: './build.yml'
       parameters:
-        CWD: '${{ parameters.DIRECTORY }}/$(clone_repo_${{ repo }}.Folder)'
+        CWD: '${{ parameters.DIRECTORY }}/$(Folder)'
         buildConfiguration: 'Release'
 
     - bash: |
@@ -55,13 +54,13 @@ steps:
                 PATCH=$((PATCH+1))
             fi
             NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-            echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+            echo "##vso[task.setvariable variable=Version]$NEW_VERSION"
             echo Previous version "$VERSION"
             echo New version "$NEW_VERSION"
         }
         main
-      name: set_version
-      workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo_${{ repo }}.Folder)'
+      displayName: Setting version
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder))'
     
-    - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
-      workingDirectory: '${{ parameters.DIRECTORY }}/$(clone_repo_${{ repo }}.Folder)'
+    - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(Version)
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder))'
