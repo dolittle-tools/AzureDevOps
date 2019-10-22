@@ -50,7 +50,7 @@ jobs:
   - job: "Release"
     pool: ${{ parameters.pool }}
     dependsOn: "Cascading_Build"
-    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'), eq(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'], 'true'))
+    condition: and(succeeded(), eq(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'], 'true'))
     variables:
       - group: global-var-pipelines
       - name: NEW_VERSION
@@ -79,7 +79,7 @@ jobs:
           
   - job: "Check_cross_job_variables"
     pool: ${{ parameters.pool }}
-    dependsOn: "DotNetCore_Build"
+    dependsOn: "Cascading_Build"
     condition: always()
     variables:
       - group: global-var-pipelines
