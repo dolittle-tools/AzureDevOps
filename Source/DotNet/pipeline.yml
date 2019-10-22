@@ -80,10 +80,15 @@ jobs:
   - job: "Check_cross_job_variables"
     pool: ${{ parameters.pool }}
     condition: always()
+    variables:
+      - name: NEW_VERSION
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+      - name: IsMerge
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
     steps:
       - bash: |
-          echo "$(dependencies.DotNetCore_Build.outputs['set_version.Version'])"
-          echo "$(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'])"
+          echo "Version : $(NEW_VERSION)"
+          echo "Pr merged : $(IsMerge)"
 
   - job: "Cleanup"
     pool: ${{ parameters.pool }}
