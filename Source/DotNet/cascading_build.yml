@@ -62,7 +62,5 @@ steps:
       displayName: Setting version
       workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
     
-    - bash: |
-        dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(Version)
+    - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(Version)
       workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
-      condition: ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty')
