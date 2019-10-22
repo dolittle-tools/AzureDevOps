@@ -33,7 +33,7 @@ steps:
     }
     main
   displayName: Commit version tag
-  condition: eq(variable[IsMerge], 'true')
+  condition: eq(variables[IsMerge], 'true')
   workingDirectory: ${{ parameters.CWD }}
   env:
     GIT_EMAIL: $(GitEmail)
