@@ -43,10 +43,6 @@ jobs:
         inputs:
           version: "2.2.203"
       
-      - bash: |
-          echo "$(dependencies.DotNetCore_Build.outputs['set_version.Version'])"
-          echo "$(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'])"
-
       - template: "./cascading_build.yml"
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
@@ -80,6 +76,14 @@ jobs:
       - template: ./tag_cascades.yml
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
+          
+  - job: "Check cross-job variables"
+    pool: ${{ parameters.pool }}
+    condition: always()
+    steps:
+      - bash: |
+          echo "$(dependencies.DotNetCore_Build.outputs['set_version.Version'])"
+          echo "$(dependencies.DotNetCore_Build.outputs['set_version.IsMerge'])"
 
   - job: "Cleanup"
     pool: ${{ parameters.pool }}
