@@ -79,6 +79,7 @@ jobs:
           
   - job: "Check_cross_job_variables"
     pool: ${{ parameters.pool }}
+    dependsOn: "DotNetCore_Build"
     condition: always()
     variables:
       NEW_VERSION: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
