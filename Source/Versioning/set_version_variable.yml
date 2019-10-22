@@ -58,7 +58,7 @@ steps:
             echo "$LABELS"
         fi
 
-        if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]]
+        if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
         then
             echo "Getting version tag..."
             
