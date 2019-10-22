@@ -73,6 +73,4 @@ steps:
     
     - template: './cascading_build.yml'
       parameters:
-        CASCADES:
-          - ${{ each cascade in Cascades }}:
-            - ${{ cascade }}
+        CASCADES: $(CASCADES)
