@@ -20,5 +20,5 @@ steps:
     main
 
   displayName: Setting Github constants
-  condition: eq(variables[IsMerge], 'true')
+  condition: eq($(IsMerge), 'true')
   name: github_constants
