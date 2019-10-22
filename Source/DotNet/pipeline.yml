@@ -77,7 +77,7 @@ jobs:
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
           
-  - job: "Check cross-job variables"
+  - job: "Check cross job variables"
     pool: ${{ parameters.pool }}
     condition: always()
     steps:
