@@ -90,7 +90,7 @@ jobs:
         displayName: Packages after clean
 
   - job: 'Documentation'
-    pool: ${{ parameters.buildConfiguration }}
+    pool: ${{ parameters.pool }}
     dependsOn: "Cascading_Build"
     condition: succeeded()
     variables:
