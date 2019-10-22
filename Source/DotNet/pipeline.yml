@@ -24,6 +24,9 @@ jobs:
 
       - template: ../Versioning/set_version_variable.yml
 
+      - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
+        displayName: Packing
+
 
   - job: "Cascading_Build"
     pool: ${{ parameters.pool }}
