@@ -74,9 +74,7 @@ steps:
       name: get_cascades
     - template: './tag_cascades.yml'
       parameters:
-        CASCADES:
-          - ${{ each cascade in Cascades }}:
-            - ${{ cascade }}
+        CASCADES: $(CASCADES)
 
 
   # Use command to get cascades:
