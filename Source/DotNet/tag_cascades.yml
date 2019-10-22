@@ -53,7 +53,7 @@ steps:
         }
         main
       displayName: Setting version
-      condition: eq($(IsMerge), 'true')
+      condition: eq(variables['IsMerge'], 'true')
       workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
 
     - template: '../Versioning/commit_version_tag.yml'
