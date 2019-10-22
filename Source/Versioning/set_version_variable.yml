@@ -12,10 +12,7 @@ steps:
         echo "$LABELS"
     }
     get_labels_from_not_merged_pull_request () {
-        echo https://api.github.com/repos/$REPO/pulls\?state\=all
-        echo $(System.PullRequest.SourceCommitId)
         local MERGED_PR_JSON=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | jq '.[] | select(.head.sha=="'$(System.PullRequest.SourceCommitId)'")')
-        echo $MERGED_PR_JSON
         local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
         echo "$LABELS"
     }
