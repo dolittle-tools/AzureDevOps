@@ -1,6 +1,6 @@
 parameters:
   CASCADES: []
-  DIRECTORY: $(Agent.BuildDirectory)
+  DIRECTORY: $(Agent.TempDirectory)
 
 steps:
   - ${{ each repo in parameters.CASCADES }}:
@@ -63,4 +63,4 @@ steps:
       workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
     
     - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(Version)
-      workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder))'
+      workingDirectory: '${{ parameters.DIRECTORY }}/$(Folder)'
