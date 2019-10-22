@@ -20,5 +20,5 @@ steps:
     main
 
   displayName: Setting Github constants
-  condition: and( ne(NEW_VERSION, 'empty'), eq(IsMerge, 'true') )
+  condition: eq(variable[IsMerge], 'true')
   name: github_constants
