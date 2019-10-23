@@ -101,15 +101,15 @@ jobs:
     condition: always()
     variables:
       - group: global-var-pipelines
-      - name: NEW_VERSION
+      - name: VERSION
         value: $[ dependencies.DotNetCore_Build.outputs['check_version.Version'] ]
-      - name: IsMerge
+      - name: Merge
         value: $[ dependencies.DotNetCore_Build.outputs['check_version.merged'] ]
       
     steps:
       - bash: |
-          echo "Version : $(NEW_VERSION)"
-          echo "Pr merged : $(IsMerge)"
+          echo "Version : $(VERSION)"
+          echo "Pr merged : $(Merge)"
 
   - job: "Cleanup"
     pool: ${{ parameters.pool }}
