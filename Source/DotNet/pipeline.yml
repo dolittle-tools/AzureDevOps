@@ -55,11 +55,11 @@ jobs:
         parameters:
           CASCADES: ${{ parameters.CASCADES }}
           
-      - bash: |
-          echo "Version : $(NEW_VERSION)"
-          echo "Pr merged : $(IsMerge)"
+      - bash: |          
           echo "##vso[task.setvariable variable=Version;isOutput=true]$(NEW_VERSION)"
           echo "##vso[task.setvariable variable=merged;isOutput=true]$(IsMerge)"
+          echo "Version : $(Version)"
+          echo "Pr merged : $(merged)"
         name: check_version
 
   - job: "Release"
