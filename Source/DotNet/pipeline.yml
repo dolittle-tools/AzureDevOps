@@ -44,6 +44,9 @@ jobs:
       - bash: |
           echo "Version : $(NEW_VERSION)"
           echo "Pr merged : $(IsMerge)"
+          echo "##vso[task.setvariable variable=Version;isOutput=true]$(NEW_VERSION)"
+          echo "##vso[task.setvariable variable=IsMerge;isOutput=true]$(IsMerge)"
+        name: check_version
 
       - checkout: none
 
@@ -62,9 +65,9 @@ jobs:
     variables:
       - group: global-var-pipelines
       - name: NEW_VERSION
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+        value: $[ dependencies.Cascading_Build.outputs['check_version.Version'] ]
       - name: IsMerge
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
+        value: $[ dependencies.Cascading_Build.outputs['check_version.IsMerge'] ]
 
     steps:
       - template: ../Github/set_github_constants.yml
@@ -80,7 +83,7 @@ jobs:
 
       - template: ../Versioning/commit_version_tag.yml
         parameters:
-          NEW_VERSION: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+          NEW_VERSION: $(NEW_VERSION)
           REPO: $(github_constants.Repo)
           BRANCH: $(github_constants.Branch)
 
@@ -95,9 +98,9 @@ jobs:
     variables:
       - group: global-var-pipelines
       - name: NEW_VERSION
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+        value: $[ dependencies.Cascading_Build.outputs['check_version.Version'] ]
       - name: IsMerge
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
+        value: $[ dependencies.Cascading_Build.outputs['check_version.IsMerge'] ]
       
     steps:
       - bash: |
