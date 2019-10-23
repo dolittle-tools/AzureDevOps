@@ -35,10 +35,6 @@ jobs:
     condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
     variables:
       - group: global-var-pipelines
-      - name: NEW_VERSION
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
-      - name: IsMerge
-        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
       
     steps:
       - bash: |
@@ -56,10 +52,10 @@ jobs:
           CASCADES: ${{ parameters.CASCADES }}
           
       - bash: |          
-          echo "##vso[task.setvariable variable=Version;isOutput=true]$(NEW_VERSION)"
+          echo "##vso[task.setvariable variable=Version;isOutput=true]$(Version)"
           echo "##vso[task.setvariable variable=merged;isOutput=true]$(IsMerge)"
           echo "Version : $(Version)"
-          echo "Pr merged : $(merged)"
+          echo "Pr merged : $(IsMerge)"
         name: check_version
 
   - job: "Release"
