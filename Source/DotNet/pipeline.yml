@@ -116,7 +116,7 @@ jobs:
 
   - job: "Cleanup"
     pool: ${{ parameters.pool }}
-    dependsOn: "Cascading_Build"
+    dependsOn: [ "Cascading_Build", "Release" ]
     condition: always()
     steps:
       - checkout: none
