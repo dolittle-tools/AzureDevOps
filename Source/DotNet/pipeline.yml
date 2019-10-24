@@ -93,7 +93,7 @@ jobs:
           
   - job: "Check_cross_job_variables"
     pool: ${{ parameters.pool }}
-#    dependsOn: "Cascading_Build"
+    dependsOn: "DotNetCore_Build"
     condition: always()
     variables:
       - group: global-var-pipelines
@@ -104,8 +104,8 @@ jobs:
       
     steps:
       - bash: |
-          echo "Version : $(set_version.Version)"
-          echo "Pr merged : $(set_version.IsMerge)"
+          echo "Version : $(NEW_VERSION)"
+          echo "Pr merged : $(IsMerge)"
 
   - job: "Cleanup"
     pool: ${{ parameters.pool }}
