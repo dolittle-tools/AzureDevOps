@@ -31,7 +31,7 @@ jobs:
         parameters:
           packageName: ${{ parameters.pipPackageName }}
           version: $(version)
-          release: dependencies.Initialize.outputs['set_version.IsMerge']
+          release: ${{ variables['release'] }}
 
   - job: "TagRepository"
     dependsOn: "Initialize"
