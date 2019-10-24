@@ -2,7 +2,7 @@ parameters:
   sourceFolder: 'Source'
   packageName: ''
   readMeFile: 'README.md'
-  version: '1.0.0'
+  NEW_VERSION: '1.0.0'
   release: false
 
 steps:
@@ -10,7 +10,7 @@ steps:
       echo "Source : ${{ parameters.sourceFolder }}"
       echo "PackageName : ${{ parameters.packageName }}"
       echo "ReadMeFile : ${{ parameters.readMeFile }}"
-      echo "Version : ${{ parameters.version }}"
+      echo "Version : ${{ parameters.NEW_VERSION }}"
       echo "Release : ${{ parameters.release }}"
     displayName: Show Parameters
 
@@ -24,7 +24,7 @@ steps:
     workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python
     displayName: Install requirements
 
-  - bash: ./generate.sh $(System.DefaultWorkingDirectory)/${{ parameters.sourceFolder }} $(System.DefaultWorkingDirectory)/Generation/Python ${{ parameters.packageName }} $(Build.Repository.Uri) $(System.DefaultWorkingDirectory)/${{ parameters.readMeFile }} ${{ parameters.version }}
+  - bash: ./generate.sh $(System.DefaultWorkingDirectory)/${{ parameters.sourceFolder }} $(System.DefaultWorkingDirectory)/Generation/Python ${{ parameters.packageName }} $(Build.Repository.Uri) $(System.DefaultWorkingDirectory)/${{ parameters.readMeFile }} ${{ parameters.NEW_VERSION }}
     workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python
     displayName: Generate gRPC Proxies
 
