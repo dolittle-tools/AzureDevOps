@@ -15,6 +15,9 @@ steps:
   - bash: git clone https://github.com/dolittle-tools/Contracts.Build.git
     displayName: Clone Contracts Build
 
+  - bash: mkdir -p $(System.DefaultWorkingDirectory)/Generation/CSharp/
+    displayName: Create generation folder
+
   - bash: sed "s@{PACKAGENAME}@${{ parameters.packageName }}@" CSharp.csproj > $(System.DefaultWorkingDirectory)/Generation/CSharp/CSharp.csproj
     workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/CSharp
     displayName: Setup project file
