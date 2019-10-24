@@ -14,7 +14,7 @@ steps:
       echo "Release : ${{ parameters.release }}"
     displayName: Show Parameters
 
-  - bash: git clone https://github.com/dolittle-tools/Contracts.Build.git
+  - bash: git clone --recursive https://github.com/dolittle-tools/Contracts.Build.git
     displayName: Clone Contracts Build
 
   - bash: python3 -m pip install --user --upgrade setuptools wheel
