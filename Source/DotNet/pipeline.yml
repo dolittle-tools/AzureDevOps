@@ -74,7 +74,7 @@ jobs:
         value: $[ dependencies.Cascading_Build.outputs['set_version.IsMerge'] ]
 
     steps:
-      - template: ../Github/set_github_constants.yml#
+      - template: ../Github/set_github_constants.yml
 
       - task: NuGetCommand@2
         displayName: Push Nuget packs
