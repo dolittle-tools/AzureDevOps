@@ -54,7 +54,7 @@ jobs:
           IsMerge: $(IsMerge)
 
   - job: "TagRepository"
-    dependsOn: "Initialize"
+    dependsOn: ["Python", "CSharp"]
     variables:
       - group: global-var-pipelines
       - name: NEW_VERSION
