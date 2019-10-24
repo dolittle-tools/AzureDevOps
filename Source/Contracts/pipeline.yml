@@ -41,7 +41,6 @@ jobs:
         value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
       - name: release
         value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
-    condition: eq($[ dependencies.Initialize.outputs['set_version.IsMerge'] ], 'true')
 
     steps:
       - template: ../Versioning/commit_version_tag.yml
