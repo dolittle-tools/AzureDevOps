@@ -29,34 +29,34 @@ jobs:
         condition: ne(variables['set_version.Version'], 'empty')
 
 
-#  - job: "Cascading_Build"
-#    pool: ${{ parameters.pool }}
-#    dependsOn: "DotNetCore_Build"
-#    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
-#    variables:
-#      - group: global-var-pipelines
+  - job: "Cascading_Build"
+    pool: ${{ parameters.pool }}
+    dependsOn: "DotNetCore_Build"
+    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
+    variables:
+      - group: global-var-pipelines
       
-#    steps:
-#      - bash: |
-#          echo "Version : $(NEW_VERSION)"
-#          echo "Pr merged : $(IsMerge)"
+    steps:
+      - bash: |
+          echo "Version : $(NEW_VERSION)"
+          echo "Pr merged : $(IsMerge)"
 
-#      - checkout: none
+      - checkout: none
 
-#      - task: DotNetCoreInstaller@0
-#        inputs:
-#          version: "2.2.203"
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: "2.2.203"
       
-#      - template: "./cascading_build.yml"
-#        parameters:
-#          CASCADES: ${{ parameters.CASCADES }}
+      - template: "./cascading_build.yml"
+        parameters:
+          CASCADES: ${{ parameters.CASCADES }}
           
-#      - bash: |          
-#          echo "##vso[task.setvariable variable=Version;isOutput=true]$(Version)"
-#          echo "##vso[task.setvariable variable=merged;isOutput=true]$(IsMerge)"
-#          echo "Version : $(Version)"
-#          echo "Pr merged : $(IsMerge)"
-#        name: check_version
+      - bash: |          
+          echo "##vso[task.setvariable variable=Version;isOutput=true]$(Version)"
+          echo "##vso[task.setvariable variable=merged;isOutput=true]$(IsMerge)"
+          echo "Version : $(Version)"
+          echo "Pr merged : $(IsMerge)"
+        name: check_version
 
 #  - job: "Release"
 #    pool: ${{ parameters.pool }}
