@@ -3,6 +3,7 @@ parameters:
   sourceFolder: 'Source'
   packageName: ''
   readMeFile: 'README.md'
+  IsMerge: false
 
 steps:
   - bash: |
@@ -10,11 +11,8 @@ steps:
       echo "PackageName : ${{ parameters.packageName }}"
       echo "ReadMeFile : ${{ parameters.readMeFile }}"
       echo "Version : ${{ parameters.NEW_VERSION }}"
-      echo "Release : ${{ parameters.release }}"
+      echo "Release : ${{ parameters.IsMerge }}"
     displayName: Show Parameters
-
-  - bash: git clone https://github.com/dolittle-tools/Contracts.Build.git
-    displayName: Clone Contracts Build
 
   - bash: python3 -m pip install --user --upgrade setuptools wheel
     displayName: Install Setup Tools  

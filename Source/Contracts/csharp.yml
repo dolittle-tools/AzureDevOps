@@ -1,0 +1,28 @@
+parameters:
+  NEW_VERSION: '1.0.0'
+  sourceFolder: 'Source'
+  packageName: ''
+  IsMerge: false
+
+steps:
+  - bash: |
+      echo "Source : ${{ parameters.sourceFolder }}"
+      echo "PackageName : ${{ parameters.packageName }}"
+      echo "Version : ${{ parameters.NEW_VERSION }}"
+      echo "Release : ${{ parameters.IsMerge }}"
+    displayName: Show Parameters
+
+  - bash: sed "s@{PACKAGENAME}@${{ parameters.packageName }}@" CSharp.csproj > $(System.DefaultWorkingDirectory)/Generation/CSharp/CSharp.csproj
+    workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/CSharp
+    displayName: Setup project file
+
+  - template: ../DotNet/build.yml
+
+  - task: NuGetCommand@2
+    displayName: Push Nuget packs
+    condition: eq(variables['IsMerge'], 'true')
+    inputs:
+      command: push
+      nugetFeedType: "external"
+      packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
+      publishFeedCredentials: "myget_mathieu"

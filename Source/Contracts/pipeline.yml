@@ -5,6 +5,12 @@ parameters:
   npmPackageName: ''
 
 jobs:
+  - job: "Contracts Build Scripts"
+
+    steps:
+    - bash: git clone --recursive https://github.com/dolittle-tools/Contracts.Build.git
+      displayName: Clone Contracts Build
+
   - job: "Initialize"
     pool: ${{ parameters.pool }}
 
