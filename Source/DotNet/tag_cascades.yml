@@ -1,6 +1,6 @@
 parameters:
   CASCADES: []
-  DIRECTORY: $(Agent.TempDirectory)
+  DIRECTORY: $(Agent.BuildDirectory)
 
 steps:
   - ${{ each repo in parameters.CASCADES }}:
