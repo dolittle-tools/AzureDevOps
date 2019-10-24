@@ -21,9 +21,9 @@ jobs:
     variables:
       - group: python
       - group: global-var-pipelines
-      - name: version
+      - name: VERSION
         value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
-      - name: release
+      - name: IsMerge
         value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
 
     steps:
@@ -37,9 +37,9 @@ jobs:
     dependsOn: "Initialize"
     variables:
       - group: global-var-pipelines
-      - name: version
+      - name: VERSION
         value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
-      - name: release
+      - name: IsMerge
         value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
 
     steps:
