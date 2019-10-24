@@ -35,7 +35,7 @@ jobs:
   - job: "Cascading_Build"
     pool: ${{ parameters.pool }}
     dependsOn: "DotNetCore_Build"
-    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
+    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'), ne(dependencies.DotNetCore_Build.outputs['set_version.IsMajor'], 'true'))
     variables:
       - group: global-var-pipelines
       - name: NEW_VERSION
