@@ -56,6 +56,7 @@ steps:
             MAJOR_LABEL=$(echo "$LABELS" | grep -E '^major$')
             MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
+            PREVIEW_LABEL=$(echo "$LABELS" | grep -E '^preview$')
         fi
 
         if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
@@ -82,14 +83,14 @@ steps:
                 PATCH="0"
                 echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
 
-            elif [ "$MINOR_LABEL" = "minor" ] && [ "$NEW_PROJECT" = false ]
+            elif [ "$MINOR_LABEL" = "minor" ] && [ "$NEW_PROJECT" = false ] && [ "$MAJOR_LABEL" != "major" ]
             then
                 echo "New minor release"
                 MINOR=$((MINOR+1))
                 PATCH="0"
                 echo "##vso[task.setvariable variable=IsMajor;isOutput=true]false"
 
-            elif [ "$PATCH_LABEL" = "patch" ] && [ "$NEW_PROJECT" = false ]
+            elif [ "$PATCH_LABEL" = "patch" ] && [ "$NEW_PROJECT" = false ] && [ "$MINOR_LABEL" != "minor" ] && [ "$MAJOR_LABEL" != "major" ]
             then
                 echo "New patch release"
                 PATCH=$((PATCH+1))
