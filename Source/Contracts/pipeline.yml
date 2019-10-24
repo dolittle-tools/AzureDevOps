@@ -5,7 +5,7 @@ parameters:
   npmPackageName: ''
 
 jobs:
-  - job: "Contracts Build Scripts"
+  - job: "ContractsClone"
 
     steps:
     - bash: git clone --recursive https://github.com/dolittle-tools/Contracts.Build.git
