@@ -31,7 +31,7 @@ jobs:
         parameters:
           packageName: ${{ parameters.pipPackageName }}
           version: $(version)
-          release: $(release)
+          release: true
 
   - job: "TagRepository"
     dependsOn: "Initialize"
