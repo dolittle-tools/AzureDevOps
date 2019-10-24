@@ -123,14 +123,14 @@ jobs:
       - script: ls /root/.nuget/dolittle-packages
         displayName: Packages after clean
 
-  - job: 'Documentation'
-    pool: ${{ parameters.pool }}
+#  - job: 'Documentation'
+#    pool: ${{ parameters.pool }}
 #    dependsOn: "Cascading_Build"
-    condition: succeeded()
-    variables:
-    - group: global-var-pipelines
-    steps:
-    - template: ../Documentation/documentation.yml
+#    condition: succeeded()
+#    variables:
+#    - group: global-var-pipelines
+#    steps:
+#    - template: ../Documentation/documentation.yml
 
 # echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
 # echo IndividualCI 036100265b6d83d536827451131bf8c306ce9d43 2.0.0
