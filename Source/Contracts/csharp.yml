@@ -26,7 +26,7 @@ steps:
     parameters:
       CWD: $(System.DefaultWorkingDirectory)/Generation/CSharp
 
-  - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
+  - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$NEW_VERSION
     displayName: Create Nuget packackages
     condition: eq(variables['IsMerge'], 'true')
     workingDirectory: $(System.DefaultWorkingDirectory)/Generation/CSharp
