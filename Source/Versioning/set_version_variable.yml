@@ -48,6 +48,7 @@ steps:
             MAJOR_LABEL=$(echo "$LABELS" | grep -E '^major$')
             MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
+            PREVIEW_LABEL=$(echo "$LABELS" | grep -E '^preview$')
         else
             echo No commit to master
             echo "##vso[task.setvariable variable=IsMerge;isOutput=true]false"
