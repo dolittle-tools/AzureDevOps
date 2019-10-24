@@ -1,0 +1,50 @@
+parameters:
+  pipPackageName: ''
+  nugetPackageName: ''
+  npmPackageName: ''
+
+jobs:
+  - job: "Initialize"
+    pool: ${{ parameters.pool }}
+
+    steps:
+    - checkout: self
+      submodules: recursive
+
+    - template: ../Versioning/set_version_variable.yml
+
+  - job: "Python"
+    pool: ${{ parameters.pool }}
+    dependsOn: "Initialize"
+    condition: succeeded()
+    variables:
+      - group: python
+      - group: global-var-pipelines
+      - name: version
+        value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
+      - name: release
+        value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
+
+    steps:
+      - template: "./python.yml"
+        parameters:
+          packageName: ${{ parameters.pipPackageName }}
+          version: $(version)
+          release: $(release)
+
+  - job: "Tag Repository"
+    dependsOn: "Initialize"
+    variables:
+      - group: global-var-pipelines
+      - name: version
+        value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
+      - name: release
+        value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
+
+    steps:
+      - template: ../Versioning/commit_version_tag.yml
+        condition: eq(variables['IsMerge'], 'true')
+        parameters:
+          NEW_VERSION: $(version)
+          REPO: $(github_constants.Repo)
+          BRANCH: $(github_constants.Branch)  

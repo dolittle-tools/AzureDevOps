@@ -1,0 +1,30 @@
+parameters:
+  sourceFolder: 'Source'
+  packageName: ''
+  readMeFile: 'README.md'
+  version: '1.0.0'
+  release: false
+
+steps:
+  - bash: git clone https://github.com/dolittle-tools/Contracts.Build.git
+    displayName: Clone Contracts Build
+
+  - bash: pip3 install --requirement requirements.txt
+    workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python
+    displayName: Install requirements
+
+  - bash: ./generate.sh $(System.DefaultWorkingDirectory)/${{ parameters.sourceFolder }} $(System.DefaultWorkingDirectory)/Generation/Python ${{ parameters.packageName }} $(Build.Repository.Uri) $(System.DefaultWorkingDirectory)/${{ parameters.readMeFile }} ${{ parameters.version }}
+    workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python
+    displayName: Generate gRPC Proxies
+
+  - bash: ./package.sh $(System.DefaultWorkingDirectory)/Generation/Python
+    workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python  
+    displayName: Package
+
+  - bash: ./publish.sh $(System.DefaultWorkingDirectory)/Generation/Python
+    condition: eq(parameters['release'], 'true')
+    workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python  
+    displayName: Publish
+    env:
+      TWINE_USERNAME: $(TWINE_USERNAME)
+      TWINE_PASSWORD: $(TWINE_PASSWORD)
