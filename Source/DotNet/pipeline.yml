@@ -10,6 +10,9 @@ jobs:
       - group: global-var-pipelines
 
     steps:
+      - bash: ls -R $(Agent.BuildDirectory)
+        name: check_if_empty
+      
       - checkout: self
         submodules: recursive
 
