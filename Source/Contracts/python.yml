@@ -33,7 +33,7 @@ steps:
     displayName: Package
 
   - bash: ./publish.sh $(System.DefaultWorkingDirectory)/Generation/Python
-    condition: eq(${{ parameters.release }}, 'true')
+    condition: eq("${{ parameters.release }}", 'true')
     workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python  
     displayName: Publish
     env:
