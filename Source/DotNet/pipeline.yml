@@ -98,9 +98,9 @@ jobs:
     variables:
       - group: global-var-pipelines
       - name: VERSION
-        value: $[ dependencies.DotNetCore_Build.outputs['check_version.Version'] ]
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
       - name: Merge
-        value: $[ dependencies.DotNetCore_Build.outputs['check_version.merged'] ]
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
       
     steps:
       - bash: |
