@@ -35,7 +35,7 @@ jobs:
 
   - job: "TagRepository"
     dependsOn: "Initialize"
-    condition: eq(variables['IsMerge'], 'true')
+    condition: eq(variables['release'], 'true')
     variables:
       - group: global-var-pipelines
       - name: version
