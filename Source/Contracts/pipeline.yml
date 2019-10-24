@@ -1,4 +1,5 @@
 parameters:
+  pool: Default
   pipPackageName: ''
   nugetPackageName: ''
   npmPackageName: ''
