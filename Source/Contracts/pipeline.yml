@@ -31,17 +31,17 @@ jobs:
         parameters:
           packageName: ${{ parameters.pipPackageName }}
           version: $(version)
-          release: true
+          release: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
 
   - job: "TagRepository"
     dependsOn: "Initialize"
-    condition: eq(variables['release'], 'true')
     variables:
       - group: global-var-pipelines
       - name: version
         value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
       - name: release
         value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
+    condition: eq($[ dependencies.Initialize.outputs['set_version.IsMerge'] ], 'true')
 
     steps:
       - template: ../Versioning/commit_version_tag.yml
