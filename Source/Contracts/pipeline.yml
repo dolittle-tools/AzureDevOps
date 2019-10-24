@@ -48,7 +48,7 @@ jobs:
       - template: "./csharp.yml"
         parameters:
           packageName: ${{ parameters.nugetPackageName }}
-          NEW_VERSION: $(NEW_VERSION)
+          NEW_VERSION: $[ dependencies.Initialize.outputs['set_version.Version'] ]
           IsMerge: $(IsMerge)
 
   - job: "TagRepository"
