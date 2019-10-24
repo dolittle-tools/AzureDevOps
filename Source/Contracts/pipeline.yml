@@ -12,6 +12,8 @@ jobs:
       displayName: Clone Contracts Build
 
   - job: "Initialize"
+    dependsOn: "ContractsClone"
+    condition: succeeded()
     pool: ${{ parameters.pool }}
 
     steps:
