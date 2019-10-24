@@ -29,67 +29,67 @@ jobs:
         condition: ne(variables['set_version.Version'], 'empty')
 
 
-  - job: "Cascading_Build"
-    pool: ${{ parameters.pool }}
-    dependsOn: "DotNetCore_Build"
-    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
-    variables:
-      - group: global-var-pipelines
+#  - job: "Cascading_Build"
+#    pool: ${{ parameters.pool }}
+#    dependsOn: "DotNetCore_Build"
+#    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'))
+#    variables:
+#      - group: global-var-pipelines
       
-    steps:
-      - bash: |
-          echo "Version : $(NEW_VERSION)"
-          echo "Pr merged : $(IsMerge)"
+#    steps:
+#      - bash: |
+#          echo "Version : $(NEW_VERSION)"
+#          echo "Pr merged : $(IsMerge)"
 
-      - checkout: none
+#      - checkout: none
 
-      - task: DotNetCoreInstaller@0
-        inputs:
-          version: "2.2.203"
+#      - task: DotNetCoreInstaller@0
+#        inputs:
+#          version: "2.2.203"
       
-      - template: "./cascading_build.yml"
-        parameters:
-          CASCADES: ${{ parameters.CASCADES }}
+#      - template: "./cascading_build.yml"
+#        parameters:
+#          CASCADES: ${{ parameters.CASCADES }}
           
-      - bash: |          
-          echo "##vso[task.setvariable variable=Version;isOutput=true]$(Version)"
-          echo "##vso[task.setvariable variable=merged;isOutput=true]$(IsMerge)"
-          echo "Version : $(Version)"
-          echo "Pr merged : $(IsMerge)"
-        name: check_version
+#      - bash: |          
+#          echo "##vso[task.setvariable variable=Version;isOutput=true]$(Version)"
+#          echo "##vso[task.setvariable variable=merged;isOutput=true]$(IsMerge)"
+#          echo "Version : $(Version)"
+#          echo "Pr merged : $(IsMerge)"
+#        name: check_version
 
-  - job: "Release"
-    pool: ${{ parameters.pool }}
-    dependsOn: "Cascading_Build"
-    condition: succeeded()
-    variables:
-      - group: global-var-pipelines
-      - name: NEW_VERSION
-        value: $[ dependencies.Cascading_Build.outputs['set_version.Version'] ]
-      - name: IsMerge
-        value: $[ dependencies.Cascading_Build.outputs['set_version.IsMerge'] ]
+#  - job: "Release"
+#    pool: ${{ parameters.pool }}
+#    dependsOn: "Cascading_Build"
+#    condition: succeeded()
+#    variables:
+#      - group: global-var-pipelines
+#      - name: NEW_VERSION
+#        value: $[ dependencies.Cascading_Build.outputs['set_version.Version'] ]
+#      - name: IsMerge
+#        value: $[ dependencies.Cascading_Build.outputs['set_version.IsMerge'] ]
 
-    steps:
-      - template: ../Github/set_github_constants.yml
+#    steps:
+#      - template: ../Github/set_github_constants.yml#
 
-      - task: NuGetCommand@2
-        displayName: Push Nuget packs
-        condition: eq(variables['IsMerge'], 'true')
-        inputs:
-          command: push
-          nugetFeedType: "external"
-          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
-          publishFeedCredentials: "myget_mathieu"
+#      - task: NuGetCommand@2
+#        displayName: Push Nuget packs
+#        condition: eq(variables['IsMerge'], 'true')
+#        inputs:
+#          command: push
+#          nugetFeedType: "external"
+#          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
+#          publishFeedCredentials: "myget_mathieu"
 
-      - template: ../Versioning/commit_version_tag.yml
-        parameters:
-          NEW_VERSION: $(NEW_VERSION)
-          REPO: $(github_constants.Repo)
-          BRANCH: $(github_constants.Branch)
+#      - template: ../Versioning/commit_version_tag.yml
+#        parameters:
+#          NEW_VERSION: $(NEW_VERSION)
+#          REPO: $(github_constants.Repo)
+#          BRANCH: $(github_constants.Branch)
 
-      - template: ./tag_cascades.yml
-        parameters:
-          CASCADES: ${{ parameters.CASCADES }}
+#      - template: ./tag_cascades.yml
+#        parameters:
+#          CASCADES: ${{ parameters.CASCADES }}
           
   - job: "Check_cross_job_variables"
     pool: ${{ parameters.pool }}
