@@ -9,6 +9,9 @@ steps:
   - bash: git clone https://github.com/dolittle-tools/Contracts.Build.git
     displayName: Clone Contracts Build
 
+  - bash: python3 -m pip install --user --upgrade setuptools wheel
+    displayName: Install Setup Tools  
+
   - bash: pip3 install --requirement requirements.txt
     workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/Python
     displayName: Install requirements
