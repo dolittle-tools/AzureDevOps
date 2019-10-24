@@ -64,7 +64,7 @@ jobs:
 
   - job: "Release"
     pool: ${{ parameters.pool }}
-    dependsOn: "Cascading_Build" | [ "DotNetCore_Build" ]
+    dependsOn: [ "Cascading_Build", "DotNetCore_Build" ]
     condition: succeeded()
     variables:
       - group: global-var-pipelines
