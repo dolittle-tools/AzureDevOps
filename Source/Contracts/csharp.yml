@@ -29,7 +29,7 @@ steps:
   - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(Version)
     displayName: Create Nuget packackages
     condition: eq(variables['IsMerge'], 'true')
-    workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/CSharp
+    workingDirectory: $(System.DefaultWorkingDirectory)/Generation/CSharp/CSharp.csproj
 
   - task: NuGetCommand@2
     displayName: Push Nuget packages
