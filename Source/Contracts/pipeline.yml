@@ -33,7 +33,7 @@ jobs:
           version: $(version)
           release: $(release)
 
-  - job: "Tag Repository"
+  - job: "TagRepository"
     dependsOn: "Initialize"
     condition: eq(variables['IsMerge'], 'true')
     variables:
