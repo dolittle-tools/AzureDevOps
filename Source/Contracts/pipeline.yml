@@ -30,8 +30,8 @@ jobs:
       - template: "./python.yml"
         parameters:
           packageName: ${{ parameters.pipPackageName }}
-          version: $(version)
-          release: $(release)
+          NEW_VERSION: $(NEW_VERSION)
+          IsMerge: $(IsMerge)
 
   - job: "TagRepository"
     dependsOn: "Initialize"
@@ -48,6 +48,7 @@ jobs:
       - template: ../Versioning/commit_version_tag.yml
         
         parameters:
-          NEW_VERSION: $(version)
+          NEW_VERSION: $(NEW_VERSION)
           REPO: $(github_constants.Repo)
           BRANCH: $(github_constants.Branch)  
+          IsMerge: $(IsMerge)
