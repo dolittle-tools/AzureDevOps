@@ -39,6 +39,24 @@ jobs:
           NEW_VERSION: $(NEW_VERSION)
           IsMerge: $(IsMerge)
 
+  - job: "CSharp"
+    pool: ${{ parameters.pool }}
+    dependsOn: "Initialize"
+    condition: succeeded()
+    variables:
+      - group: global-var-pipelines
+      - name: NEW_VERSION
+        value: $[ dependencies.Initialize.outputs['set_version.Version'] ]
+      - name: IsMerge
+        value: $[ dependencies.Initialize.outputs['set_version.IsMerge'] ]
+
+    steps:
+      - template: "./csharp.yml"
+        parameters:
+          packageName: ${{ parameters.nugetPackageName }}
+          NEW_VERSION: $(NEW_VERSION)
+          IsMerge: $(IsMerge)
+
   - job: "TagRepository"
     dependsOn: "Initialize"
     variables:
