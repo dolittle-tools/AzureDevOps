@@ -30,8 +30,8 @@ jobs:
       - template: "./python.yml"
         parameters:
           packageName: ${{ parameters.pipPackageName }}
-          version: $(version)
-          release: $(release)
+          version: $(variables.version)
+          release: $(variables.release)
 
   - job: "TagRepository"
     dependsOn: "Initialize"
