@@ -23,6 +23,8 @@ steps:
     displayName: Setup project file
 
   - template: ../DotNet/build.yml
+    parameters:
+      CWD: $(System.DefaultWorkingDirectory)/Generation/CSharp
 
   - task: NuGetCommand@2
     displayName: Push Nuget packs
