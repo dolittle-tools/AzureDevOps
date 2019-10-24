@@ -34,6 +34,7 @@ jobs:
 
   - job: "Tag Repository"
     dependsOn: "Initialize"
+    condition: eq(variables['IsMerge'], 'true')
     variables:
       - group: global-var-pipelines
       - name: version
@@ -43,7 +44,7 @@ jobs:
 
     steps:
       - template: ../Versioning/commit_version_tag.yml
-        condition: eq(variables['IsMerge'], 'true')
+        
         parameters:
           NEW_VERSION: $(version)
           REPO: $(github_constants.Repo)
