@@ -24,6 +24,8 @@ steps:
         done
 
         local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -1)
+# The one after is for handling with pre-release versions"   
+#        local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+" -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-[a-z]\+[0-9]\+$" -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-[a-z]\+$" | head -1)
         echo "$VERSION"
     }
 
