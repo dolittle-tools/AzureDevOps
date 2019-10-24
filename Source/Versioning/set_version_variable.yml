@@ -25,7 +25,7 @@ steps:
 
         local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -1)
 # The one after is for handling with pre-release versions"   
-#        local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+" -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-[a-z]\+[0-9]\+$" -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-[a-z]\+$" | head -1)
+#        local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-\?.\?*\+[0-9]\?*\+$" | head -1)
         echo "$VERSION"
     }
 
@@ -60,6 +60,29 @@ steps:
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
             PREVIEW_LABEL=$(echo "$LABELS" | grep -E '^preview$')
         fi
+
+#   if [ "$VERSION" =~ ^[0-9]\+\.[0-9]\+\.[0-9]\+$ ]
+#   then
+#       ~ Basic verioning with major, minor and patch
+#
+#   elif [ "$VERSION" =~ ^[0-9]\+\.[0-9]\+\.[0-9]\+\-?.\+\.[0-9]\+$ ]
+#   then
+#       ~ Pre-release versioning with incrementing preview number
+#       - preview_number=`echo $VERSION | awk -F "." '{print $4}'`
+#       - preview_number=$((preview_number+1))
+#       - preview_version=`echo $VERSION | awk -F "-" '{print $2}'` | awk -F "." '{print $1}'`
+#       MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
+#       MINOR=`echo $VERSION | awk -F "." '{print $2}'`
+#       PATCH=`echo $VERSION | awk -F "." '{print $3}'`
+#       NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-${preview_version}.${preview_number}"
+#   elif [ "$VERSION" =~ ^[0-9]\+\.[0-9]\+\.[0-9]\+\-?[a-zA-Z0-9]\+$ ]
+#       ~ Pre-release versioning with Adding a preview number
+#       - preview_number="1"
+#       - preview_version=`echo $VERSION | awk -F "-" '{print $2}'`
+#       MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
+#       MINOR=`echo $VERSION | awk -F "." '{print $2}'`
+#       PATCH=`echo $VERSION | awk -F "." '{print $3}'`
+#       NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-${preview_version}.${preview_number}"
 
         if [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ]
         then
