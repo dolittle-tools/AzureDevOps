@@ -67,9 +67,9 @@ jobs:
     variables:
       - group: global-var-pipelines
       - name: NEW_VERSION
-        value: $[ dependencies.Cascading_Build.outputs['set_version.Version'] ]
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
       - name: IsMerge
-        value: $[ dependencies.Cascading_Build.outputs['set_version.IsMerge'] ]
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
 
     steps:
     
