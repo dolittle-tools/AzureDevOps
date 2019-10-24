@@ -12,6 +12,9 @@ steps:
       echo "Release : ${{ parameters.IsMerge }}"
     displayName: Show Parameters
 
+  - bash: git clone https://github.com/dolittle-tools/Contracts.Build.git
+    displayName: Clone Contracts Build
+
   - bash: sed "s@{PACKAGENAME}@${{ parameters.packageName }}@" CSharp.csproj > $(System.DefaultWorkingDirectory)/Generation/CSharp/CSharp.csproj
     workingDirectory: $(System.DefaultWorkingDirectory)/Contracts.Build/Source/CSharp
     displayName: Setup project file

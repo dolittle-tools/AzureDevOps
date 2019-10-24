@@ -5,12 +5,6 @@ parameters:
   npmPackageName: ''
 
 jobs:
-  - job: "ContractsClone"
-
-    steps:
-    - bash: git clone --recursive https://github.com/dolittle-tools/Contracts.Build.git
-      displayName: Clone Contracts Build
-
   - job: "Initialize"
     dependsOn: "ContractsClone"
     condition: succeeded()
