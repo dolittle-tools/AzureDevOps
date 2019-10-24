@@ -17,7 +17,7 @@ steps:
         git config user.email \"$GIT_EMAIL\"
     }
     tag_git () {
-        echo Pushing new version tag to github.com/"$REPO" HEAD:"$BRANCH"
+        echo Pushing new version tag to github.com/${{ parameters.REPO }} HEAD:${{ parameters.BRANCH }}
         git tag -a ${{ parameters.NEW_VERSION }} -m "Azure Devops Pipelines Versioning Strategy: Tagging new version"
         git push https://"${GIT_USERNAME}":"${PAT}"@github.com/${{ parameters.REPO }} HEAD:${{ parameters.BRANCH }} --tags
     }
