@@ -167,7 +167,7 @@ steps:
                 fi
             fi
         
-        elif [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ] && [ "$PREVIEW_LABEL" != "preview" ]
+        elif [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] && [ "$PREVIEW_LABEL" != "preview" ]
         then
             echo "Getting version tag..."
             
@@ -205,13 +205,6 @@ steps:
                 echo "New patch release"
                 PATCH=$((PATCH+1))
                 echo "##vso[task.setvariable variable=IsMajor;isOutput=true]false"
-
-
-            elif [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ] && [ "$NEW_PROJECT" = false ]
-            then
-                echo "New patch release, dependency has been upgraded."
-                PATCH=$((PATCH+1))
-            fi
             
             NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
             echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
