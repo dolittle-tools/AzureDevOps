@@ -68,7 +68,7 @@ steps:
             echo "Getting version tag..."
             
             VERSION=$(get_latest_version_tag)
-            echo "Version is : $(VERSION)"
+            echo "Version is : $VERSION"
             NEW_PROJECT=false
             if [ ! "$VERSION" ]
             then
@@ -150,7 +150,7 @@ steps:
                 echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
                 echo "Major update from pre-release --> Version is no longer a pre-release. Now 1.0.0"
             else
-                echoerr "INVALID VERSION $(VERSION)! Please use SymVer syntax for version tags, or let it empty."
+                echoerr "INVALID VERSION $VERSION ! Please use SymVer syntax for version tags, or let it empty."
                 echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
             fi
 
