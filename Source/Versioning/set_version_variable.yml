@@ -156,9 +156,6 @@ steps:
                     NEW_VERSION=`echo $VERSION | awk -F "-" '{print $1}'`
                     echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
                     echo "Major update from pre-release --> Version is no longer a pre-release."
-                elif
-                then
-
                 else
                     echoerr "Error with pre-release versioning"
                 fi
