@@ -167,7 +167,7 @@ steps:
                 fi
             fi
         
-        elif [[ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ]] && [ "$PREVIEW_LABEL" != "preview" ]
+        elif [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] || [ "$COMMIT_MESSAGE" = "$CASCADING_BUILD_MESSAGE" ] && [ "$PREVIEW_LABEL" != "preview" ]
         then
             echo "Getting version tag..."
             
