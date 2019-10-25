@@ -119,7 +119,7 @@ steps:
         then
             echo "Getting version tag..."
             
-            VERSION=$(get_latest_version_tag)"
+            VERSION=$(get_latest_version_tag)
             echo "Version is = $VERSION"
             NEW_PROJECT=false
             if [ ! "$VERSION" ]
