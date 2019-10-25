@@ -120,9 +120,11 @@ steps:
         if [ "$PREVIEW_LABEL" = "preview" ]
         then
             VERSION=$(get_preview_version_tag)
+            echo "Preview Version is = $VERSION"
             if [ -z "$VERSION" ]
             then
                 VERSION=$(get_latest_version_tag)
+                echo "Last basic version is = $VERSION"
                 if [ "$VERSION" != "" ]
                 then
                     MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
