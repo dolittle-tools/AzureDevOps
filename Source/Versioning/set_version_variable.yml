@@ -174,7 +174,7 @@ steps:
             VERSION=$(get_latest_version_tag)
             echo "Version is = $VERSION"
             NEW_PROJECT=false
-            if [  check_version_tag ( "$VERSION" ) = true ]
+            if [  $(check_version_tag "$VERSION" ) = true ]
             then
                 if [ ! "$VERSION" ]
                 then
