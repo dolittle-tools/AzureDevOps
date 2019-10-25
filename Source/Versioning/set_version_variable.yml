@@ -46,7 +46,7 @@ steps:
         then
             echo "true"
         else
-            echo "false
+            echo "false"
         fi
     }
     
@@ -62,7 +62,7 @@ steps:
         then
             echo "true"
         else
-            echo "false
+            echo "false"
         fi
     }
 
@@ -78,7 +78,7 @@ steps:
         then
             echo "true"
         else
-            echo "false
+            echo "false"
         fi
     }
 
