@@ -120,7 +120,7 @@ steps:
         if [ "$PREVIEW_LABEL" = "preview" ]
         then
             VERSION=$(get_preview_version_tag)
-            if [ -z "$VERSION"]
+            if [ -z "$VERSION" ]
             then
                 VERSION=$(get_latest_version_tag)
                 if [ "$VERSION" != "" ]
