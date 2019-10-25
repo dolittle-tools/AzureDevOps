@@ -126,7 +126,7 @@ steps:
                 echo "Pre-release versioning... incrementing preview number"
                 preview_number=`echo $VERSION | awk -F "." '{print $4}'`
                 preview_number=$((preview_number+1))
-                preview_version=`echo $VERSION | awk -F "-" '{print $2}'` | awk -F "." '{print $1}'`
+                preview_version=`echo $VERSION | awk -F "-" '{print $2}' | awk -F "." '{print $1}'`
                 MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
                 MINOR=`echo $VERSION | awk -F "." '{print $2}'`
                 PATCH=`echo $VERSION | awk -F "." '{print $3}'`
