@@ -114,6 +114,7 @@ steps:
             MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
             PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
             PREVIEW_LABEL=$(echo "$LABELS" | grep -E '^preview$')
+            NEW_LABEL=$(echo "$LABELS" | grep -E '^new$')
         fi
 
 
@@ -121,7 +122,7 @@ steps:
         then
             VERSION=$(get_preview_version_tag)
             echo "Preview Version is = $VERSION"
-            if [ -z "$VERSION" ]
+            if [ "$NEW_LABEL" = "new" ]
             then
                 VERSION=$(get_latest_version_tag)
                 echo "Last basic version is = $VERSION"
