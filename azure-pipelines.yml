@@ -8,6 +8,13 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
+  
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: dolittle-tools/AzureDevOps
+      endpoint: dolittle-tools
 
 steps:
 - script: echo Hello, world!
@@ -22,3 +29,5 @@ steps:
   inputs:
     command: pack
     packagesToPack: '**/*.csproj'
+
+ - template: Source/Documentation/documentation.yml@templates
