@@ -42,7 +42,7 @@ steps:
         do
             sleep 1
         done
-        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-?.\+$" | head -1)
+        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-.\+\.[0-9]\+$" | head -1)
         if [ "$PREVIEW_VERSION" = "$1" ]
         then
             echo "true"
@@ -58,7 +58,7 @@ steps:
             sleep 1
         done
 
-        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-?[a-zA-Z0-9]\+$" | head -1)
+        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-[a-zA-Z0-9]\+$" | head -1)
         if [ "$PREVIEW_VERSION" = "$1" ]
         then
             echo "true"
@@ -139,7 +139,7 @@ steps:
                     echo "Preview tag created from last version."
                 fi
             else
-                if [ $(check_version_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
+                if [ $(check_preivew_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
                 then
                     echo "Pre-release versioning... incrementing preview number"
                     preview_number=`echo $VERSION | awk -F "." '{print $4}'`
