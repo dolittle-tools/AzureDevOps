@@ -14,9 +14,10 @@ We have several pipelines already built and some yet to build. This page shows y
 Our pipelines are almost all hooked up to out versioning pipeline that automatically sets the version
 to our packages when built. We follow the Semantic Versioning v2.
 To be able to control the versioning of our packages we use pull requests in GitHub, and we add Labels 
-in those pull requests, depending on the version we need to update.
+in those pull requests, depending on the version we need to update. You must use them if you are building 
+a project with versions using our pipelines.
 
-*Version can be 2.0.11-preview.55* 
+*Version can be something like 3.0.9 or 2.0.11-preview.55* 
 
 Please refer to the SemVer v2 if you need to understand the syntax.
 
