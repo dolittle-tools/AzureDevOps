@@ -139,7 +139,7 @@ steps:
                     echo "Preview tag created from last version."
                 fi
             else
-                if [ $(check_preivew_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
+                if [ $(check_preview_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
                 then
                     echo "Pre-release versioning... incrementing preview number"
                     preview_number=`echo $VERSION | awk -F "." '{print $4}'`
@@ -155,8 +155,8 @@ steps:
                 elif [ $(check_bad_preview_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
                 then
                     echo "Pre-release versioning, no preview number found... Adding a preview number = 1"
-                    - preview_number="1"
-                    - preview_version=`echo $VERSION | awk -F "-" '{print $2}'`
+                    preview_number="1"
+                    preview_version=`echo $VERSION | awk -F "-" '{print $2}'`
                     MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
                     MINOR=`echo $VERSION | awk -F "." '{print $2}'`
                     PATCH=`echo $VERSION | awk -F "." '{print $3}'`
