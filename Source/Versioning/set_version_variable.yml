@@ -154,7 +154,7 @@ steps:
                 then
                     echo "Pre-release versioning, no preview number found... Adding a preview number = 1"
                     preview_number="1"
-                    NEW_VERSION="${VERSION}-${preview_version}.${preview_number}"
+                    NEW_VERSION="${VERSION}.${preview_number}"
                     echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
                     echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
                 elif [ $(check_version_tag "$VERSION") = "true" ] || [ $(check_bad_preview_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" = "major" ]
