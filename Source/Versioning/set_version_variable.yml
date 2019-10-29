@@ -28,6 +28,7 @@ steps:
             version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
             branch_contains=$(git branch --contains $version_commit)
             result=$(echo "$branch_contains" | grep "HEAD")
+            echoerr "$result"
             if [ "$result" != "" ];   then
                 version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
                 break
