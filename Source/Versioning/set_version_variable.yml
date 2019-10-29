@@ -2,7 +2,7 @@ steps:
 - bash: |
     setup () {
         set -o nounset
-        git chekout master
+        git checkout master
     }
     echoerr () { 
         printf "%s\n" "$*" >&2;
