@@ -28,7 +28,7 @@ steps:
             version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
             branch_contains=$(git branch --contains $version_commit)
             result=$(echo "$branch_contains" | grep "master")
-            echo "sha : $version_commit"
+            echo "$result"
             if [ "$result" != "" ];   then
                 version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
                 break
@@ -59,7 +59,6 @@ steps:
             version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
             branch_contains=$(git branch --contains $version_commit)
             result=$(echo "$branch_contains" | grep "master")
-            echo "sha : $version_commit"
             if [ "$result" != "" ];   then
                 version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
                 break
