@@ -32,7 +32,7 @@ steps:
                 version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
                 break
             else
-                echo "."
+                echoerr "."
                 echoerr "branch = $branch_contains"
                 echoerr "verson_ref = $version_ref"
                 version=""
