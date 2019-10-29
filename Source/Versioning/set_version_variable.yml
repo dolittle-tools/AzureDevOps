@@ -27,14 +27,11 @@ steps:
             version_ref=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname | grep "refs/tags" | grep -e "[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -$i | tail -1 )
             version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
             branch_contains=$(git branch --contains $version_commit)
-            result=$(echo "$branch_contains" | grep "HEAD")
+            result=$(echo "$branch_contains" | grep "master")
             if [ "$result" != "" ];   then
                 version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
                 break
             else
-                echoerr "."
-                echoerr "branch = $branch_contains"
-                echoerr "verson_ref = $version_ref"
                 version=""
                 i=$(($i+1))
             fi
@@ -60,7 +57,7 @@ steps:
             version_ref=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname | grep "refs/tags" | grep -e "[0-9]\+\.[0-9]\+\.[0-9]\+\-.\+\.\?[0-9]*$" | head -$i | tail -1 )
             version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
             branch_contains=$(git branch --contains $version_commit)
-            result=$(echo "$branch_contains" | grep "HEAD")
+            result=$(echo "$branch_contains" | grep "master")
             if [ "$result" != "" ];   then
                 version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
                 break
