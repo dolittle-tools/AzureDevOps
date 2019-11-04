@@ -10,6 +10,11 @@ steps:
 - script: yarn
   displayName: Installing dependencies
     
+- bash: |
+    ls
+    ls Source
+    ls Source/commands
+  displayName: print
 - script: yarn build
   displayName: Building the typescript project
 
