@@ -11,14 +11,14 @@ jobs:
   steps:
   - template: ./build.yml
   
-- job: Release
-  pool: ${{ parameters.pool }}
-  dependsOn: Build
-  condition: succeeded()
-  variables:
-  - group: global-var-pipelines
-  steps:
-  - template: ./release.yml
+# - job: Release
+#   pool: ${{ parameters.pool }}
+#   dependsOn: Build
+#   condition: succeeded()
+#   variables:
+#   - group: global-var-pipelines
+#   steps:
+#   - template: ./release.yml
 
 #- job: Documentation
 #  pool: ${{ parameters.pool }}
