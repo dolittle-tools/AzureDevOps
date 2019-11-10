@@ -88,7 +88,7 @@ jobs:
         inputs:
           command: push
           nugetFeedType: "external"
-          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg"
+          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg;/root/.nuget/dolittle-packages/**/*.symbols.nupkg"
           publishFeedCredentials: "nuget_credential"
 
       - template: ../Versioning/commit_version_tag.yml
