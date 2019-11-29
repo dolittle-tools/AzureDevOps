@@ -26,5 +26,6 @@ jobs:
           echo System.PullRequest.SourceBranch $(System.PullRequest.SourceBranch)
           echo System.PullRequest.SourceRepositoryURI $(System.PullRequest.SourceRepositoryURI)
           echo System.PullRequest.TargetBranch $(System.PullRequest.TargetBranch)
+          echo System.PullRequest.MergedAt $(System.PullRequest.MergedAt)
           
         displayName: Print Predefined Variables
