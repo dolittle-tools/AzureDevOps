@@ -33,7 +33,7 @@ jobs:
         name: Context
         displayName: 'Setting up context'
         inputs:
-          Connection: 'github.com_woksin'
+          Connection: '$(GithubPAT)'
 
       - bash: |
           echo $(Context.PreviousVersion)
