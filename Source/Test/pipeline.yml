@@ -8,8 +8,9 @@ jobs:
     pool: ${{ parameters.pool }}
     variables:
       - group: global-var-pipelines
-
     steps:
+      - bash: ls /azp/agent/_work/_tasks/SetupBuildContext_edffa758-4888-4eda-b886-c0a9afcb9360/0.0.5/
+        
       - bash: |
           echo Build.QueuedBy $(Build.QueuedBy)
           echo Build.Reason $(Build.Reason)
