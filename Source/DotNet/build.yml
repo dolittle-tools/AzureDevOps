@@ -8,8 +8,8 @@ steps:
     SonarCloud: 'SonarCloud'
     organization: 'dolittle-build-testing'
     scannerMode: 'MSBuild'
-    projectKey: 'dolittle-build-testing_DotNET.Fundamentals'
-    projectName: 'DotNET.Fundamentals'
+    projectKey: $(sonarProjectKey)
+    projectName: $(sonarProjectName)
     
 - bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
   workingDirectory: ${{ parameters.CWD }}
