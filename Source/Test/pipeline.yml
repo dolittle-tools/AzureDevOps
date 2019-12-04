@@ -9,10 +9,6 @@ jobs:
     variables:
       - group: global-var-pipelines
     steps:
-      - bash: ls /azp/agent/_work/_tasks/SetupBuildContext_edffa758-4888-4eda-b886-c0a9afcb9360/
-      - bash: ls /azp/agent/_work/_tasks/SetupBuildContext_edffa758-4888-4eda-b886-c0a9afcb9360/0.0.8/
-      - bash: ls /azp/agent/_work/_tasks/SetupBuildContext_edffa758-4888-4eda-b886-c0a9afcb9360/0.0.8/Distribution
-        
       - bash: |
           echo Build.QueuedBy $(Build.QueuedBy)
           echo Build.Reason $(Build.Reason)
@@ -34,7 +30,6 @@ jobs:
 
       - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@0
         name: Context
-        displayName: 'Setting up context'
         inputs:
           Connection: 'github.com_woksin'
 
@@ -43,4 +38,15 @@ jobs:
           echo $(Context.ReleaseType)
           echo $(Context.ShouldPublish)
         displayName: Printing outputted variables
+
+      - task: Dolittle.tasks.CalculateNewVersion.CalculateNewVersion@0
+        name: NewVersion
+        inputs:
+          PreviousVersion: ${Context.PreviousVersion}
+          ReleaseType: $(Context.ReleaseType)
+
+      - bash: |
+          echo $(NewVersion.NextVersion)
+        displayName: Printing output variable from CalculateNewVersion
+
       
