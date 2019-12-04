@@ -30,6 +30,7 @@ jobs:
 
       - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@0
         name: Context
+        displayName: Setting up context
         inputs:
           Connection: 'github.com_woksin'
 
@@ -41,6 +42,7 @@ jobs:
 
       - task: Dolittle.tasks.CalculateNewVersion.CalculateNewVersion@0
         name: NewVersion
+        displayName: Calculating new version
         inputs:
           PreviousVersion: ${Context.PreviousVersion}
           ReleaseType: $(Context.ReleaseType)
