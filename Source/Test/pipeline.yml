@@ -23,3 +23,13 @@ jobs:
           PreviousVersion: $(Context.PreviousVersion)
           ReleaseType: $(Context.ReleaseType)
 
+      - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
+        # condition: eq(variables['ShouldPublish'], 'true')
+        displayName: Triggering cascading builds
+        inputs:
+          Connection: 'github.com_woksin'
+          ShouldPublish: $(Context.ShouldPublish)
+          NextVersion: $(NewVersion.NextVersion)
+          Cascades: ${{ join(',', parameters.CASCADES) }}
+
+
