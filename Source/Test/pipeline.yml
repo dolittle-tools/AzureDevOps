@@ -14,7 +14,7 @@ jobs:
         name: Context
         displayName: Setting up context
         inputs:
-          Connection: 'github.com_woksin'
+          Connection: 'dolittle-build-testing'
 
       - task: Dolittle.tasks.CalculateNewVersion.CalculateNewVersion@0
         name: NewVersion
@@ -27,7 +27,7 @@ jobs:
         # condition: eq(variables['ShouldPublish'], 'true')
         displayName: Triggering cascading builds
         inputs:
-          Connection: 'github.com_woksin'
+          Connection: 'dolittle-build-testing'
           ShouldPublish: $(Context.ShouldPublish)
           NextVersion: $(NewVersion.NextVersion)
           Cascades: ${{ join(',', parameters.CASCADES) }}
