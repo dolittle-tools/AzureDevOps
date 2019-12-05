@@ -19,8 +19,8 @@ steps:
   workingDirectory: ${{ parameters.CWD }}
   displayName: Build
   
-- task: SonarCloudAnalyze@1
-
 - bash: dotnet test --no-build --configuration ${{ parameters.buildConfiguration }}
   workingDirectory: ${{ parameters.CWD }}    
   displayName: Test
+
+- task: SonarCloudAnalyze@1
