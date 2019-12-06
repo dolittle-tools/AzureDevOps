@@ -24,7 +24,7 @@ jobs:
           ReleaseType: $(Context.ReleaseType)
 
       - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
-        # condition: eq(variables['ShouldPublish'], 'true')
+        condition: eq(variables['Context.ShouldPublish'], 'true')
         displayName: Triggering cascading builds
         inputs:
           Connection: 'github.com_woksin'
