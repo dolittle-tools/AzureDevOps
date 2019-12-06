@@ -27,7 +27,7 @@ jobs:
         # condition: eq(variables['ShouldPublish'], 'true')
         displayName: Triggering cascading builds
         inputs:
-          Connection: 'dolittle-build-testing'
+          Connection: 'github.com_woksin'
           ShouldPublish: $(Context.ShouldPublish)
           NextVersion: $(NewVersion.NextVersion)
           Cascades: ${{ join(',', parameters.CASCADES) }}
