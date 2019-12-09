@@ -21,6 +21,13 @@ jobs:
         inputs:
           PreviousVersion: $(Context.PreviousVersion)
           ReleaseType: $(Context.ReleaseType)
+      
+      - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
+        condition: eq(variables['Context.ShouldPublish'], 'true')
+        displayName: Tagging new version
+        inputs:
+          Connection: 'service-dolittle-build'
+          Version: $(NewVersion.NextVersion)
 
       - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
         condition: eq(variables['Context.ShouldPublish'], 'true')
@@ -30,5 +37,7 @@ jobs:
           ShouldPublish: $(Context.ShouldPublish)
           NextVersion: $(NewVersion.NextVersion)
           Cascades: ${{ join(',', parameters.CASCADES) }}
+
+      
 
 
