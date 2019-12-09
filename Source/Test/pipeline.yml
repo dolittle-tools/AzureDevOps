@@ -23,14 +23,14 @@ jobs:
           ReleaseType: $(Context.ReleaseType)
       
       - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
-        condition: eq(variables['Context.ShouldPublish'], 'true')
+        condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
         displayName: Tagging new version
         inputs:
           Connection: 'service-dolittle-build'
           Version: $(NewVersion.NextVersion)
 
       - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
-        condition: eq(variables['Context.ShouldPublish'], 'true')
+        condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
         displayName: Triggering cascading builds
         inputs:
           Connection: 'service-dolittle-build'
