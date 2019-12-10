@@ -123,15 +123,6 @@ jobs:
     condition: always()
     steps:
       - checkout: none
-      
-      - script: ls /root/.nuget/dolittle-packages
-        displayName: Packages before clean
-      
-      - script: rm -rf /root/.nuget/dolittle-packages/*
-        displayName: Clean Packages
-
-      - script: ls /root/.nuget/dolittle-packages
-        displayName: Packages after clean
         
       - script: rm -rf $(Agent.BuildDirectory)/*
         displayName: Clean $(Agent.BuildDirectory)
