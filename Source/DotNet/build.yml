@@ -3,7 +3,7 @@ parameters:
   CWD: $(System.DefaultWorkingDirectory)
 
 steps:
-- bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config -s /root/.nuget/packages -s https://api.nuget.org/v3/index.json
+- bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
   workingDirectory: ${{ parameters.CWD }}
   displayName: Restore
 
