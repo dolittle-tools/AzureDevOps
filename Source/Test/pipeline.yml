@@ -23,6 +23,8 @@ jobs:
           ReleaseType: $(Context.ReleaseType)
       
       - template: "../DotNet/build.yml"
+        parameters:
+          CWD: $(System.DefaultWorkingDirectory)
 
       - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
         condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
