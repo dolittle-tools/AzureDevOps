@@ -1,4 +1,8 @@
 steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: "2.2.203"
+
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'SonarCloud'
