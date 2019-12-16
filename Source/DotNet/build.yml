@@ -7,6 +7,10 @@ steps:
     # projectKey: $(sonarProjectKey)
     # projectName: $(sonarProjectName)
     
+- task: DotNetCoreInstaller@0
+        inputs:
+          version: "2.2.203"
+
 - bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
   displayName: Restore
 
