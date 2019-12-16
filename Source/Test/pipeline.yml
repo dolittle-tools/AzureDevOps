@@ -22,6 +22,8 @@ jobs:
           PreviousVersion: $(Context.PreviousVersion)
           ReleaseType: $(Context.ReleaseType)
       
+      - template: "../DotNet/build.yml"
+
       - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
         condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
         displayName: Tagging new version
