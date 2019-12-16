@@ -1,11 +1,11 @@
 steps:
-# - task: SonarCloudPrepare@1
-  # inputs:
-    # SonarCloud: 'SonarCloud'
-    # organization: 'dolittle-build-testing'
-    # scannerMode: 'MSBuild'
-    # projectKey: $(sonarProjectKey)
-    # projectName: $(sonarProjectName)
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'dolittle-build-testing'
+    scannerMode: 'MSBuild'
+    projectKey: $(sonarProjectKey)
+    projectName: $(sonarProjectName)
     
 - task: DotNetCoreInstaller@0
   inputs:
@@ -20,4 +20,4 @@ steps:
 - bash: dotnet test --no-build --configuration Release
   displayName: Test
 
-# - task: SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@1
