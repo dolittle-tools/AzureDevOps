@@ -19,6 +19,15 @@ steps:
 
 - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(NewVersion.NextVersion)
   displayName: Pack
+  condition: and(succeeded(), ne(variables['NewVersion.NextVersion'], ''))
+
+- task: NuGetCommand@2
+  displayName: Push Nuget packs
   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+  inputs:
+    command: push
+    nugetFeedType: "external"
+    packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg;!/root/.nuget/dolittle-packages/**/*.symbols.nupkg"
+    publishFeedCredentials: "myget_mathieu"
 
 - task: SonarCloudAnalyze@1
