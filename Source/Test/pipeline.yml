@@ -23,8 +23,6 @@ jobs:
           ReleaseType: $(Context.ReleaseType)
       
       - template: "../DotNet/build.yml"
-        parameters:
-          CWD: $(System.DefaultWorkingDirectory)
       
       - task: NuGetCommand@2
         displayName: Push Nuget packs
