@@ -25,6 +25,15 @@ jobs:
       - template: "../DotNet/build.yml"
         parameters:
           CWD: $(System.DefaultWorkingDirectory)
+      
+      - task: NuGetCommand@2
+        displayName: Push Nuget packs
+        condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+        inputs:
+          command: pushnuget_credential
+          nugetFeedType: "external"
+          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg;!/root/.nuget/dolittle-packages/**/*.symbols.nupkg"
+          publishFeedCredentials: "myget_mathieu"
 
       - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
         condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
