@@ -9,6 +9,9 @@ jobs:
     variables:
       - group: global-var-pipelines
     steps:
+      - checkout: self
+        submodules: recursive
+
       - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@0
         name: Context
         displayName: Setting up context
