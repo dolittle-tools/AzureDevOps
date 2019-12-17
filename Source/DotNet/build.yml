@@ -17,4 +17,8 @@ steps:
 - bash: dotnet test --no-build --configuration Release
   displayName: Test
 
+- bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(NewVersion.NextVersion)
+  displayName: Pack
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+
 - task: SonarCloudAnalyze@1
