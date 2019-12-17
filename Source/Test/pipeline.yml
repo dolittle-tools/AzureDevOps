@@ -31,7 +31,7 @@ jobs:
         displayName: Push Nuget packs
         condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
         inputs:
-          command: pushnuget_credential
+          command: push
           nugetFeedType: "external"
           packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg;!/root/.nuget/dolittle-packages/**/*.symbols.nupkg"
           publishFeedCredentials: "myget_mathieu"
