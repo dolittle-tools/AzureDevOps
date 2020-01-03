@@ -15,9 +15,9 @@ jobs:
       - checkout: self
         submodules: recursive
 
-      - script: rm -r $(sharedPackagesFolder)
+      - script: rm -r $(sharedPackagesFolder) || true
         displayName: Cleaning packages folder
-        
+
       - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@0
         name: Context
         displayName: Setting up context
