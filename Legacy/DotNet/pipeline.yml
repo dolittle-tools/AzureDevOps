@@ -1,0 +1,149 @@
+parameters:
+  buildConfiguration: "Release"
+  pool: Default
+  CASCADES: []
+
+jobs:
+  - job: "DotNetCore_Build"
+    pool: ${{ parameters.pool }}
+    variables:
+      - group: global-var-pipelines
+
+    steps:
+      - bash: ls -R $(Agent.BuildDirectory)
+        name: check_if_empty
+      
+      - checkout: self
+        submodules: recursive
+
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: "2.2.203"
+
+      - template: "./build.yml"
+        parameters:
+          buildConfiguration: "Release"
+          CWD: $(System.DefaultWorkingDirectory)
+
+      - template: ../Versioning/set_version_variable.yml
+
+      - bash: dotnet pack --output /root/.nuget/dolittle-packages /p:PackageVersion=$(set_version.Version)
+        displayName: Packing
+        condition: ne(variables['set_version.Version'], 'empty')
+
+
+  - job: "Cascading_Build"
+    pool: ${{ parameters.pool }}
+    dependsOn: "DotNetCore_Build"
+    condition: and(succeeded(), ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty'), ne(dependencies.DotNetCore_Build.outputs['set_version.IsMajor'], 'true'))
+    variables:
+      - group: global-var-pipelines
+      - name: NEW_VERSION
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+      - name: IsMerge
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
+      
+    steps:
+      - bash: |
+          echo "Version : $(NEW_VERSION)"
+          echo "Pr merged : $(IsMerge)"
+
+      - checkout: none
+
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: "2.2.203"
+      
+      - template: "./cascading_build.yml"
+        parameters:
+          CASCADES: ${{ parameters.CASCADES }}
+          
+      - bash: |          
+          echo "Version : $(Version)"
+          echo "Pr merged : $(IsMerge)"
+        name: check_version
+
+  - job: "Release"
+    pool: ${{ parameters.pool }}
+    dependsOn: [ "Cascading_Build", "DotNetCore_Build" ]
+    condition: ne(dependencies.DotNetCore_Build.outputs['set_version.Version'], 'empty')
+    variables:
+      - group: global-var-pipelines
+      - name: NEW_VERSION
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+      - name: IsMerge
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
+
+    steps:
+    
+      - bash: |
+          echo "Version : $(NEW_VERSION)"
+          echo "Pr merged : $(IsMerge)"
+        
+      - template: ../Github/set_github_constants.yml
+
+      - task: NuGetCommand@2
+        displayName: Push Nuget packs
+        condition: eq(variables['IsMerge'], 'true')
+        inputs:
+          command: push
+          nugetFeedType: "external"
+          packagesToPush: "/root/.nuget/dolittle-packages/**/*.nupkg;!/root/.nuget/dolittle-packages/**/*.symbols.nupkg"
+          publishFeedCredentials: "nuget_credential"
+
+      - template: ../Versioning/commit_version_tag.yml
+        parameters:
+          NEW_VERSION: $(NEW_VERSION)
+          REPO: $(github_constants.Repo)
+          BRANCH: $(github_constants.Branch)
+
+      - template: ./tag_cascades.yml
+        parameters:
+          CASCADES: ${{ parameters.CASCADES }}
+          
+  - job: "Check_cross_job_variables"
+    pool: ${{ parameters.pool }}
+    dependsOn: "DotNetCore_Build"
+    condition: always()
+    variables:
+      - group: global-var-pipelines
+      - name: NEW_VERSION
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.Version'] ]
+      - name: IsMerge
+        value: $[ dependencies.DotNetCore_Build.outputs['set_version.IsMerge'] ]
+      
+    steps:
+      - bash: |
+          echo "Version : $(NEW_VERSION)"
+          echo "Pr merged : $(IsMerge)"
+
+  - job: "Cleanup"
+    pool: ${{ parameters.pool }}
+    dependsOn: [ "Cascading_Build", "Release", "Documentation" ]
+    condition: always()
+    steps:
+      - checkout: none
+      
+      - script: ls /root/.nuget/dolittle-packages
+        displayName: Packages before clean
+      
+      - script: rm -rf /root/.nuget/dolittle-packages/*
+        displayName: Clean Packages
+
+      - script: ls /root/.nuget/dolittle-packages
+        displayName: Packages after clean
+        
+      - script: rm -rf $(Agent.BuildDirectory)/*
+        displayName: Clean $(Agent.BuildDirectory)
+
+  - job: 'Documentation'
+    pool: ${{ parameters.pool }}
+    dependsOn: "Release"
+    condition: succeeded()
+    variables:
+    - group: global-var-pipelines
+    steps:
+    - template: ../Documentation/documentation.yml
+
+# echo PullRequest  49e27cc18f57870206171925a8c540abdac7bbfb 2.0.0
+# echo IndividualCI 036100265b6d83d536827451131bf8c306ce9d43 2.0.0

@@ -1,0 +1,274 @@
+steps:
+- bash: |
+    setup () {
+        set -o nounset
+        git checkout master
+    }
+    echoerr () { 
+        printf "%s\n" "$*" >&2;
+    }
+    get_labels_from_merged_pull_request () {
+        local MERGED_PR_JSON=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | jq '.[] | select(.merge_commit_sha=="'$COMMIT_SHA'")')
+        local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
+        echo "$LABELS"
+    }
+    get_labels_from_not_merged_pull_request () {
+        local MERGED_PR_JSON=$(curl https://api.github.com/repos/$REPO/pulls\?state\=all | jq '.[] | select(.head.sha=="'$(System.PullRequest.SourceCommitId)'")')
+        local LABELS=$(echo $MERGED_PR_JSON | jq '.labels | .[] | .name' -r)
+        echo "$LABELS"
+    }
+    get_latest_version_tag () {
+        local i=1
+        local version=""
+        local nb_tags=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname | grep -c "refs/tags/")
+        
+        while [ $i -le $nb_tags ];
+        do
+            version_ref=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname | grep "refs/tags" | grep -e "[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -$i | tail -1 )
+            version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
+            branch_contains=$(git branch --contains $version_commit)
+            result=$(echo "$branch_contains" | grep "master")
+            if [ "$result" != "" ];   then
+                version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
+                break
+            else
+                version=""
+                i=$(($i+1))
+            fi
+        done;
+        echo "$version"
+        
+        # local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
+        # while [ ! "$TAG_REFS" ]
+        # do
+            # sleep 1
+        # done
+
+        # local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -1)
+        # echo "$VERSION"
+    }
+    get_preview_version_tag () {
+        local i=1
+        local version=""
+        local nb_tags=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname | grep -c "refs/tags/")
+        
+        while [ $i -le $nb_tags ];
+        do
+            version_ref=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname | grep "refs/tags" | grep -e "[0-9]\+\.[0-9]\+\.[0-9]\+\-.\+\.\?[0-9]*$" | head -$i | tail -1 )
+            version_commit=$(echo "$version_ref" | awk -F" " '{print $1}')
+            branch_contains=$(git branch --contains $version_commit)
+            result=$(echo "$branch_contains" | grep "master")
+            if [ "$result" != "" ];   then
+                version=`echo "$version_ref" | awk -F "refs/tags/" '{print $2}'`
+                break
+            else
+                version=""
+                i=$(($i+1))
+            fi
+        done;
+        echo "$version"
+        
+        # local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
+        # while [ ! "$TAG_REFS" ]
+        # do
+            # sleep 1
+        # done
+
+        # local VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-.\+\.\?[0-9]*$" | head -1)
+        # echo "$VERSION"
+    }
+    check_preview_tag () {
+        local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
+        while [ ! "$TAG_REFS" ]
+        do
+            sleep 1
+        done
+        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-.\+\.[0-9]\+$" | head -1)
+        if [ "$PREVIEW_VERSION" = "$1" ]
+        then
+            echo "true"
+        else
+            echo "false"
+        fi
+    }
+    
+    check_bad_preview_tag () {
+        local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
+        while [ ! "$TAG_REFS" ]
+        do
+            sleep 1
+        done
+
+        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\-[a-zA-Z0-9]\+$" | head -1)
+        if [ "$PREVIEW_VERSION" = "$1" ]
+        then
+            echo "true"
+        else
+            echo "false"
+        fi
+    }
+
+    check_version_tag () {
+        local TAG_REFS=$(git -c 'versionsort.suffix=-' ls-remote --refs --sort=-v:refname)
+        while [ ! "$TAG_REFS" ]
+        do
+            sleep 1
+        done
+        
+        local PREVIEW_VERSION=$(echo "$TAG_REFS" | grep -o -E "refs/tags/\S+" | awk -F "tags/" '{print $2}' | grep -o -e "^[0-9]\+\.[0-9]\+\.[0-9]\+$" | head -1)
+        if [ "$PREVIEW_VERSION" = "$1" ]
+        then
+            echo "true"
+        else
+            echo "false"
+        fi
+    }
+
+    main () {
+        setup
+        URL=$(Build.Repository.Uri)
+        BRANCH=$(Build.SourceBranch) 
+        COMMIT_SHA=$(Build.SourceVersion)
+        REPO=`echo "$URL" | awk -F ".com/" '{ print $2 }'`
+        BRANCH=$(echo $BRANCH | cut -d "/" -f 3)
+        
+        if [ "$BRANCH" = "master" ]
+        then
+            echo Commit has been made to master.
+            echo "##vso[task.setvariable variable=IsMerge;isOutput=true]true"
+
+            LABELS=$(get_labels_from_merged_pull_request)
+            echo "Got labels from pull request:"
+            echo "$LABELS"
+            MAJOR_LABEL=$(echo "$LABELS" | grep -E '^major$')
+            MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
+            PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
+            PREVIEW_LABEL=$(echo "$LABELS" | grep -E '^preview$')
+        else
+            echo No commit to master
+            echo "##vso[task.setvariable variable=IsMerge;isOutput=true]false"
+            
+            LABELS=$(get_labels_from_not_merged_pull_request)
+            echo "Got labels from pull request:"
+            echo "$LABELS"
+            MAJOR_LABEL=$(echo "$LABELS" | grep -E '^major$')
+            MINOR_LABEL=$(echo "$LABELS" | grep -E '^minor$')
+            PATCH_LABEL=$(echo "$LABELS" | grep -E '^patch$')
+            PREVIEW_LABEL=$(echo "$LABELS" | grep -E '^preview$')
+            NEW_LABEL=$(echo "$LABELS" | grep -E '^new$')
+        fi
+
+
+        if [ "$PREVIEW_LABEL" = "preview" ]
+        then
+            VERSION=$(get_preview_version_tag)
+            echo "Preview Version is = $VERSION"
+            if [ "$NEW_LABEL" = "new" ]
+            then
+                VERSION=$(get_latest_version_tag)
+                echo "Last basic version is = $VERSION"
+                if [ "$VERSION" != "" ]
+                then
+                    MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
+                    MINOR=`echo $VERSION | awk -F "." '{print $2}'`
+                    PATCH=`echo $VERSION | awk -F "." '{print $3}'`
+                    MAJOR=$((MAJOR+1))
+                    MINOR="0"
+                    PATCH="0"
+                    NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-preview.1"
+                    echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+                    echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
+                    echo "Preview tag created from last version."
+                fi
+            else
+                if [ $(check_preview_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
+                then
+                    echo "Pre-release versioning... incrementing preview number"
+                    preview_number=`echo $VERSION | awk -F "." '{print $4}'`
+                    preview_number=$((preview_number+1))
+                    preview_version=`echo $VERSION | awk -F "-" '{print $2}' | awk -F "." '{print $1}'`
+                    VERSION=`echo $VERSION | awk -F "-" '{print $1}'`
+                    NEW_VERSION="${VERSION}-${preview_version}.${preview_number}"
+                    echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+                    echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
+
+                elif [ $(check_bad_preview_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" != "major" ]
+                then
+                    echo "Pre-release versioning, no preview number found... Adding a preview number = 1"
+                    preview_number="1"
+                    NEW_VERSION="${VERSION}.${preview_number}"
+                    echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+                    echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
+                elif [ $(check_version_tag "$VERSION") = "true" ] || [ $(check_bad_preview_tag "$VERSION") = "true" ] && [ "$MAJOR_LABEL" = "major" ]
+                then
+                    NEW_VERSION=`echo $VERSION | awk -F "-" '{print $1}'`
+                    echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+                    echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
+                    echo "Major update from pre-release --> Version is no longer a pre-release."
+                else
+                    echoerr "No preview version found. Try to add [new] label in the pull request to create a preview version from the last version."
+                fi
+            fi
+        
+        elif [ "$MAJOR_LABEL" = "major" ] || [ "$MINOR_LABEL" = "minor" ] || [ "$PATCH_LABEL" = "patch" ] && [ "$PREVIEW_LABEL" != "preview" ]
+        then
+            echo "Getting version tag..."
+            
+            VERSION=$(get_latest_version_tag)
+            echo "Version is = $VERSION"
+            NEW_PROJECT=false
+            if [ ! "$VERSION" ]
+            then
+                NEW_PROJECT=true
+                VERSION=1.0.0
+                echo No version tag found. Setting version to "$VERSION"
+            fi
+
+            MAJOR=`echo $VERSION | awk -F "." '{print $1}'`
+            MINOR=`echo $VERSION | awk -F "." '{print $2}'`
+            PATCH=`echo $VERSION | awk -F "." '{print $3}'`
+
+            if [ "$MAJOR_LABEL" = "major" ] && [ "$NEW_PROJECT" = false ]
+            then
+                echo "New major release"
+                MAJOR=$((MAJOR+1))
+                MINOR="0"
+                PATCH="0"
+                echo "##vso[task.setvariable variable=IsMajor;isOutput=true]true"
+
+            elif [ "$MINOR_LABEL" = "minor" ] && [ "$NEW_PROJECT" = false ] && [ "$MAJOR_LABEL" != "major" ]
+            then
+                echo "New minor release"
+                MINOR=$((MINOR+1))
+                PATCH="0"
+                echo "##vso[task.setvariable variable=IsMajor;isOutput=true]false"
+
+            elif [ "$PATCH_LABEL" = "patch" ] && [ "$NEW_PROJECT" = false ] && [ "$MINOR_LABEL" != "minor" ] && [ "$MAJOR_LABEL" != "major" ]
+            then
+                echo "New patch release"
+                PATCH=$((PATCH+1))
+                echo "##vso[task.setvariable variable=IsMajor;isOutput=true]false"
+            fi
+            
+            NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+            echo "##vso[task.setvariable variable=Version;isOutput=true]$NEW_VERSION"
+            echo Previous version "$VERSION"
+            echo New version "$NEW_VERSION"
+
+        else
+            echoerr No label triggering new version
+            echo "##vso[task.setvariable variable=IsMajor;isOutput=true]false"
+            echo "##vso[task.setvariable variable=Version;isOutput=true]empty"
+        fi
+        
+    }
+    main
+
+  displayName: Setting version pipeline variable
+  name: set_version
+  env:
+    CASCADING_BUILD_MESSAGE: $(CascadingTriggerMessage)
+    
+- bash: |
+    echo "New version = $(set_version.Version)"
+    echo "PullRequest has been merged = $(set_version.IsMerge)"

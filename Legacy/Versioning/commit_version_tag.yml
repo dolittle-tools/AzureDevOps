@@ -1,0 +1,41 @@
+parameters:
+    NEW_VERSION: 'empty'
+    REPO: ''
+    BRANCH: 'master'
+    CWD: $(System.DefaultWorkingDirectory)
+
+steps:
+- bash: |
+    setup () {
+        set -o nounset
+    }
+    echoerr () { 
+        printf "%s\n" "$*" >&2;
+    }
+    setup_git_config () {
+        git config user.name \"$GIT_USERNAME\"
+        git config user.email \"$GIT_EMAIL\"
+    }
+    tag_git () {
+        echo Pushing new version tag to github.com/${{ parameters.REPO }} HEAD:${{ parameters.BRANCH }}
+        git tag -a ${{ parameters.NEW_VERSION }} -m "Azure Devops Pipelines Versioning Strategy: Tagging new version"
+        git push https://"${GIT_USERNAME}":"${PAT}"@github.com/${{ parameters.REPO }} HEAD:${{ parameters.BRANCH }} --tags
+    }
+    main () {
+        setup
+        if [ -n ${{ parameters.NEW_VERSION }} ] && [ ${{ parameters.NEW_VERSION }} != "empty" ]
+        then
+            setup_git_config
+            tag_git
+        else
+            echoerr No new version to tag
+        fi
+    }
+    main
+  displayName: Commit version tag
+  condition: eq(variables['IsMerge'], 'true')
+  workingDirectory: ${{ parameters.CWD }}
+  env:
+    GIT_EMAIL: $(GitEmail)
+    GIT_USERNAME: $(GitUsername)
+    PAT: $(CascadingBuild)
