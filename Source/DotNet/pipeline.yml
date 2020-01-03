@@ -12,7 +12,6 @@ jobs:
         value: "/root/.nuget/dolittle-packages/$(Build.Repository.Name)"
 
     steps:
-      - script: echo $(sharedPackagesFolder)
       - checkout: self
         submodules: recursive
 
