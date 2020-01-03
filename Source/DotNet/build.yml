@@ -3,13 +3,13 @@ steps:
   inputs:
     version: "2.2.402"
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud'
-    organization: 'dolittle-build-testing'
-    scannerMode: 'MSBuild'
-    projectKey: $(sonarProjectKey)
-    projectName: $(sonarProjectName)
+# - task: SonarCloudPrepare@1
+#   inputs:
+#     SonarCloud: 'SonarCloud'
+#     organization: 'dolittle-build-testing'
+#     scannerMode: 'MSBuild'
+#     projectKey: $(sonarProjectKey)
+#     projectName: $(sonarProjectName)
 
 - bash: dotnet build --configuration Release
   displayName: Build
@@ -21,4 +21,4 @@ steps:
   displayName: Pack
   condition: and(succeeded(), ne(variables['NewVersion.NextVersion'], ''))
 
-- task: SonarCloudAnalyze@1
+# - task: SonarCloudAnalyze@1
