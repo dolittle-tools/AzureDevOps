@@ -18,8 +18,7 @@ steps:
   displayName: Test
 
 - bash: dotnet pack --no-restore --output $(sharedPackagesFolder) /p:PackageVersion=$(NewVersion.NextVersion)
-  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'), ne(variables['NewVersion.NextVersion'], ''))
   displayName: Pack
-  condition: and(succeeded(), ne(variables['NewVersion.NextVersion'], ''))
 
 # - task: SonarCloudAnalyze@1
