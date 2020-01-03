@@ -4,15 +4,15 @@ parameters:
   CASCADES: []
 
 jobs:
-  - job: ".NET Build"
+  - job: "DotNet_Build"
     pool: ${{ parameters.pool }}
     variables:
       - group: global-var-pipelines
-      - name: nugetFolder
+      - name: sharedPackagesFolder
         value: "/root/.nuget/dolittle-packages/${{ variables.Build.Repository.Name }}"
 
     steps:
-      - script: echo ${{ parameters.nugetFolder }}
+      - script: echo $(sharedPackagesFolder)
   #     - checkout: self
   #       submodules: recursive
 
