@@ -9,7 +9,7 @@ jobs:
     variables:
       - group: global-var-pipelines
       - name: sharedPackagesFolder
-        value: "/root/.nuget/dolittle-packages/${{ variables.Build.Repository.Name }}"
+        value: "/root/.nuget/dolittle-packages/$(Build.Repository.Name)"
 
     steps:
       - script: echo $(sharedPackagesFolder)
