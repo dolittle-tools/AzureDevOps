@@ -42,41 +42,21 @@ jobs:
       #     packagesToPush: "$(sharedPackagesFolder)/**/*.nupkg;!$(sharedPackagesFolder)/**/*.symbols.nupkg"
       #     publishFeedCredentials: "myget_mathieu"
 
-      # - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
-      #   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
-      #   displayName: Tagging new version
-      #   inputs:
-      #     Connection: 'service-dolittle-build'
-      #     Version: $(NewVersion.NextVersion)
+      - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
+        condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+        displayName: Tagging new version
+        inputs:
+          Connection: 'service-dolittle-build'
+          Version: $(NewVersion.NextVersion)
 
-      # - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
-      #   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
-      #   displayName: Triggering cascading builds
-      #   inputs:
-      #     Connection: 'service-dolittle-build'
-      #     ShouldPublish: $(Context.ShouldPublish)
-      #     NextVersion: $(NewVersion.NextVersion)
-      #     Cascades: ${{ join(',', parameters.CASCADES) }}
-
-
-  # - job: "Cleanup"
-  #   pool: ${{ parameters.pool }}
-  #   dependsOn: [ "Cascading_Build", "Release", "Documentation" ]
-  #   condition: always()
-  #   steps:
-  #     - checkout: none
-      
-  #     - script: ls /root/.nuget/dolittle-packages
-  #       displayName: Packages before clean
-      
-  #     - script: rm -rf /root/.nuget/dolittle-packages/*
-  #       displayName: Clean Packages
-
-  #     - script: ls /root/.nuget/dolittle-packages
-  #       displayName: Packages after clean
-        
-  #     - script: rm -rf $(Agent.BuildDirectory)/*
-  #       displayName: Clean $(Agent.BuildDirectory)
+      - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
+        condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'), ne(variables['Context.ReleaseType'], 'major'))
+        displayName: Triggering cascading builds
+        inputs:
+          Connection: 'service-dolittle-build'
+          ShouldPublish: $(Context.ShouldPublish)
+          NextVersion: $(NewVersion.NextVersion)
+          Cascades: ${{ join(',', parameters.CASCADES) }}
 
   # - job: 'Documentation'
   #   pool: ${{ parameters.pool }}
