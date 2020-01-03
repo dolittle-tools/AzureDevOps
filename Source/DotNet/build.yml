@@ -17,7 +17,7 @@ steps:
 - bash: dotnet test --no-build --configuration Release
   displayName: Test
 
-- bash: dotnet pack --no-restore --output /root/.nuget/dolittle-packages /p:PackageVersion=$(NewVersion.NextVersion)
+- bash: dotnet pack --no-restore --output $(sharedPackagesFolder) /p:PackageVersion=$(NewVersion.NextVersion)
   displayName: Pack
   condition: and(succeeded(), ne(variables['NewVersion.NextVersion'], ''))
 
