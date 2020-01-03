@@ -9,9 +9,9 @@ jobs:
     pool: ${{ parameters.pool }}
     variables:
       - group: global-var-pipelines
-    varFromA: $[ dependencies.A.outputs['ProduceVar.MyVar'] ]
 
     steps:
+      - script: echo ${{ parameters.nugetFolder }}
   #     - checkout: self
   #       submodules: recursive
 
