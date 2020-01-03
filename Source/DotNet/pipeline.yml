@@ -2,13 +2,14 @@ parameters:
   buildConfiguration: "Release"
   pool: Default
   CASCADES: []
-  nugetFolder: /root/.nuget/dolittle-packages/${{ variables.Build.Repository.Name }}
 
 jobs:
   - job: ".NET Build"
     pool: ${{ parameters.pool }}
     variables:
       - group: global-var-pipelines
+      - name: nugetFolder
+        value: "/root/.nuget/dolittle-packages/${{ variables.Build.Repository.Name }}"
 
     steps:
       - script: echo ${{ parameters.nugetFolder }}
