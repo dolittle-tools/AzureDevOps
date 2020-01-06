@@ -14,10 +14,10 @@ steps:
 - bash: dotnet build --configuration Release
   displayName: Build
   
-- bash: dotnet test --no-build
+- bash: dotnet test --configuration Release --no-build
   displayName: Test
 
-- bash: dotnet pack --no-build --output "$(Agent.BuildDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion)
+- bash: dotnet pack --configuration Release --no-build --output "$(Agent.BuildDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion)
   displayName: Pack
 
 # - task: SonarCloudAnalyze@1
