@@ -3,8 +3,9 @@ steps:
   displayName: Installing NuGet
   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
   inputs:
-    versionSpec: '5.x' 
+    versionSpec: '5.x'
 
-- bash: nuget push $(sharedPackagesFolder)/*.nupkg $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package
-  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
-  displayName: Publish to MyGet
+- task: NuGetCommand@2
+  inputs:
+    command: 'custom'
+    arguments: 'push $(sharedPackagesFolder)/*.nupkg $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
