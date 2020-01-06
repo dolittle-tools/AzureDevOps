@@ -33,6 +33,7 @@ jobs:
       
       - template: "./build.yml"
       
+      - template: "./publish.yml"
       # - task: NuGetCommand@2
       #   displayName: Push Nuget packs
       #   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
