@@ -6,6 +6,14 @@ steps:
     versionSpec: '5.x'
 
 - task: NuGetCommand@2
+  displayName: Publishing to MyGet
   inputs:
     command: 'custom'
-    arguments: 'push $(sharedPackagesFolder)/*.nupkg $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
+    arguments: 'push "$(Agent.BuildDirectory)/Artifacts/*.nupkg" $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
+
+- task: NuGetCommand@2
+  displayName: Publishing to MyGet
+  inputs:
+    command: 'custom'
+    arguments: 'add "$(Agent.BuildDirectory)/Artifacts/*.nupkg" -Source $(SharedPackagesFolder) -Verbosity detailed'
+
