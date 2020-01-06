@@ -12,8 +12,8 @@ steps:
     arguments: 'push "$(Agent.BuildDirectory)/Artifacts/*.nupkg" $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
 
 - task: NuGetCommand@2
-  displayName: Publishing to MyGet
+  displayName: Publishing to Shared NuGet Package Folder
   inputs:
     command: 'custom'
-    arguments: 'add "$(Agent.BuildDirectory)/Artifacts/*.nupkg" -Source $(SharedPackagesFolder) -Verbosity detailed'
+    arguments: 'init "$(Agent.BuildDirectory)/Artifacts" $(SharedPackagesFolder) -Verbosity detailed'
 
