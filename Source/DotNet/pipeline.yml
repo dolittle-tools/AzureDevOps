@@ -22,13 +22,13 @@ jobs:
         displayName: Setting commit message variable
         name: Git
         
-      - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@0
+      - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@1
         name: Context
         displayName: Setting up context
         inputs:
           Connection: 'service-dolittle-build'
 
-      - task: Dolittle.tasks.CalculateNewVersion.CalculateNewVersion@0
+      - task: Dolittle.tasks.CalculateNewVersion.CalculateNewVersion@1
         name: NewVersion
         displayName: Calculating new version
         inputs:
@@ -39,14 +39,14 @@ jobs:
       
       - template: "./publish.yml"
 
-      - task: Dolittle.tasks.TagNewVersion.TagNewVersion@0
+      - task: Dolittle.tasks.TagNewVersion.TagNewVersion@1
         condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
         displayName: Tagging new version
         inputs:
           Connection: 'service-dolittle-build'
           Version: $(NewVersion.NextVersion)
 
-      - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@0
+      - task: Dolittle.tasks.TriggerCascadingBuilds.TriggerCascadingBuilds@1
         condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'), ne(variables['Context.ReleaseType'], 'major'))
         displayName: Triggering cascading builds
         inputs:
