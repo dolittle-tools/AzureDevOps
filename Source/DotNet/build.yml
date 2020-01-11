@@ -17,7 +17,7 @@ steps:
 - bash: dotnet test --configuration Release --no-build
   displayName: Test
 
-- bash: dotnet pack --configuration Release --no-build --output "$(Agent.BuildDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion) -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+- bash: dotnet pack --configuration Release --no-build --output "$(Agent.TempDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion) -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
   displayName: Pack
 
 # - task: SonarCloudAnalyze@1
