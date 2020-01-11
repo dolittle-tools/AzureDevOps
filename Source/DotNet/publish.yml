@@ -7,13 +7,15 @@ steps:
 
 - task: NuGetCommand@2
   displayName: Publishing to MyGet
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
   inputs:
     command: 'custom'
-    arguments: 'push "$(Agent.BuildDirectory)/Artifacts/*.nupkg" $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
+    arguments: 'push "$(Agent.TempDirectory)/Artifacts/*.nupkg" $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
 
 - task: NuGetCommand@2
   displayName: Publishing to Shared NuGet Package Folder
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
   inputs:
     command: 'custom'
-    arguments: 'init "$(Agent.BuildDirectory)/Artifacts" $(SharedPackagesFolder) -Verbosity detailed'
+    arguments: 'init "$$(Agent.TempDirectory)/Artifacts" $(SharedPackagesFolder) -Verbosity detailed'
 
