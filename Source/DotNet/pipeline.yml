@@ -27,7 +27,6 @@ jobs:
         displayName: Setting up context
         inputs:
           Connection: 'service-dolittle-build'
-          CommitMessage: $(Git.CommitMessage)
 
       - task: Dolittle.tasks.CalculateNewVersion.CalculateNewVersion@0
         name: NewVersion
