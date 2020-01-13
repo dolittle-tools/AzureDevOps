@@ -14,13 +14,6 @@ jobs:
     steps:
       - checkout: self
         submodules: recursive
-
-      - bash: | 
-          echo -n "##vso[task.setvariable variable=CommitMessage;]"
-          git log -1 --pretty=%B | cat
-        condition: and(succeeded(), eq(variables['Build.SourceVersionMessage'], ''))
-        displayName: Setting commit message variable
-        name: Git
         
       - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@1
         name: Context
