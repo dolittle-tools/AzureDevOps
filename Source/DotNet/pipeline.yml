@@ -1,10 +1,10 @@
 parameters:
   buildConfiguration: "Release"
   pool: Default
-  CASCADES: []
+  cascades: []
 
 jobs:
-  - job: "DotNet_Build"
+  - job: "DotNet"
     pool: ${{ parameters.pool }}
     variables:
       - group: global-var-pipelines
@@ -46,4 +46,4 @@ jobs:
           Connection: 'service-dolittle-build'
           ShouldPublish: $(Context.ShouldPublish)
           NextVersion: $(NewVersion.NextVersion)
-          Cascades: ${{ join(',', parameters.CASCADES) }}
+          Cascades: ${{ join(',', parameters.cascades) }}
