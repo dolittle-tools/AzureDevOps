@@ -1,10 +1,13 @@
 steps:
 - task: NuGetCommand@2
-  displayName: Publishing to MyGet
+  displayName: Publishing to NuGet
   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
   inputs:
-    command: 'custom'
-    arguments: 'push "$(Agent.TempDirectory)/Artifacts/*.nupkg" $(SindreMyGet) -Source https://www.myget.org/F/dolittle/api/v2/package -Verbosity detailed'
+    command: push
+    nugetFeedType: "external"
+    packagesToPush: "$(Agent.TempDirectory)/Artifacts/*.nupkg"
+    publishFeedCredentials: "nuget_credential"
+
 
 - task: NuGetCommand@2
   displayName: Publishing to Shared NuGet Package Folder
@@ -12,4 +15,3 @@ steps:
   inputs:
     command: 'custom'
     arguments: 'init "$(Agent.TempDirectory)/Artifacts" $(SharedPackagesFolder) -Verbosity detailed'
-
