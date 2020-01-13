@@ -10,8 +10,8 @@ steps:
 - bash: dotnet --info
   displayName: Info
 
-- bash: dotnet restore --no-cache --verbosity detailed --configuration Release
-  displayName: Build
+- bash: dotnet restore --no-cache --verbosity detailed
+  displayName: Restore
 
 - bash: dotnet build --no-restore --verbosity detailed --configuration Release
   displayName: Build
