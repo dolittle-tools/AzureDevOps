@@ -1,10 +1,4 @@
 steps:
-- task: NuGetToolInstaller@0
-  displayName: Installing NuGet
-  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
-  inputs:
-    versionSpec: '5.x'
-
 - task: NuGetCommand@2
   displayName: Publishing to MyGet
   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))

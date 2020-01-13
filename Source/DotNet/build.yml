@@ -10,16 +10,16 @@ steps:
 - bash: dotnet --info
   displayName: Info
 
-- bash: dotnet restore --no-cache --verbosity detailed
+- bash: dotnet restore --no-cache --verbosity normal
   displayName: Restore
 
-- bash: dotnet build --no-restore --verbosity detailed --configuration Release
+- bash: dotnet build --no-restore --configuration Release
   displayName: Build
   
-- bash: dotnet test --verbosity detailed --configuration Release --no-build
+- bash: dotnet test --configuration Release --no-build
   displayName: Test
 
-- bash: dotnet pack --verbosity detailed --configuration Release --no-build --output "$(Agent.TempDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion) -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+- bash: dotnet pack --verbosity normal --configuration Release --no-build --output "$(Agent.TempDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion) -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
   displayName: Pack
 
 # - task: SonarCloudAnalyze@1
