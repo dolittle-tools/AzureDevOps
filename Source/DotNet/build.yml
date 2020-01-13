@@ -1,15 +1,4 @@
 steps:
-# - task: SonarCloudPrepare@1
-#   inputs:
-#     SonarCloud: 'SonarCloud'
-#     organization: 'dolittle-build-testing'
-#     scannerMode: 'MSBuild'
-#     projectKey: $(sonarProjectKey)
-#     projectName: $(sonarProjectName)
-
-- bash: dotnet --info
-  displayName: Info
-
 - bash: dotnet restore --no-cache --verbosity normal
   displayName: Restore
 
@@ -22,4 +11,3 @@ steps:
 - bash: dotnet pack --verbosity normal --configuration Release --no-build --output "$(Agent.TempDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion) -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
   displayName: Pack
 
-# - task: SonarCloudAnalyze@1

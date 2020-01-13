@@ -47,12 +47,3 @@ jobs:
           ShouldPublish: $(Context.ShouldPublish)
           NextVersion: $(NewVersion.NextVersion)
           Cascades: ${{ join(',', parameters.CASCADES) }}
-
-  # - job: 'Documentation'
-  #   pool: ${{ parameters.pool }}
-  #   dependsOn: "Release"
-  #   condition: succeeded()
-  #   variables:
-  #   - group: global-var-pipelines
-  #   steps:
-  #   - template: ../Documentation/documentation.yml
