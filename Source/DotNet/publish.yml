@@ -8,7 +8,6 @@ steps:
     packagesToPush: "$(Agent.TempDirectory)/Artifacts/*.nupkg"
     publishFeedCredentials: "nuget_credential"
 
-
 - task: NuGetCommand@2
   displayName: Publishing to Shared NuGet Package Folder
   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
