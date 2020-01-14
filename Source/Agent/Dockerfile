@@ -35,7 +35,9 @@ RUN apt-get update \
         mono-devel \
         yq \
         python3-pip \
-        dotnet-sdk-3.0
+        dotnet-sdk-3.0 \
+        dotnet-sdk-2.1 \
+        openjdk-8-jre-headless
 
 WORKDIR /azp
 
