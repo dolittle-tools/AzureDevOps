@@ -1,4 +1,10 @@
 steps:
+- task: NuGetToolInstaller@0
+  displayName: Make sure recent version of NuGet installed
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+  inputs:
+    versionSpec: '5.x'
+
 - task: NuGetCommand@2
   displayName: Publishing to NuGet
   condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
