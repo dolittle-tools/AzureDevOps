@@ -11,7 +11,7 @@ steps:
   inputs:
     command: push
     nugetFeedType: "external"
-    packagesToPush: "$(Agent.TempDirectory)/Artifacts/*"
+    packagesToPush: "$(Agent.TempDirectory)/Artifacts/*.nupkg"
     publishFeedCredentials: "nuget_credential"
 
 - task: NuGetCommand@2
