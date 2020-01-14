@@ -1,0 +1,16 @@
+steps:
+- task: NuGetCommand@2
+  displayName: Publishing to NuGet
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+  inputs:
+    command: push
+    nugetFeedType: "external"
+    packagesToPush: "$(Agent.TempDirectory)/Artifacts/*"
+    publishFeedCredentials: "nuget_credential"
+
+- task: NuGetCommand@2
+  displayName: Publishing to Shared NuGet Package Folder
+  condition: and(succeeded(), eq(variables['Context.ShouldPublish'], 'true'))
+  inputs:
+    command: 'custom'
+    arguments: 'init "$(Agent.TempDirectory)/Artifacts" $(SharedPackagesFolder) -Verbosity detailed'

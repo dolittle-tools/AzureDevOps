@@ -1,16 +1,13 @@
-parameters:
-  buildConfiguration: 'Release'
-  CWD: $(System.DefaultWorkingDirectory)
-
 steps:
-- bash: dotnet restore --no-cache --configfile /root/.nuget/NuGet.Config
-  workingDirectory: ${{ parameters.CWD }}
+- bash: dotnet restore --no-cache --verbosity normal
   displayName: Restore
 
-- bash: dotnet build --no-restore --configuration ${{ parameters.buildConfiguration }}
-  workingDirectory: ${{ parameters.CWD }}
+- bash: dotnet build --no-restore --configuration Release
   displayName: Build
-
-- bash: dotnet test --no-build --configuration ${{ parameters.buildConfiguration }}
-  workingDirectory: ${{ parameters.CWD }}    
+  
+- bash: dotnet test --configuration Release --no-build
   displayName: Test
+
+- bash: dotnet pack --verbosity normal --configuration Release --no-build --output "$(Agent.TempDirectory)/Artifacts" /p:PackageVersion=$(NewVersion.NextVersion) -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+  displayName: Pack
+
