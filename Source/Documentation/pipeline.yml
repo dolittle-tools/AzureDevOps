@@ -1,0 +1,24 @@
+parameters:
+  buildConfiguration: "Release"
+  pool: Default
+
+jobs:
+  - job: "Documentation_docker"
+    pool: ${{ parameters.pool }}
+    variables:
+      - group: global-var-pipelines
+
+    steps:
+      - checkout: self
+        submodules: recursive
+        
+      - task: Dolittle.tasks.SetupBuildContext.SetupBuildContext@1
+        name: Context
+        displayName: Setting up context
+        inputs:
+          Connection: 'service-dolittle-build'
+
+      - task: 
+        # TODO figure out how to add dockerhub credentials here
+        # TODO call teh dockerize.sh
+
