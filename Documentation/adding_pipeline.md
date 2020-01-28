@@ -2,7 +2,7 @@
 title: Adding pipeline
 description: Overview of how to add an a pipeline
 keywords: Build
-weight: 1
+weight: 2
 author: einari
 aliases: /tools/azuredevops/adding_pipeline
 ---
