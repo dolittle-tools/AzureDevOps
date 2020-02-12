@@ -1,13 +1,12 @@
 ---
 title: Overview
-url: /tooling/azuredevops/
 description: Overview of how to use the Azure DevOps support
 keywords: Build, Azure, DevOps
 author: einari
 weight: 1
 aliases:
     - /tools/azuredevops/
-    - /tooling/azuredevops/overview/
+    - /tools/azuredevops/overview/
 ---
 
 Part of building software is the feedback loop of knowing what you create works
